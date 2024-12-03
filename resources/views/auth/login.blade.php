@@ -60,19 +60,19 @@
                     </div>
                 @endif
 
-                <form method="GET" action="/admin/dashboard" class="space-y-6">
+                <form method="POST" action="{{ route('login.submit') }}" class="space-y-6">
                     @csrf
                     <div class="space-y-2">
-                        <label for="nip" class="block text-sm font-medium text-gray-700">Nomor Induk Guru</label>
+                        <label for="nip" class="block text-sm font-medium text-gray-700">Nomor Induk</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
                                 </svg>
                             </div>
-                            <input id="nip" name="nip" type="text" 
+                            <input id="nip" name="nip" type="text" required
                                 class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
-                                placeholder="Masukkan NIP anda">
+                                placeholder="Masukkan NIP/NIS/ID anda">
                         </div>
                     </div>
 
@@ -84,7 +84,7 @@
                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <input id="password" name="password" type="password"
+                            <input id="password" name="password" type="password" required
                                 class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
                                 placeholder="Masukkan password anda">
                         </div>

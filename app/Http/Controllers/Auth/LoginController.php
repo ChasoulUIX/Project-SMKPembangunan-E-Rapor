@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function __invoke(Request $request)
     {
         $credentials = $request->validate([
             'nip' => 'required',

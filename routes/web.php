@@ -1,15 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 
 // Auth
-Route::get('/', function () {
-    return view('auth.login');
-});
-
-Route::post('/login', function () {
-    return view('auth.login');
-});
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, '__invoke'])->name('login.submit');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Wali Kelas
 Route::get('wali/dashboard', function () {
