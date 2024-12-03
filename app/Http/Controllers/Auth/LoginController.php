@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
 use App\Models\Guru;
 use App\Models\Murid;
-use App\Models\Wali;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -20,35 +20,64 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        // Check in Admin table
+        // Find user in respective tables based on nip/nis
         $admin = Admin::where('nip', $credentials['nip'])->first();
-        if ($admin && Hash::check($credentials['password'], $admin->password)) {
-            Auth::login($admin);
-            return redirect('/admin/dashboard');
-        }
-
-        // Check in Guru table
         $guru = Guru::where('nip', $credentials['nip'])->first();
-        if ($guru && Hash::check($credentials['password'], $guru->password)) {
-            Auth::login($guru);
-            return redirect('/guru/dashboard');
-        }
-
-        // Check in Murid table using NIS
         $murid = Murid::where('nis', $credentials['nip'])->first();
-        if ($murid && Hash::check($credentials['password'], $murid->password)) {
-            Auth::login($murid);
-            return redirect('/murid/dashboard');
+
+        // Find corresponding user record
+        $user = null;
+        $userData = null;
+
+        if ($admin) {
+            $userData = $admin;
+            $user = User::where('nip', $userData->nip)->first();
+        } elseif ($guru) {
+            $userData = $guru;
+            $user = User::where('nip', $userData->nip)->first();
+        } elseif ($murid) {
+            $userData = $murid;
+            $user = User::where('nis', $userData->nis)->first();
         }
 
-        // Check in Wali table using ID
-        $wali = Wali::where('id', $credentials['nip'])->first();
-        if ($wali && Hash::check($credentials['password'], $wali->password)) {
-            Auth::login($wali);
-            return redirect('/wali/dashboard');
+        if (!$user || !$userData) {
+            return back()
+                ->withInput($request->only('nip'))
+                ->with('error', 'Nomor induk tidak ditemukan!');
         }
 
-        return back()->with('status', 'Nomor induk atau password salah!');
+        if (!Hash::check($credentials['password'], $userData->password)) {
+            return back()
+                ->withInput($request->only('nip'))
+                ->with('error', 'Password salah!');
+        }
+
+        // Login based on role
+        $loginSuccess = false;
+        
+        switch($user->role) {
+            case 'admin':
+                $loginSuccess = Auth::guard('web')->loginUsingId($user->id);
+                break;
+            case 'guru':
+                $loginSuccess = Auth::guard('web')->loginUsingId($user->id);
+                break;
+            case 'wali':
+                $loginSuccess = Auth::guard('web')->loginUsingId($user->id);
+                break;
+            case 'murid':
+                $loginSuccess = Auth::guard('web')->loginUsingId($user->id);
+                break;
+        }
+
+        if ($loginSuccess) {
+            $request->session()->regenerate();
+            return redirect('/' . $user->role . '/dashboard')->with('success', 'Login berhasil!');
+        }
+
+        return back()
+            ->withInput($request->only('nip'))
+            ->with('error', 'Login gagal!');
     }
 
     public function logout(Request $request)
@@ -56,11 +85,16 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect('/')->with('success', 'Berhasil logout!');
     }
 
     public function showLoginForm()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            return redirect('/' . $user->role . '/dashboard');
+        }
+
         return view('auth.login');
     }
 }

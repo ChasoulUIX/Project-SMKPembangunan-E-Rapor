@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('parent_phone');
             $table->string('parent_address')->nullable();
             $table->string('class');
-            $table->string('major');
+            $table->enum('major', ['multimedia', 'akuntansi', 'perkantoran', 'pemasaran']);
             $table->integer('academic_year');
             $table->enum('semester', [1, 2]);
             $table->string('photo')->nullable();

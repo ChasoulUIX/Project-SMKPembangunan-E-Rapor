@@ -31,4 +31,14 @@ class Guru extends Authenticatable
     protected $casts = [
         'birth_date' => 'date'
     ];
+
+    protected $attributes = [
+        'birth_place' => '',
+        'birth_date' => null,
+        'address' => '',
+        'phone_number' => '',
+        'photo' => '',
+        'gender' => '',
+        'role' => 'guru'
+    ];
 }

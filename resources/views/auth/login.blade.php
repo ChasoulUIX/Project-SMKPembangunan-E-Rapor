@@ -53,10 +53,17 @@
                     </p>
                 </div>
 
-                @if (session('status'))
+                @if (session('error'))
                     <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert">
                         <p class="font-medium">Error</p>
-                        <p>{{ session('status') }}</p>
+                        <p>{{ session('error') }}</p>
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg">
+                        <p class="font-medium">Success</p>
+                        <p>{{ session('success') }}</p>
                     </div>
                 @endif
 
@@ -71,9 +78,13 @@
                                 </svg>
                             </div>
                             <input id="nip" name="nip" type="text" required
-                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
-                                placeholder="Masukkan NIP/NIS/ID anda">
+                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out @error('nip') border-red-500 @enderror"
+                                placeholder="Masukkan NIP/NIS/ID anda"
+                                value="{{ old('nip') }}">
                         </div>
+                        @error('nip')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="space-y-2">
@@ -85,22 +96,34 @@
                                 </svg>
                             </div>
                             <input id="password" name="password" type="password" required
-                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
+                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out @error('password') border-red-500 @enderror"
                                 placeholder="Masukkan password anda">
                         </div>
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <input id="remember_me" name="remember_me" type="checkbox" 
+                            <input id="remember" name="remember" type="checkbox" 
                                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="remember_me" class="ml-2 block text-sm text-gray-700">
+                            <label for="remember" class="ml-2 block text-sm text-gray-700">
                                 Ingat saya
                             </label>
                         </div>
                         <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500">
                             Lupa password?
                         </a>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Belum punya akun? 
+                            <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500">
+                                Daftar di sini
+                            </a>
+                        </p>
                     </div>
 
                     <div>

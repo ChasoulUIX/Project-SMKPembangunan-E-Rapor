@@ -36,9 +36,10 @@
             </select>
             <select class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
                 <option value="">Semua Jurusan</option>
-                <option value="RPL">RPL</option>
-                <option value="TKJ">TKJ</option>
-                <option value="MM">MM</option>
+                <option value="multimedia">Multimedia</option>
+                <option value="akuntansi">Akuntansi</option>
+                <option value="perkantoran">Perkantoran</option>
+                <option value="pemasaran">Pemasaran</option>
             </select>
         </div>
     </div>
@@ -52,59 +53,42 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jurusan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
+                @foreach($murids as $murid)
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024001</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $murid->nis }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="h-10 w-10 flex-shrink-0">
-                                <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=John+Doe" alt="">
+                                @if($murid->photo)
+                                    <img class="h-10 w-10 rounded-full" src="{{ asset($murid->photo) }}" alt="{{ $murid->name }}">
+                                @else
+                                    <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($murid->name) }}" alt="{{ $murid->name }}">
+                                @endif
                             </div>
                             <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">John Doe</div>
-                                <div class="text-sm text-gray-500">johndoe@example.com</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $murid->name }}</div>
+                                <div class="text-sm text-gray-500">{{ $murid->email }}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">X</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">RPL 1</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
-                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $murid->class }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($murid->major) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onclick="openEditModal()" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
-                        <button onclick="confirmDelete()" class="text-red-600 hover:text-red-900">Hapus</button>
+                        <button type="button" onclick="openEditModal({{ $murid->id }})" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
+                        <form action="{{ route('admin.pages.murid.destroy', $murid->id) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?')" class="text-red-600 hover:text-red-900">Hapus</button>
+                        </form>
                     </td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
-    </div>
-
-    <!-- Pagination -->
-    <div class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6 mt-4">
-        <div class="flex-1 flex justify-between sm:hidden">
-            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Previous</a>
-            <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Next</a>
-        </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-            <div>
-                <p class="text-sm text-gray-700">
-                    Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">20</span> results
-                </p>
-            </div>
-            <div>
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">Previous</a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">1</a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</a>
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">Next</a>
-                </nav>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -112,40 +96,111 @@
 <div id="createModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-        <div class="relative bg-white rounded-lg max-w-lg w-full">
+        <div class="relative bg-white rounded-lg max-w-6xl w-full">
             <div class="px-6 py-4 border-b">
                 <h3 class="text-lg font-medium text-gray-900">Tambah Siswa Baru</h3>
             </div>
-            <form class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">NIS</label>
-                        <input type="text" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <form action="{{ route('admin.pages.murid.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+                @csrf
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Column 1 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NIS</label>
+                            <input type="text" name="nis" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NISN</label>
+                            <input type="text" name="nisn" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                            <input type="text" name="name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" name="email" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Password</label>
+                            <input type="password" name="password" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                            <select name="gender" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Foto</label>
+                            <input type="file" name="photo" class="mt-1 block w-full">
+                        </div>
                     </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                        <input type="text" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+
+                    <!-- Column 2 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
+                            <input type="text" name="birth_place" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+                            <input type="date" name="birth_date" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Alamat</label>
+                            <textarea name="address" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">No. Telepon</label>
+                            <input type="text" name="phone_number" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nama Ayah</label>
+                            <input type="text" name="father_name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nama Ibu</label>
+                            <input type="text" name="mother_name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                        <select class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option>X</option>
-                            <option>XI</option>
-                            <option>XII</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Jurusan</label>
-                        <select class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option>RPL 1</option>
-                            <option>RPL 2</option>
-                            <option>TKJ 1</option>
-                            <option>TKJ 2</option>
-                        </select>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+
+                    <!-- Column 3 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">No. Telepon Orang Tua</label>
+                            <input type="text" name="parent_phone" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Alamat Orang Tua</label>
+                            <textarea name="parent_address" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Kelas</label>
+                            <input type="text" name="class" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Jurusan</label>
+                            <select name="major" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="multimedia">Multimedia</option>
+                                <option value="akuntansi">Akuntansi</option>
+                                <option value="perkantoran">Perkantoran</option>
+                                <option value="pemasaran">Pemasaran</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tahun Akademik</label>
+                            <input type="number" name="academic_year" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Semester</label>
+                            <select name="semester" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="role" value="murid">
                     </div>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
@@ -161,40 +216,112 @@
 <div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-        <div class="relative bg-white rounded-lg max-w-lg w-full">
+        <div class="relative bg-white rounded-lg max-w-6xl w-full">
             <div class="px-6 py-4 border-b">
                 <h3 class="text-lg font-medium text-gray-900">Edit Data Siswa</h3>
             </div>
-            <form class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">NIS</label>
-                        <input type="text" value="2024001" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6">
+                @csrf
+                @method('PUT')
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Column 1 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NIS</label>
+                            <input type="text" name="nis" id="edit_nis" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NISN</label>
+                            <input type="text" name="nisn" id="edit_nisn" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                            <input type="text" name="name" id="edit_name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" name="email" id="edit_email" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Password (Kosongkan jika tidak ingin mengubah)</label>
+                            <input type="password" name="password" id="edit_password" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                            <select name="gender" id="edit_gender" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Foto</label>
+                            <input type="file" name="photo" id="edit_photo" class="mt-1 block w-full">
+                        </div>
                     </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                        <input type="text" value="John Doe" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+
+                    <!-- Column 2 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
+                            <input type="text" name="birth_place" id="edit_birth_place" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+                            <input type="date" name="birth_date" id="edit_birth_date" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Alamat</label>
+                            <textarea name="address" id="edit_address" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">No. Telepon</label>
+                            <input type="text" name="phone_number" id="edit_phone_number" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nama Ayah</label>
+                            <input type="text" name="father_name" id="edit_father_name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nama Ibu</label>
+                            <input type="text" name="mother_name" id="edit_mother_name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                        <select class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option selected>X</option>
-                            <option>XI</option>
-                            <option>XII</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Jurusan</label>
-                        <select class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option selected>RPL 1</option>
-                            <option>RPL 2</option>
-                            <option>TKJ 1</option>
-                            <option>TKJ 2</option>
-                        </select>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" value="johndoe@example.com" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+
+                    <!-- Column 3 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">No. Telepon Orang Tua</label>
+                            <input type="text" name="parent_phone" id="edit_parent_phone" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Alamat Orang Tua</label>
+                            <textarea name="parent_address" id="edit_parent_address" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Kelas</label>
+                            <input type="text" name="class" id="edit_class" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Jurusan</label>
+                            <select name="major" id="edit_major" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="multimedia">Multimedia</option>
+                                <option value="akuntansi">Akuntansi</option>
+                                <option value="perkantoran">Perkantoran</option>
+                                <option value="pemasaran">Pemasaran</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tahun Akademik</label>
+                            <input type="number" name="academic_year" id="edit_academic_year" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Semester</label>
+                            <select name="semester" id="edit_semester" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="role" value="murid">
                     </div>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
@@ -215,19 +342,53 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal() {
-    document.getElementById('editModal').classList.remove('hidden');
+function openEditModal(id) {
+    // Fetch murid data and populate form
+    fetch(`/admin/pages/siswa/${id}`, {
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Populate form fields with data
+        document.getElementById('edit_nis').value = data.nis;
+        document.getElementById('edit_nisn').value = data.nisn;
+        document.getElementById('edit_name').value = data.name;
+        document.getElementById('edit_email').value = data.email;
+        document.getElementById('edit_gender').value = data.gender;
+        document.getElementById('edit_birth_place').value = data.birth_place;
+        document.getElementById('edit_birth_date').value = data.birth_date;
+        document.getElementById('edit_address').value = data.address;
+        document.getElementById('edit_phone_number').value = data.phone_number;
+        document.getElementById('edit_father_name').value = data.father_name;
+        document.getElementById('edit_mother_name').value = data.mother_name;
+        document.getElementById('edit_parent_phone').value = data.parent_phone;
+        document.getElementById('edit_parent_address').value = data.parent_address || '';
+        document.getElementById('edit_class').value = data.class;
+        document.getElementById('edit_major').value = data.major;
+        document.getElementById('edit_academic_year').value = data.academic_year;
+        document.getElementById('edit_semester').value = data.semester;
+        
+        // Update form action URL
+        document.getElementById('editForm').action = `/admin/pages/siswa/${id}`;
+        
+        // Show modal
+        document.getElementById('editModal').classList.remove('hidden');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengambil data siswa');
+    });
 }
 
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
-
-function confirmDelete() {
-    if(confirm('Apakah Anda yakin ingin menghapus data siswa ini?')) {
-        // Handle delete
-    }
-}
 </script>
 @endsection
-

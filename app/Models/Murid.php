@@ -12,9 +12,9 @@ class Murid extends Authenticatable
 
     protected $fillable = [
         'nis',
-        'nisn',
+        'nisn', 
         'name',
-        'email', 
+        'email',
         'password',
         'gender',
         'birth_place',
@@ -27,7 +27,7 @@ class Murid extends Authenticatable
         'parent_address',
         'class',
         'major',
-        'academic_year',
+        'academic_year', 
         'semester',
         'photo',
         'role'
@@ -40,6 +40,9 @@ class Murid extends Authenticatable
     protected $casts = [
         'birth_date' => 'date',
         'academic_year' => 'integer',
-        'semester' => 'integer'
+        'semester' => 'integer',
+        'gender' => 'string',
+        'major' => 'string',
+        'role' => 'string'
     ];
 }

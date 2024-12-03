@@ -18,7 +18,8 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-600">Total Guru</p>
-                    <p class="text-xl font-bold text-gray-800">24 Guru</p>
+                    <p class="text-xl font-bold text-gray-800">{{ DB::table('gurus')->count() }} Guru</p>
+            
                 </div>
             </div>
         </div>
@@ -32,7 +33,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-600">Total Siswa</p>
-                    <p class="text-xl font-bold text-gray-800">360 Siswa</p>
+                    <p class="text-xl font-bold text-gray-800">{{ DB::table('murids')->count() }} Siswa</p>
                 </div>
             </div>
         </div>
