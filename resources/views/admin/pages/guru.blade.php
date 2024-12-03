@@ -135,7 +135,7 @@
 
 <!-- Edit Modal -->
 <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div class="relative top-20 mx-auto p-5 border w-[800px] shadow-lg rounded-md bg-white">
         <div class="flex justify-between items-center pb-3">
             <h3 class="text-lg font-medium">Edit Data Guru</h3>
             <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-500">
@@ -146,52 +146,65 @@
         </div>
         <form id="editForm" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">NIP</label>
-                    <input type="text" name="nip" id="edit_nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <div class="grid grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">NIP</label>
+                        <input type="text" name="nip" id="edit_nip" value="{{ old('nip', $guru->nip ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" name="name" id="edit_name" value="{{ old('name', $guru->name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" name="email" id="edit_email" value="{{ old('email', $guru->email ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Password (Kosongkan jika tidak ingin mengubah)</label>
+                        <input type="password" name="password" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <select name="gender" id="edit_gender" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="L" {{ old('gender', $guru->gender ?? '') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="P" {{ old('gender', $guru->gender ?? '') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
+                        <input type="text" name="birth_place" id="edit_birth_place" value="{{ old('birth_place', $guru->birth_place ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                    <input type="text" name="name" id="edit_name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+                        <input type="date" name="birth_date" id="edit_birth_date" value="{{ old('birth_date', $guru->birth_date ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Alamat</label>
+                        <textarea name="address" id="edit_address" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">{{ old('address', $guru->address ?? '') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">No. Telepon</label>
+                        <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number', $guru->phone_number ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Foto</label>
+                        <input type="file" name="photo" class="mt-1 block w-full">
+                        @if(isset($guru) && $guru->photo)
+                            <img src="{{ asset($guru->photo) }}" alt="Preview foto guru" class="mt-2 h-20 w-20 object-cover rounded-full">
+                        @endif
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Role</label>
+                        <select name="role" id="edit_role" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="guru" {{ old('role', $guru->role ?? '') == 'guru' ? 'selected' : '' }}>Guru</option>
+                            <option value="wali" {{ old('role', $guru->role ?? '') == 'wali' ? 'selected' : '' }}>Wali</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="email" id="edit_email" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Password (Kosongkan jika tidak ingin mengubah)</label>
-                    <input type="password" name="password" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
-                    <select name="gender" id="edit_gender" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
-                    <input type="text" name="birth_place" id="edit_birth_place" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                    <input type="date" name="birth_date" id="edit_birth_date" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Alamat</label>
-                    <textarea name="address" id="edit_address" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">No. Telepon</label>
-                    <input type="text" name="phone_number" id="edit_phone_number" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Foto</label>
-                    <input type="file" name="photo" class="mt-1 block w-full">
-                </div>
-                <input type="hidden" name="role" value="guru">
             </div>
             <div class="mt-6 flex justify-end space-x-3">
                 <button type="button" onclick="closeEditModal()" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Batal</button>
@@ -210,30 +223,8 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal(id) {
-    fetch(`/admin/pages/guru/${id}`, {
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('edit_nip').value = data.nip;
-        document.getElementById('edit_name').value = data.name;
-        document.getElementById('edit_email').value = data.email;
-        document.getElementById('edit_gender').value = data.gender;
-        document.getElementById('edit_birth_place').value = data.birth_place;
-        document.getElementById('edit_birth_date').value = data.birth_date;
-        document.getElementById('edit_address').value = data.address;
-        document.getElementById('edit_phone_number').value = data.phone_number;
-        
-        document.getElementById('editForm').action = `/admin/pages/guru/${id}`;
-        document.getElementById('editModal').classList.remove('hidden');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengambil data guru');
-    });
+function openEditModal() {
+    document.getElementById('editModal').classList.remove('hidden');
 }
 
 function closeEditModal() {

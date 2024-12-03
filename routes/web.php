@@ -54,13 +54,14 @@ Route::get('/guru/absensi', function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 });
-
-Route::get('/admin/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
-Route::post('/admin/pages/siswa', [MuridController::class, 'store'])->name('admin.pages.murid.store');
-Route::get('/admin/pages/siswa/{murid}', [MuridController::class, 'show'])->name('admin.pages.murid.show');
-Route::put('/admin/pages/siswa/{murid}', [MuridController::class, 'update'])->name('admin.pages.murid.update');
-Route::delete('/admin/pages/siswa/{murid}', [MuridController::class, 'destroy'])->name('admin.pages.murid.destroy');
-Route::get('/admin/pages/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
+Route::prefix('admin')->group(function () {
+    Route::get('/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
+    Route::get('/pages/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
+    Route::post('/pages/siswa', [MuridController::class, 'store'])->name('admin.pages.murid.store');
+    Route::get('/pages/siswa/{murid}', [MuridController::class, 'show'])->name('admin.pages.murid.show');
+    Route::put('/pages/siswa/{murid}', [MuridController::class, 'update'])->name('admin.pages.murid.update');
+    Route::delete('/pages/siswa/{murid}', [MuridController::class, 'destroy'])->name('admin.pages.murid.destroy');
+});
 
 Route::get('/admin/guru', function () {
     return view('admin.pages.guru');

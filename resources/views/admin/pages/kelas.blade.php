@@ -26,12 +26,12 @@
                 <tr>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->nama_kelas }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->jurusan }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->wali_kelas }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->wali_name }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">
                         {{ $kls->daftar_siswa ? count(json_decode($kls->daftar_siswa)) : 0 }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900">
-                        <button onclick="openEditModal({{ $kls->id }}, '{{ $kls->nama_kelas }}', '{{ $kls->jurusan }}', '{{ $kls->wali_kelas }}')" class="text-blue-600 hover:text-blue-800 mr-3">Edit</button>
+                        <button onclick="openEditModal({{ $kls->id }}, '{{ $kls->nama_kelas }}', '{{ $kls->jurusan }}', '{{ $kls->wali_id }}')" class="text-blue-600 hover:text-blue-800 mr-3">Edit</button>
                         <form action="{{ route('admin.pages.kelas.destroy', $kls) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
@@ -75,7 +75,12 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
-                        <input type="text" name="wali_kelas" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select name="wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Pilih Wali Kelas</option>
+                            @foreach(App\Models\User::where('role', 'guru')->get() as $wali)
+                                <option value="{{ $wali->id }}">{{ $wali->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
@@ -119,7 +124,12 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
-                        <input type="text" name="wali_kelas" id="edit_wali_kelas" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select name="wali_id" id="edit_wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Pilih Wali Kelas</option>
+                            @foreach(App\Models\User::where('role', 'guru')->get() as $wali)
+                                <option value="{{ $wali->id }}">{{ $wali->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
@@ -144,14 +154,14 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal(id, nama_kelas, jurusan, wali_kelas) {
+function openEditModal(id, nama_kelas, jurusan, wali_id) {
     const modal = document.getElementById('editModal');
     const form = document.getElementById('editForm');
     form.action = `/admin/pages/kelas/${id}`;
     
     document.getElementById('edit_nama_kelas').value = nama_kelas;
     document.getElementById('edit_jurusan').value = jurusan;
-    document.getElementById('edit_wali_kelas').value = wali_kelas;
+    document.getElementById('edit_wali_id').value = wali_id;
     
     modal.classList.remove('hidden');
 }

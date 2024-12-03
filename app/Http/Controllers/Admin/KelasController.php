@@ -4,33 +4,29 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
+use App\Models\Wali;
 use Illuminate\Http\Request;
 
 class KelasController extends Controller
 {
     public function index()
     {
+        // Remove relationship load since 'wali' relationship is not defined
         $kelas = Kelas::all();
         return view('admin.pages.kelas', compact('kelas'));
-    }
-
-    public function create()
-    {
-        return view('admin.pages.kelas.create');
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'nama_kelas' => 'required|string|max:255',
-            'wali_kelas' => 'required|string|max:255',
+            'wali_id' => 'required|exists:walis,nip',
             'jurusan' => 'required|string|max:255',
-            'daftar_siswa' => 'nullable|array'
         ]);
 
-        if ($request->has('daftar_siswa')) {
-            $validated['daftar_siswa'] = json_encode($request->daftar_siswa);
-        }
+        $wali = Wali::select('id', 'name')->where('nip', $validated['wali_id'])->first();
+        $validated['wali_id'] = $wali->id;
+        $validated['wali_name'] = $wali->name;
 
         Kelas::create($validated);
 
@@ -40,26 +36,21 @@ class KelasController extends Controller
 
     public function show(Kelas $kelas)
     {
-        return view('admin.pages.kelas.show', compact('kelas'));
-    }
-
-    public function edit(Kelas $kelas)
-    {
-        return view('admin.pages.kelas.edit', compact('kelas'));
+        // Remove relationship load since 'wali' relationship is not defined
+        return response()->json($kelas);
     }
 
     public function update(Request $request, Kelas $kelas)
     {
         $validated = $request->validate([
-            'nama_kelas' => 'required|string|max:255',
-            'wali_kelas' => 'required|string|max:255', 
+            'nama_kelas' => 'required|string|max:255', 
+            'wali_id' => 'required|exists:walis,nip',
             'jurusan' => 'required|string|max:255',
-            'daftar_siswa' => 'nullable|array'
         ]);
 
-        if ($request->has('daftar_siswa')) {
-            $validated['daftar_siswa'] = json_encode($request->daftar_siswa);
-        }
+        $wali = Wali::select('id', 'name')->where('nip', $validated['wali_id'])->first();
+        $validated['wali_id'] = $wali->id;
+        $validated['wali_name'] = $wali->name;
 
         $kelas->update($validated);
 

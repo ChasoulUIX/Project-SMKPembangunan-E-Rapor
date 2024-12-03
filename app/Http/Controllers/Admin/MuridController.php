@@ -46,14 +46,14 @@ class MuridController extends Controller
             'academic_year' => 'required|integer',
             'semester' => 'required|in:1,2',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'role' => 'required|in:murid,guru,wali,admin'
+            'role' => 'required|in:murid'
         ]);
 
         if ($request->hasFile('photo')) {
             $photo = $request->file('photo');
             $filename = time() . '.' . $photo->getClientOriginalExtension();
             $photo->move(public_path('images'), $filename);
-            $validated['photo'] = 'images/' . $filename;
+            $validated['photo'] = '/images/' . $filename;
         }
 
         $validated['password'] = Hash::make($validated['password']);
@@ -68,17 +68,17 @@ class MuridController extends Controller
             // Create user
             User::create([
                 'name' => $validated['name'],
-                'nis' => $validated['nis'], // Store NIS in users table
+                'nis' => $validated['nis'],
                 'email' => $validated['email'],
                 'password' => $validated['password'],
                 'role' => 'murid'
             ]);
 
             DB::commit();
-            return redirect()->route('admin.pages.siswa')->with('success', 'Murid created successfully');
+            return redirect()->route('admin.pages.siswa')->with('success', 'Siswa berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Error creating murid: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error menambahkan siswa: ' . $e->getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ class MuridController extends Controller
             'academic_year' => 'required|integer',
             'semester' => 'required|in:1,2',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'role' => 'required|in:murid,guru,wali,admin',
+            'role' => 'required|in:murid',
             'password' => 'nullable|string|min:3'
         ]);
 
@@ -159,10 +159,10 @@ class MuridController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.pages.siswa')->with('success', 'Murid updated successfully');
+            return redirect()->route('admin.pages.siswa')->with('success', 'Data siswa berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Error updating murid: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error memperbarui data siswa: ' . $e->getMessage());
         }
     }
 
@@ -184,10 +184,10 @@ class MuridController extends Controller
             $murid->delete();
 
             DB::commit();
-            return redirect()->route('admin.pages.siswa')->with('success', 'Murid deleted successfully');
+            return redirect()->route('admin.pages.siswa')->with('success', 'Data siswa berhasil dihapus');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Error deleting murid: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error menghapus data siswa: ' . $e->getMessage());
         }
     }
 }

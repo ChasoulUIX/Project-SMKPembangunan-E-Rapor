@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\User;
+use App\Models\Wali;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -126,6 +127,18 @@ class GuruController extends Controller
                 }
                 
                 $user->update($userData);
+            }
+
+            // If role is changed to wali, create wali record
+            if ($validated['role'] === 'wali') {
+                $waliData = [
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => $validated['password'] ?? $guru->password,
+                    'role' => 'wali'
+                ];
+
+                Wali::create($waliData);
             }
 
             DB::commit();
