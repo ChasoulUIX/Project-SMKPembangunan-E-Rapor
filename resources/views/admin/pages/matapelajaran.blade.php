@@ -25,17 +25,8 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">MTK001</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Matematika</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Budi Santoso</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">75</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onclick="openEditModal()" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
-                        <button onclick="confirmDelete()" class="text-red-600 hover:text-red-900">Hapus</button>
-                    </td>
-                </tr>
-                <!-- More rows... -->
+              
+               
             </tbody>
         </table>
     </div>
@@ -52,28 +43,31 @@
                 </svg>
             </button>
         </div>
-        <form class="mt-4">
+        <form action="{{ route('admin.pages.matapelajaran.store') }}" method="POST" class="mt-4">
+            @csrf
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Kode Mapel</label>
-                    <input type="text" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" name="kode_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Nama Mapel</label>
-                    <input type="text" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" name="nama_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
-                    <select class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option>Pilih Guru</option>
-                        <option>Budi Santoso</option>
-                        <option>Siti Aminah</option>
-                        <option>Ahmad Yani</option>
+                    <select name="nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Guru</option>
+                      
+                            <option value=""</option>
+                       
+                            <option value="" disabled>Tidak ada data guru</option>
+                      
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">KKM</label>
-                    <input type="number" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="number" name="kkm" required min="0" max="100" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
             <div class="mt-6 flex justify-end space-x-3">
@@ -95,27 +89,25 @@
                 </svg>
             </button>
         </div>
-        <form class="mt-4">
+        <form id="editForm" method="POST" class="mt-4">
+            @csrf
+            @method('PUT')
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Kode Mapel</label>
-                    <input type="text" value="MTK001" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" name="kode_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Nama Mapel</label>
-                    <input type="text" value="Matematika" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" name="nama_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
-                    <select class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option selected>Budi Santoso</option>
-                        <option>Siti Aminah</option>
-                        <option>Ahmad Yani</option>
-                    </select>
+                   
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">KKM</label>
-                    <input type="number" value="75" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <input type="number" name="kkm" required min="0" max="100" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
             <div class="mt-6 flex justify-end space-x-3">
@@ -135,18 +127,30 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal() {
-    document.getElementById('editModal').classList.remove('hidden');
+function openEditModal(id) {
+    fetch(`/admin/pages/matapelajaran/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('#editForm').action = `/admin/pages/matapelajaran/${id}`;
+            document.querySelector('#editForm [name="kode_mapel"]').value = data.kode_mapel;
+            document.querySelector('#editForm [name="nama_mapel"]').value = data.nama_mapel;
+            document.querySelector('#editForm [name="nip"]').value = data.nip;
+            document.querySelector('#editForm [name="kkm"]').value = data.kkm;
+            
+            // Set selected guru in dropdown
+            const guruSelect = document.querySelector('#editForm [name="nip"]');
+            Array.from(guruSelect.options).forEach(option => {
+                if (option.value === data.nip) {
+                    option.selected = true;
+                }
+            });
+            
+            document.getElementById('editModal').classList.remove('hidden');
+        });
 }
 
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
-}
-
-function confirmDelete() {
-    if(confirm('Apakah Anda yakin ingin menghapus mata pelajaran ini?')) {
-        // Handle delete
-    }
 }
 </script>
 @endsection

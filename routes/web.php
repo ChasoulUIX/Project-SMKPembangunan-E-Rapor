@@ -5,7 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\MuridController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Auth\RegisterController;
-
+use App\Http\Controllers\Admin\MatapelajaranController;
+use App\Http\Controllers\Admin\KelasController;
 // Auth
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, '__invoke'])->name('login.submit');
@@ -70,8 +71,24 @@ Route::get('/admin/guru/{guru}', [GuruController::class, 'show'])->name('admin.p
 Route::put('/admin/guru/{guru}', [GuruController::class, 'update'])->name('admin.pages.guru.update');
 Route::delete('/admin/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.pages.guru.destroy');
 
+
 Route::get('/admin/kelas', function () {
     return view('admin.pages.kelas');
+});
+Route::get('/admin/kelas', [KelasController::class, 'index'])->name('admin.pages.kelas.index');
+Route::post('/admin/pages/kelas', [KelasController::class, 'store'])->name('admin.pages.kelas.store');
+Route::get('/admin/pages/kelas/{kelas}/edit', [KelasController::class, 'edit'])->name('admin.pages.kelas.edit');
+Route::put('/admin/pages/kelas/{kelas}', [KelasController::class, 'update'])->name('admin.pages.kelas.update');
+Route::delete('/admin/pages/kelas/{kelas}', [KelasController::class, 'destroy'])->name('admin.pages.kelas.destroy');
+Route::PUT('/admin/pages/kelas/create', [KelasController::class, 'create'])->name('admin.pages.kelas.create');
+
+
+Route::prefix('admin')->group(function () {
+    Route::get('/pages/matapelajaran', [MatapelajaranController::class, 'index'])->name('admin.pages.matapelajaran.index');
+    Route::post('/pages/matapelajaran', [MatapelajaranController::class, 'store'])->name('admin.pages.matapelajaran.store');
+    Route::get('/pages/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'show'])->name('admin.pages.matapelajaran.show');
+    Route::put('/pages/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'update'])->name('admin.pages.matapelajaran.update');
+    Route::delete('/pages/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'destroy'])->name('admin.pages.matapelajaran.destroy');
 });
 
 Route::get('/admin/matapelajaran', function () {

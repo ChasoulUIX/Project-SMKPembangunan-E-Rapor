@@ -41,4 +41,9 @@ class Guru extends Authenticatable
         'gender' => '',
         'role' => 'guru'
     ];
+
+    public function matapelajarans()
+    {
+        return $this->hasMany(Matapelajaran::class, 'nip', 'nip');
+    }
 }
