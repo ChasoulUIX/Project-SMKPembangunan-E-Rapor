@@ -50,6 +50,22 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 });
 
+Route::get('/admin/siswa', function () {
+    return view('admin.pages.siswa');
+});
+
+Route::get('/admin/guru', function () {
+    return view('admin.pages.guru');
+});
+
+Route::get('/admin/kelas', function () {
+    return view('admin.pages.kelas');
+});
+
+Route::get('/admin/matapelajaran', function () {
+    return view('admin.pages.matapelajaran');
+});
+
 // Public
 Route::get('/images/{filename}', function ($filename) {
     $path = public_path('images/' . $filename);

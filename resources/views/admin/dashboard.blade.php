@@ -67,39 +67,64 @@
     </div>
 
     <!-- Recent Activities -->
-    <div class="bg-white rounded-lg border">
-        <div class="p-4 border-b">
-            <h2 class="text-lg font-semibold text-gray-800">Aktivitas Terbaru</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Aktivitas Guru -->
+        <div class="bg-white rounded-lg border">
+            <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold text-gray-800">Aktivitas Guru</h2>
+            </div>
+            <div class="p-4">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktivitas</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Waktu</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Guru</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-3 text-sm text-gray-900">Input Nilai Matematika</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">1 jam yang lalu</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">Budi Santoso</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm text-gray-900">Upload Materi Pembelajaran</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">2 jam yang lalu</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">Siti Aminah</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="p-4">
-            <div class="space-y-4">
-                <div class="flex items-center space-x-4">
-                    <div class="flex-shrink-0">
-                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Input Nilai Kelas X RPL 1</p>
-                        <p class="text-sm text-gray-500">2 jam yang lalu oleh Budi Santoso</p>
-                    </div>
-                </div>
 
-                <div class="flex items-center space-x-4">
-                    <div class="flex-shrink-0">
-                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Absensi Kelas XI RPL 2</p>
-                        <p class="text-sm text-gray-500">3 jam yang lalu oleh Siti Aminah</p>
-                    </div>
-                </div>
+        <!-- Aktivitas Wali Kelas -->
+        <div class="bg-white rounded-lg border">
+            <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold text-gray-800">Aktivitas Wali Kelas</h2>
+            </div>
+            <div class="p-4">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktivitas</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Waktu</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wali Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-3 text-sm text-gray-900">Rekap Absensi X RPL 1</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">30 menit yang lalu</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">Ahmad Yani</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm text-gray-900">Jadwal Konsultasi Orang Tua</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">1 jam yang lalu</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">Sri Wahyuni</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
