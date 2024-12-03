@@ -25,8 +25,28 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              
-               
+                @if(isset($matapelajarans))
+                    @foreach($matapelajarans as $mapel)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->kode_mapel }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->nama_mapel }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->nama_guru }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->kkm }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button onclick="openEditModal('{{ $mapel->id }}')" class="text-blue-600 hover:text-blue-900">Edit</button>
+                            <form action="{{ route('admin.pages.matapelajaran.destroy', $mapel->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="ml-2 text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">Tidak ada data mata pelajaran</td>
+                    </tr>
+                @endif
             </tbody>
         </table>
     </div>
@@ -58,11 +78,11 @@
                     <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
                     <select name="nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Pilih Guru</option>
-                      
-                            <option value=""</option>
-                       
+                        @forelse($gurus ?? [] as $guru)
+                            <option value="{{ $guru->nip }}">{{ $guru->name }}</option>
+                        @empty
                             <option value="" disabled>Tidak ada data guru</option>
-                      
+                        @endforelse
                     </select>
                 </div>
                 <div>
@@ -103,7 +123,14 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
-                   
+                    <select name="nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Guru</option>
+                        @forelse($gurus ?? [] as $guru)
+                            <option value="{{ $guru->nip }}">{{ $guru->name }}</option>
+                        @empty
+                            <option value="" disabled>Tidak ada data guru</option>
+                        @endforelse
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">KKM</label>
@@ -131,21 +158,22 @@ function openEditModal(id) {
     fetch(`/admin/pages/matapelajaran/${id}`)
         .then(response => response.json())
         .then(data => {
-            document.querySelector('#editForm').action = `/admin/pages/matapelajaran/${id}`;
-            document.querySelector('#editForm [name="kode_mapel"]').value = data.kode_mapel;
-            document.querySelector('#editForm [name="nama_mapel"]').value = data.nama_mapel;
-            document.querySelector('#editForm [name="nip"]').value = data.nip;
-            document.querySelector('#editForm [name="kkm"]').value = data.kkm;
-            
-            // Set selected guru in dropdown
-            const guruSelect = document.querySelector('#editForm [name="nip"]');
-            Array.from(guruSelect.options).forEach(option => {
-                if (option.value === data.nip) {
-                    option.selected = true;
-                }
-            });
-            
-            document.getElementById('editModal').classList.remove('hidden');
+            if (data.success) {
+                document.querySelector('#editForm').action = `/admin/pages/matapelajaran/${id}`;
+                document.querySelector('#editForm [name="kode_mapel"]').value = data.data.kode_mapel;
+                document.querySelector('#editForm [name="nama_mapel"]').value = data.data.nama_mapel;
+                document.querySelector('#editForm [name="kkm"]').value = data.data.kkm;
+                
+                // Set selected guru in dropdown
+                const guruSelect = document.querySelector('#editForm [name="nip"]');
+                Array.from(guruSelect.options).forEach(option => {
+                    if (option.text === data.data.nama_guru) {
+                        option.selected = true;
+                    }
+                });
+                
+                document.getElementById('editModal').classList.remove('hidden');
+            }
         });
 }
 

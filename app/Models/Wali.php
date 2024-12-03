@@ -17,7 +17,7 @@ class Wali extends Authenticatable
         'name', 
         'email',
         'password',
-        'role'
+        'role',
     ];
 
     protected $hidden = [
@@ -27,9 +27,4 @@ class Wali extends Authenticatable
     protected $casts = [
         'password' => 'hashed'
     ];
-
-    public function kelas(): HasOne 
-    {
-        return $this->hasOne(Kelas::class, 'wali_id');
-    }
 }

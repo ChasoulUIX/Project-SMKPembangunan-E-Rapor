@@ -26,7 +26,7 @@
                 <tr>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->nama_kelas }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->jurusan }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->wali_name }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->wali_kelas ?? '-' }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">
                         {{ $kls->daftar_siswa ? count(json_decode($kls->daftar_siswa)) : 0 }}
                     </td>
@@ -77,7 +77,7 @@
                         <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
                         <select name="wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Wali Kelas</option>
-                            @foreach(App\Models\User::where('role', 'guru')->get() as $wali)
+                            @foreach(App\Models\Wali::where('role', 'wali')->get() as $wali)
                                 <option value="{{ $wali->id }}">{{ $wali->name }}</option>
                             @endforeach
                         </select>
@@ -126,7 +126,7 @@
                         <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
                         <select name="wali_id" id="edit_wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Wali Kelas</option>
-                            @foreach(App\Models\User::where('role', 'guru')->get() as $wali)
+                            @foreach(App\Models\Wali::where('role', 'wali')->get() as $wali)
                                 <option value="{{ $wali->id }}">{{ $wali->name }}</option>
                             @endforeach
                         </select>

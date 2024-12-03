@@ -15,4 +15,9 @@ class Kelas extends Model
         'wali_kelas',
         'jurusan'
     ];
+
+    public function wali()
+    {
+        return $this->belongsTo(Wali::class);
+    }
 }

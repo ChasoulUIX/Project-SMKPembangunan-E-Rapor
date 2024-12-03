@@ -190,4 +190,21 @@ class MuridController extends Controller
             return redirect()->back()->with('error', 'Error menghapus data siswa: ' . $e->getMessage());
         }
     }
+
+    public function getByNis($nis)
+    {
+        $murid = Murid::where('nis', $nis)->first();
+        
+        if (!$murid) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data siswa tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $murid
+        ]);
+    }
 }

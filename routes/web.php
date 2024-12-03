@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\MatapelajaranController;
 use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\WaliController;
+
 // Auth
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, '__invoke'])->name('login.submit');
@@ -57,8 +59,10 @@ Route::get('/admin/dashboard', function () {
 Route::prefix('admin')->group(function () {
     Route::get('/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
     Route::get('/pages/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
+    Route::get('/pages/siswa/create', [MuridController::class, 'create'])->name('admin.pages.murid.create');
     Route::post('/pages/siswa', [MuridController::class, 'store'])->name('admin.pages.murid.store');
     Route::get('/pages/siswa/{murid}', [MuridController::class, 'show'])->name('admin.pages.murid.show');
+    Route::get('/pages/siswa/{murid}/edit', [MuridController::class, 'edit'])->name('admin.pages.murid.edit');
     Route::put('/pages/siswa/{murid}', [MuridController::class, 'update'])->name('admin.pages.murid.update');
     Route::delete('/pages/siswa/{murid}', [MuridController::class, 'destroy'])->name('admin.pages.murid.destroy');
 });
@@ -95,6 +99,15 @@ Route::prefix('admin')->group(function () {
 Route::get('/admin/matapelajaran', function () {
     return view('admin.pages.matapelajaran');
 });
+
+
+// Wali Kelas
+Route::get('/admin/wali', function () {
+    return view('admin.pages.wali');
+});
+Route::get('/admin/wali', [WaliController::class, 'index'])->name('admin.pages.wali.index');
+Route::post('/admin/wali', [WaliController::class, 'store'])->name('admin.pages.wali.store');
+Route::delete('/admin/wali/{wali}', [WaliController::class, 'destroy'])->name('admin.pages.wali.destroy');
 
 // Public
 Route::get('/images/{filename}', function ($filename) {

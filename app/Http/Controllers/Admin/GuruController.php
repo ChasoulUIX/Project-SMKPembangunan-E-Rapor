@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\User;
-use App\Models\Wali;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -76,11 +75,10 @@ class GuruController extends Controller
     {
         $guru = Guru::findOrFail($id);
 
-        $validated = $request->validate([
+        $rules = [
             'nip' => 'required|string|unique:gurus,nip,' . $id,
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:gurus,email,' . $id,
-            'password' => 'nullable|string|min:3',
             'gender' => 'required|in:L,P',
             'birth_place' => 'required|string',
             'birth_date' => 'required|date',
@@ -88,7 +86,13 @@ class GuruController extends Controller
             'phone_number' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'role' => 'required|in:murid,guru,wali,admin'
-        ]);
+        ];
+
+        if ($request->filled('password')) {
+            $rules['password'] = 'required|string|min:3';
+        }
+
+        $validated = $request->validate($rules);
 
         if ($request->hasFile('photo')) {
             // Delete old photo if exists
@@ -103,9 +107,7 @@ class GuruController extends Controller
         }
 
         if ($request->filled('password')) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
+            $validated['password'] = Hash::make($request->password);
         }
 
         DB::beginTransaction();
@@ -119,7 +121,8 @@ class GuruController extends Controller
                 $userData = [
                     'name' => $validated['name'],
                     'nip' => $validated['nip'],
-                    'email' => $validated['email']
+                    'email' => $validated['email'],
+                    'role' => $validated['role']
                 ];
                 
                 if (isset($validated['password'])) {
@@ -127,18 +130,6 @@ class GuruController extends Controller
                 }
                 
                 $user->update($userData);
-            }
-
-            // If role is changed to wali, create wali record
-            if ($validated['role'] === 'wali') {
-                $waliData = [
-                    'name' => $validated['name'],
-                    'email' => $validated['email'],
-                    'password' => $validated['password'] ?? $guru->password,
-                    'role' => 'wali'
-                ];
-
-                Wali::create($waliData);
             }
 
             DB::commit();

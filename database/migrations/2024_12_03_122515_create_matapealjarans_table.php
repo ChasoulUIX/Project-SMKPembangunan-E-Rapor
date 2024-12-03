@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('kode_mapel')->unique();
             $table->string('nama_mapel');
             $table->string('nama_guru');
+            $table->json('daftar_siswa')->nullable(); // Menyimpan array ID siswa
             $table->timestamps();
         });
     }

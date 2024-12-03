@@ -10,6 +10,6 @@ class Matapelajaran extends Model
         'kode_mapel',
         'nama_mapel',
         'nama_guru',
-        'kkm'
+        'daftar_siswa'
     ];
 }
