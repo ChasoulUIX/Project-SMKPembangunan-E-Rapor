@@ -79,15 +79,15 @@ Route::prefix('admin')->group(function () {
     Route::delete('/pages/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.pages.guru.destroy');
 });
 
-Route::get('/admin/kelas', function () {
-    return view('admin.pages.kelas');
+Route::prefix('admin')->group(function () {
+    Route::get('/kelas', [KelasController::class, 'index'])->name('admin.pages.kelas.index');
+    Route::get('/kelas/{kelas}', [KelasController::class, 'show'])->name('admin.pages.kelas.show');
+    Route::get('/kelas/create', [KelasController::class, 'create'])->name('admin.pages.kelas.create');
+    Route::post('/kelas', [KelasController::class, 'store'])->name('admin.pages.kelas.store');
+    Route::get('/kelas/{kelas}/edit', [KelasController::class, 'edit'])->name('admin.pages.kelas.edit');
+    Route::put('/kelas/{kelas}', [KelasController::class, 'update'])->name('admin.pages.kelas.update');
+    Route::delete('/kelas/{kelas}', [KelasController::class, 'destroy'])->name('admin.pages.kelas.destroy');
 });
-Route::get('/admin/kelas', [KelasController::class, 'index'])->name('admin.pages.kelas.index');
-Route::post('/admin/pages/kelas', [KelasController::class, 'store'])->name('admin.pages.kelas.store');
-Route::get('/admin/pages/kelas/{kelas}/edit', [KelasController::class, 'edit'])->name('admin.pages.kelas.edit');
-Route::put('/admin/pages/kelas/{kelas}', [KelasController::class, 'update'])->name('admin.pages.kelas.update');
-Route::delete('/admin/pages/kelas/{kelas}', [KelasController::class, 'destroy'])->name('admin.pages.kelas.destroy');
-Route::PUT('/admin/pages/kelas/create', [KelasController::class, 'create'])->name('admin.pages.kelas.create');
 
 
 Route::prefix('admin')->group(function () {

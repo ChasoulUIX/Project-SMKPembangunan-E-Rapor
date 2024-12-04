@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Murid;
 use App\Models\User;
+use App\Models\Kelas;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -16,12 +18,14 @@ class MuridController extends Controller
     public function index()
     {
         $murids = Murid::all();
-        return view('admin.pages.siswa', compact('murids'));
+        $kelas = Kelas::all();
+        return view('admin.pages.siswa', compact('murids', 'kelas'));
     }
 
     public function create()
     {
-        return view('admin.pages.siswa');
+        $kelas = Kelas::all();
+        return view('admin.pages.siswa', compact('kelas'));
     }
 
     public function store(Request $request)
@@ -74,6 +78,14 @@ class MuridController extends Controller
                 'role' => 'murid'
             ]);
 
+            // Update kelas daftar_siswa
+            $kelas = Kelas::where('nama_kelas', $validated['class'])->first();
+            if ($kelas) {
+                $daftar_siswa = $kelas->daftar_siswa ?? [];
+                $daftar_siswa[] = $validated['name'];
+                $kelas->update(['daftar_siswa' => $daftar_siswa]);
+            }
+
             DB::commit();
             return redirect()->route('admin.pages.siswa')->with('success', 'Siswa berhasil ditambahkan');
         } catch (\Exception $e) {
@@ -84,12 +96,14 @@ class MuridController extends Controller
 
     public function show(Murid $murid)
     {
-        return view('admin.pages.siswa', compact('murid'));
+        $kelas = Kelas::all();
+        return view('admin.pages.siswa', compact('murid', 'kelas'));
     }
 
     public function edit(Murid $murid)
     {
-        return view('admin.pages.siswa.edit', compact('murid'));
+        $kelas = Kelas::all();
+        return view('admin.pages.siswa.edit', compact('murid', 'kelas'));
     }
 
     public function update(Request $request, Murid $murid)
@@ -139,8 +153,26 @@ class MuridController extends Controller
 
         DB::beginTransaction();
         try {
+            // Remove from old class
+            $oldKelas = Kelas::where('nama_kelas', $murid->class)->first();
+            if ($oldKelas) {
+                $daftar_siswa = $oldKelas->daftar_siswa ?? [];
+                $daftar_siswa = array_filter($daftar_siswa, function($siswa) use ($murid) {
+                    return $siswa !== $murid->name;
+                });
+                $oldKelas->update(['daftar_siswa' => array_values($daftar_siswa)]);
+            }
+
             // Update murid
             $murid->update($validated);
+
+            // Add to new class
+            $newKelas = Kelas::where('nama_kelas', $validated['class'])->first();
+            if ($newKelas) {
+                $daftar_siswa = $newKelas->daftar_siswa ?? [];
+                $daftar_siswa[] = $validated['name'];
+                $newKelas->update(['daftar_siswa' => $daftar_siswa]);
+            }
 
             // Update corresponding user
             $user = User::where('nis', $murid->getOriginal('nis'))->first();
@@ -170,6 +202,16 @@ class MuridController extends Controller
     {
         DB::beginTransaction();
         try {
+            // Remove from class
+            $kelas = Kelas::where('nama_kelas', $murid->class)->first();
+            if ($kelas) {
+                $daftar_siswa = $kelas->daftar_siswa ?? [];
+                $daftar_siswa = array_filter($daftar_siswa, function($siswa) use ($murid) {
+                    return $siswa !== $murid->name;
+                });
+                $kelas->update(['daftar_siswa' => array_values($daftar_siswa)]);
+            }
+
             if ($murid->photo) {
                 $photoPath = public_path($murid->photo);
                 if (file_exists($photoPath)) {

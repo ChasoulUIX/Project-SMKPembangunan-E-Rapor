@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('gender', ['L', 'P']);
-            $table->string('birth_place');
-            $table->date('birth_date');
-            $table->text('address');
-            $table->string('phone_number');
-            $table->string('photo')->nullable();
+            $table->enum('gender', ['L', 'P'])->default('');
+            $table->string('birth_place')->default('');
+            $table->date('birth_date')->nullable();
+            $table->text('address')->default('');
+            $table->string('phone_number')->default('');
+            $table->string('photo')->default('');
             $table->enum('role', ['murid', 'guru', 'wali', 'admin'])->default('guru');
             $table->timestamps();
         });

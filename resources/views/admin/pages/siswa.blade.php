@@ -178,7 +178,11 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                            <input type="text" name="class" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <select name="class" id="edit_class" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                @foreach($kelas as $kls)
+                                    <option value="{{ $kls->nama_kelas }}" {{ old('class', $murid->class ?? '') == $kls->nama_kelas ? 'selected' : '' }}>{{ $kls->nama_kelas }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Jurusan</label>
@@ -273,7 +277,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                        <input type="date" name="birth_date" id="edit_birth_date" value="{{ old('birth_date', $murid->birth_date ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="date" name="birth_date" id="edit_birth_date" value="{{ old('birth_date', isset($murid) ? \Carbon\Carbon::parse($murid->birth_date)->format('Y-m-d') : '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Alamat</label>
@@ -305,7 +309,11 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                        <input type="text" name="class" id="edit_class" value="{{ old('class', $murid->class ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select name="class" id="edit_class" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            @foreach($kelas as $kls)
+                                <option value="{{ $kls->nama_kelas }}" {{ old('class', $murid->class ?? '') == $kls->nama_kelas ? 'selected' : '' }}>{{ $kls->nama_kelas }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Jurusan</label>

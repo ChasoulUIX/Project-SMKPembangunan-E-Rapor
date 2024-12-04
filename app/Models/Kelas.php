@@ -12,7 +12,7 @@ class Kelas extends Model
     protected $table = 'kelas';
     protected $fillable = [
         'nama_kelas',
-        'wali_kelas',
+        'wali_kelas', 
         'jurusan',
         'wali_id'
     ];
@@ -20,5 +20,10 @@ class Kelas extends Model
     public function wali()
     {
         return $this->belongsTo(Wali::class, 'wali_id');
+    }
+
+    public function murid()
+    {
+        return $this->hasMany(Murid::class, 'kelas_id');
     }
 }

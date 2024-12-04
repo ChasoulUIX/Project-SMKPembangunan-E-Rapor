@@ -97,45 +97,49 @@
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen px-4">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-        <div class="relative bg-white rounded-lg max-w-lg w-full">
-            <div class="px-6 py-4 border-b">
-                <h3 class="text-lg font-medium text-gray-900">Edit Kelas</h3>
-            </div>
-            <form id="editForm" method="POST" class="p-6">
-                @csrf
-                @method('PUT')
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama Kelas</label>
-                         </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Jurusan</label>
-                        <select name="jurusan" id="edit_jurusan" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Pilih Jurusan</option>
-                            </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
-                        <select name="wali_id" id="edit_wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Pilih Wali Kelas</option>
-                            @foreach(App\Models\Wali::where('role', 'wali')->get() as $wali)
-                                 @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="mt-6 flex justify-end space-x-3">
-                    <button type="button" onclick="closeEditModal()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                        Batal
-                    </button>
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Simpan
-                    </button>
-                </div>
-            </form>
+<div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-[800px] shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center pb-3">
+            <h3 class="text-lg font-medium">Edit Data Kelas</h3>
+            <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-500">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
+        <form id="editForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nama Kelas</label>
+                    <input type="text" name="nama_kelas" id="edit_nama_kelas" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Jurusan</label>
+                    <select name="jurusan" id="edit_jurusan" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Jurusan</option>
+                        <option value="Multimedia">Multimedia</option>
+                        <option value="Akuntansi">Akuntansi</option>
+                        <option value="Perkantoran">Perkantoran</option>
+                        <option value="Pemasaran">Pemasaran</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
+                    <select name="wali_id" id="edit_wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Wali Kelas</option>
+                        @foreach(App\Models\Wali::where('role', 'wali')->get() as $wali)
+                            <option value="{{ $wali->id }}">{{ $wali->nip }} - {{ $wali->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" onclick="closeEditModal()" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Batal</button>
+                <button type="submit" class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan Perubahan</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -150,6 +154,16 @@ function closeCreateModal() {
 
 function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editForm').action = `/admin/kelas/${id}`;
+    
+    // Fetch kelas data and populate form
+    fetch(`/admin/kelas/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('edit_nama_kelas').value = data.nama_kelas;
+            document.getElementById('edit_jurusan').value = data.jurusan;
+            document.getElementById('edit_wali_id').value = data.wali.id;
+        });
 }
 
 function closeEditModal() {
