@@ -45,4 +45,9 @@ class Murid extends Authenticatable
         'major' => 'string',
         'role' => 'string'
     ];
+
+    public static function getAllMurids()
+    {
+        return self::all();
+    }
 }

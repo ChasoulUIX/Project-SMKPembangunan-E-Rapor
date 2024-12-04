@@ -8,7 +8,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\MatapelajaranController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\WaliController;
-
+use App\Http\Controllers\Wali\WaliMuridController;
+use App\Http\Controllers\Wali\DaftarSiswaController;
+use App\Http\Controllers\Wali\DaftarNilaiController;
 
 // Auth
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -40,12 +42,24 @@ Route::get('/pages/siswa', function () {
 });
 
 Route::prefix('wali')->group(function () {
-    Route::get('/siswa', [WaliController::class, 'siswaIndex'])->name('wali.siswa.index');
-    Route::get('/siswa/{siswa}', [WaliController::class, 'siswaShow'])->name('wali.siswa.show');
+    Route::get('/siswa', [WaliMuridController::class, 'index'])->name('wali.siswa.index');
+    Route::get('/siswa/create', [WaliMuridController::class, 'create'])->name('wali.siswa.create');
+    Route::post('/siswa', [WaliMuridController::class, 'store'])->name('wali.siswa.store');
+    Route::get('/siswa/{siswa}', [WaliMuridController::class, 'show'])->name('wali.siswa.show');
+    Route::get('/siswa/{murid}/edit', [WaliMuridController::class, 'edit'])->name('wali.siswa.edit');
+    Route::put('/siswa/{murid}', [WaliMuridController::class, 'update'])->name('wali.siswa.update');
+    Route::delete('/siswa/{murid}', [WaliMuridController::class, 'destroy'])->name('wali.siswa.destroy');
+    Route::post('/siswa', [DaftarSiswaController::class, 'store'])->name('wali.siswa.store');
+    Route::get('/siswa', [DaftarSiswaController::class, 'index'])->name('wali.siswa.index');
 });
 
 Route::get('/pages/nilai', function () {
     return view('wali.pages.nilai');
+});
+
+Route::prefix('wali')->group(function () {
+    Route::get('/nilai', [WaliNilaiController::class, 'index'])->name('wali.nilai.index');
+    Route::get('/nilai/{id}', [WaliNilaiController::class, 'show'])->name('wali.nilai.show');
 });
 
 Route::get('/pages/rapor', function () {

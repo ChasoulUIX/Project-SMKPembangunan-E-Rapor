@@ -55,39 +55,43 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-                <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">1</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">Ahmad Fauzi</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">Matematika</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">85</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">80</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">90</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-blue-600">85</td>
+            @php
+                $daftarNilai = \App\Models\Daftarnilai::where('id_wali', auth()->user()->nip)
+                    ->paginate(10);
+            @endphp
+            @forelse($daftarNilai as $nilai)
+                @if(is_array($nilai->daftar_siswa) || is_object($nilai->daftar_siswa))
+                    @foreach($nilai->daftar_siswa as $murid)
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $loop->parent->index * count($nilai->daftar_siswa) + $loop->iteration }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['name'] }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_pelajaran }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                            {{ number_format($nilai->calculateAverageScore($murid['nis']), 1) }}
+                        </td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uts[$murid['nis']] ?? '-' }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uas[$murid['nis']] ?? '-' }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-blue-600">
+                            {{ number_format($nilai->calculateFinalScore($murid['nis']), 1) }}
+                        </td>
+                    </tr>
+                    @endforeach
+                @endif
+            @empty
+                <tr>
+                    <td colspan="7" class="px-3 sm:px-6 py-3 sm:py-4 text-center text-sm text-gray-500">
+                        Tidak ada data nilai
+                    </td>
                 </tr>
-                <!-- Tambahkan baris nilai lainnya -->
+            @endforelse
             </tbody>
         </table>
+    </div>
     </div>
 
     <!-- Pagination -->
     <div class="mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
-        <div class="text-xs sm:text-sm text-gray-600">
-            Menampilkan <span class="font-medium">1 - 10</span> dari <span class="font-medium">36</span> data
-        </div>
-        <div class="flex space-x-2">
-            <button class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-1 sm:space-x-2">
-                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-                <span>Previous</span>
-            </button>
-            <button class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-1 sm:space-x-2">
-                <span>Next</span>
-                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-        </div>
+        {{ $daftarNilai->links() }}
     </div>
 </div>
 @endsection

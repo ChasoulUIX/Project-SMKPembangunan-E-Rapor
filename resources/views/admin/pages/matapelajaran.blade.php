@@ -84,6 +84,11 @@
                         <input type="text" name="nama_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-gray-700">NIP</label>
+                        <input type="text" name="nip" id="nip" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                   
+                    <div>
                         <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
                         <select name="nama_guru" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Guru</option>

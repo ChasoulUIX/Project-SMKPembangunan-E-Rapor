@@ -17,7 +17,6 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Kelas</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jurusan</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wali Kelas</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jumlah Siswa</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
@@ -27,9 +26,7 @@
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->nama_kelas }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->jurusan }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kls->wali_kelas ?? '-' }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">
-                        {{ $kls->daftar_siswa ? count(json_decode($kls->daftar_siswa)) : 0 }}
-                    </td>
+                  
                     <td class="px-6 py-4 text-sm text-gray-900">
                         <button onclick="openEditModal({{ $kls->id }}, '{{ $kls->nama_kelas }}', '{{ $kls->jurusan }}', '{{ $kls->wali_id }}')" class="text-blue-600 hover:text-blue-800 mr-3">Edit</button>
                         <form action="{{ route('admin.pages.kelas.destroy', $kls) }}" method="POST" class="inline">

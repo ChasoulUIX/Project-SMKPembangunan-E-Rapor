@@ -45,43 +45,39 @@
                 <tr>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">No</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">NIS</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">NISN</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Siswa</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Jenis Kelamin</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Status</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Kelas</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Jurusan</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-100">
-                @if(isset($murids) && count($murids) > 0)
-                    @foreach($murids as $index => $murid)
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $index + 1 }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{{ $murid->nis }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->nisn }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->name }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                            <span class="px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm text-green-700 bg-green-100 rounded-full">Aktif</span>
-                        </td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-1 sm:space-x-2">
-                            <a href="{{ route('wali.murid.edit', $murid->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">Edit</a>
-                            <form action="{{ route('wali.murid.destroy', $murid->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">Hapus</button>
-                            </form>
-                            <a href="{{ route('wali.murid.show', $murid->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors">Detail</a>
-                        </td>
-                    </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="7" class="px-3 sm:px-6 py-4 text-center text-sm text-gray-500">
-                            Tidak ada data siswa yang tersedia
-                        </td>
-                    </tr>
-                @endif
+           <tbody class="divide-y divide-gray-100">
+            @php
+                $daftarSiswa = App\Models\Daftarsiswa::where('nip', Auth::user()->nip)->get();
+                $no = 1;
+            @endphp
+            @forelse($daftarSiswa as $siswa)
+                @foreach($siswa->daftar_siswa as $murid)
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{{ $murid['nis'] }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['name'] }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $siswa->nama_kelas }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $siswa->jurusan }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-1 sm:space-x-2">
+                        <a href="{{ route('wali.siswa.edit', $siswa->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">Edit</a>
+                        <a href="{{ route('wali.siswa.show', $siswa->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors">Detail</a>
+                        <!-- Add delete form/button here -->
+                    </td>
+                </tr>
+                @endforeach
+            @empty
+                <tr>
+                    <td colspan="6" class="px-3 sm:px-6 py-3 sm:py-4 text-center text-sm text-gray-500">
+                        Tidak ada data siswa
+                    </td>
+                </tr>
+            @endforelse
             </tbody>
         </table>
     </div>
@@ -138,29 +134,90 @@
                     <h3 class="text-xl font-semibold text-gray-900">Tambah Siswa Baru</h3>
                 </div>
 
-                <form action="{{ route('wali.murid.store') }}" method="POST" class="space-y-5">
+                <form action="{{ route('wali.siswa.store') }}" method="POST" class="space-y-5">
                     @csrf
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">NIS</label>
-                        <input type="text" name="nis" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan NIS">
+                        <input type="hidden" name="id_kelas" id="id_kelas">
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const kelasSelect = document.querySelector('select[name="nama_kelas"]');
+                            const idKelasInput = document.getElementById('id_kelas');
+
+                            kelasSelect.addEventListener('change', function() {
+                                const selectedKelas = this.value;
+                                // Fetch kelas data to get ID
+                                fetch(`/api/kelas/${selectedKelas}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        idKelasInput.value = data.id;
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            });
+                        });
+                    </script>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kelas</label>
+                        <select name="nama_kelas" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                            <option value="">Pilih Kelas</option>
+                            @foreach(\App\Models\Kelas::orderBy('nama_kelas')->get() as $kelas)
+                                <option value="{{ $kelas->nama_kelas }}">{{ $kelas->nama_kelas }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">NISN</label>
-                        <input type="text" name="nisn" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan NISN">
+                        <input type="hidden" name="nip" id="nipInput">
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const waliSelect = document.getElementById('waliKelasSelect');
+                            const nipInput = document.getElementById('nipInput');
+
+                            waliSelect.addEventListener('change', function() {
+                                const selectedWali = this.value;
+                                // Fetch wali data to get NIP
+                                fetch(`/api/wali/${selectedWali}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        nipInput.value = data.nip;
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            });
+                        });
+                    </script>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Wali Kelas</label>
+                        <select name="wali_kelas" id="waliKelasSelect" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                            <option value="">Pilih Wali Kelas</option>
+                            @foreach(\App\Models\Wali::orderBy('name')->get() as $wali)
+                                <option value="{{ $wali->name }}">{{ $wali->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                        <input type="text" name="name" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan nama lengkap">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Jurusan</label>
+                        <select name="jurusan" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                            <option value="">Pilih Jurusan</option>
+                            @foreach(\App\Models\Kelas::select('jurusan')->distinct()->orderBy('jurusan')->get() as $kelas)
+                                <option value="{{ $kelas->jurusan }}">{{ $kelas->jurusan }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
-                        <select name="gender" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
-                            <option value="" disabled selected>Pilih Jenis Kelamin</option>
-                            <option value="L">Laki-laki</option>
-                            <option value="P">Perempuan</option>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Daftar Siswa</label>
+                        <select name="daftar_siswa" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                            <option value="">Pilih Siswa</option>
+                            @foreach(\App\Models\Murid::orderBy('name')->get() as $murid)
+                                <option value="{{ json_encode(['id' => $murid->id, 'name' => $murid->name, 'nis' => $murid->nis, 'nisn' => $murid->nisn]) }}">
+                                    {{ $murid->name }} ({{ $murid->nis }})
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -181,11 +238,14 @@
 <script>
 function openModal(modalId) {
     document.getElementById(modalId).classList.remove('hidden');
+    // Fetch wali data when modal opens
+    fetchWaliData();
 }
 
 function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
 }
+
 </script>
 
 @endsection

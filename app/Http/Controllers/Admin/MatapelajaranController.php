@@ -32,10 +32,18 @@ class MatapelajaranController extends Controller
             'kode_mapel' => 'required|unique:matapelajarans',
             'nama_mapel' => 'required',
             'nama_guru' => 'required',
+            'nip' => 'required',
             'daftar_siswa' => 'nullable'
         ]);
 
-        Matapelajaran::create($validated);
+        // Include nip in the data to be created
+        Matapelajaran::create([
+            'kode_mapel' => $validated['kode_mapel'],
+            'nama_mapel' => $validated['nama_mapel'], 
+            'nama_guru' => $validated['nama_guru'],
+            'nip' => $validated['nip'],
+            'daftar_siswa' => $validated['daftar_siswa'] ?? null
+        ]);
 
         return redirect()->route('admin.pages.matapelajaran')->with('success', 'Mata pelajaran berhasil ditambahkan');
     }
@@ -51,10 +59,17 @@ class MatapelajaranController extends Controller
             'kode_mapel' => 'required|unique:matapelajarans,kode_mapel,' . $matapelajaran->id,
             'nama_mapel' => 'required',
             'nama_guru' => 'required',
+            'nip' => 'required',
             'daftar_siswa' => 'nullable'
         ]);
 
-        $matapelajaran->update($validated);
+        $matapelajaran->update([
+            'kode_mapel' => $validated['kode_mapel'],
+            'nama_mapel' => $validated['nama_mapel'],
+            'nama_guru' => $validated['nama_guru'],
+            'nip' => $validated['nip'],
+            'daftar_siswa' => $validated['daftar_siswa'] ?? null
+        ]);
 
         return redirect()->route('admin.pages.matapelajaran')->with('success', 'Mata pelajaran berhasil diperbarui');
     }

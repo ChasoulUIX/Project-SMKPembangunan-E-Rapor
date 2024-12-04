@@ -17,7 +17,11 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl sm:text-3xl font-bold text-blue-600">{{ Auth::user()->email ?? 'Belum ditentukan' }}</span>
+                    @php
+                        $daftarSiswa = \App\Models\Daftarsiswa::where('nip', Auth::user()->nip)->first();
+                        $namaKelas = $daftarSiswa ? $daftarSiswa->nama_kelas : 'Belum ditentukan';
+                    @endphp
+                    <span class="text-2xl sm:text-3xl font-bold text-blue-600">{{ $namaKelas }}</span>
                     <p class="text-xs sm:text-sm text-blue-500 mt-1">2023/2024</p>
                 </div>
             </div>
@@ -35,20 +39,20 @@
                 </div>
                 <div class="text-right">
                     @php
-                        use App\Models\Murid;
-                        $muridCount = Murid::count();
-                        $muridLakiLaki = Murid::where('gender', 'L')->count();
-                        $muridPerempuan = Murid::where('gender', 'P')->count();
+                        use App\Models\Daftarsiswa;
+                        $daftarSiswa = Daftarsiswa::where('nip', Auth::user()->nip)->first();
+                        $totalSiswa = 0;
+                        
+                        if($daftarSiswa && is_array($daftarSiswa->daftar_siswa)) {
+                            $totalSiswa = count($daftarSiswa->daftar_siswa);
+                        }
                     @endphp
-                    <span class="text-2xl sm:text-3xl font-bold text-green-600">{{ $muridCount }}</span>
+                    <span class="text-2xl sm:text-3xl font-bold text-green-600">{{ $totalSiswa }}</span>
                     <p class="text-xs sm:text-sm text-green-500 mt-1">Siswa</p>
                 </div>
             </div>
             <h3 class="text-base sm:text-lg font-semibold text-gray-800">Jumlah Siswa</h3>
-            <p class="text-sm text-gray-600 mt-1">
-                Laki-laki: {{ $muridLakiLaki }} | 
-                Perempuan: {{ $muridPerempuan }}
-            </p>
+            <p class="text-sm text-gray-600 mt-1">Total Siswa: {{ $totalSiswa }}</p>
         </div>
 
         <!-- Card Mata Pelajaran -->
@@ -60,12 +64,18 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl sm:text-3xl font-bold text-purple-600">{{ Auth::user()->wali?->kelas?->matapelajaran?->count() ?? '0' }}</span>
+                    @php
+                        $loggedInName = auth()->user()->name;
+                        $matapelajarans = \App\Models\Matapelajaran::where('nama_guru', $loggedInName)
+                            ->orderBy('nama_mapel')
+                            ->get();
+                    @endphp
+                    <span class="text-2xl sm:text-3xl font-bold text-purple-600">{{ $matapelajarans->count() }}</span>
                     <p class="text-xs sm:text-sm text-purple-500 mt-1">Mata Pelajaran</p>
                 </div>
             </div>
             <h3 class="text-base sm:text-lg font-semibold text-gray-800">Mata Pelajaran</h3>
-            <p class="text-sm text-gray-600 mt-1">{{ Auth::user()->wali?->kelas?->matapelajaran?->pluck('nama_mapel')->implode(', ') ?? '-' }}</p>
+            <p class="text-sm text-gray-600 mt-1">{{ $matapelajarans->pluck('nama_mapel')->implode(', ') ?: '-' }}</p>
         </div>
     </div>
 
@@ -90,34 +100,38 @@
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
-                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @php
-                        $murids = App\Models\Murid::all();
+                        $daftarSiswa = App\Models\Daftarsiswa::where('nip', Auth::user()->nip)->get();
+                        $no = 1;
                     @endphp
-                    @forelse($murids as $index => $murid)
-                    <tr>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $index + 1 }}</td>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->nis }}</td>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->name }}</td>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Aktif
-                            </span>
-                        </td>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm font-medium">
-                            <a href="{{ route('wali.siswa.show', $murid->id) }}" class="text-blue-600 hover:text-blue-900">Detail</a>
-                        </td>
-                    </tr>
+                    @forelse($daftarSiswa as $siswa)
+                        @foreach($siswa->daftar_siswa as $murid)
+                        <tr>
+                            <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
+                            <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['nis'] }}</td>
+                            <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['name'] }}</td>
+                            <td class="px-4 sm:px-6 py-3 whitespace-nowrap">
+                                <div class="flex flex-col">
+                                    <span class="text-xs text-gray-900">{{ $siswa->nama_kelas }}</span>
+                                    <span class="text-xs text-gray-500">{{ $siswa->jurusan }}</span>
+                                </div>
+                            </td>
+                            <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm font-medium">
+                                <a href="{{ route('wali.siswa.show', $murid['id']) }}" class="text-blue-600 hover:text-blue-900">Detail</a>
+                            </td>
+                        </tr>
+                        @endforeach
                     @empty
-                    <tr>
-                        <td colspan="5" class="px-4 sm:px-6 py-3 whitespace-nowrap text-sm text-center text-gray-500">
-                            Tidak ada data siswa
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="5" class="px-4 sm:px-6 py-3 whitespace-nowrap text-sm text-center text-gray-500">
+                                Tidak ada data siswa
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>

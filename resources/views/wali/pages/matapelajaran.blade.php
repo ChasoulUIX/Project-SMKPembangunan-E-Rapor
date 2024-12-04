@@ -34,22 +34,38 @@
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Kode Mapel</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Mapel</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Guru Pengajar</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">KKM</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
+                @php
+                    $loggedInName = auth()->user()->name;
+                    $matapelajarans = \App\Models\Matapelajaran::where('nama_guru', $loggedInName)
+                        ->orderBy('nama_mapel')
+                        ->get();
+                @endphp
+                @forelse($matapelajarans as $mapel)
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">1</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">MTK001</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">Matematika</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">Budi Santoso, S.Pd</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">75</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm space-x-2">
-                        <button class="text-blue-600 hover:text-blue-900">Edit</button>
-                        <button class="text-red-600 hover:text-red-900">Hapus</button>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $loop->iteration }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $mapel->kode_mapel }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $mapel->nama_mapel }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $mapel->nama_guru }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-2">
+                        <a href="" class="text-blue-600 hover:text-blue-900">Edit</a>
+                        <form action="" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus mata pelajaran ini?')">Hapus</button>
+                        </form>
                     </td>
                 </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="px-3 sm:px-6 py-3 sm:py-4 text-center text-sm text-gray-500">
+                        Tidak ada data mata pelajaran
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

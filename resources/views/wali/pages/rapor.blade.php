@@ -23,55 +23,53 @@
         </div>
     </div>
 
-    <!-- Daftar Siswa -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        <!-- Card Siswa -->
-        <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-shadow">
-            <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-gray-900 truncate">Ahmad Fauzi</p>
-                    <p class="text-xs text-gray-500">NIS: 2024001</p>
-                </div>
-                <a href="#" class="inline-flex items-center px-3 py-1.5 border border-blue-600 text-xs font-medium rounded-lg text-blue-600 bg-white hover:bg-blue-50 transition-colors">
-                    Cetak Rapor
-                </a>
-            </div>
-        </div>
-
-        <!-- Repeat card for other students -->
-        <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-shadow">
-            <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-gray-900 truncate">Siti Aminah</p>
-                    <p class="text-xs text-gray-500">NIS: 2024002</p>
-                </div>
-                <a href="#" class="inline-flex items-center px-3 py-1.5 border border-blue-600 text-xs font-medium rounded-lg text-blue-600 bg-white hover:bg-blue-50 transition-colors">
-                    Cetak Rapor
-                </a>
-            </div>
-        </div>
-
-        <!-- Add more student cards as needed -->
+    <!-- Tabel Siswa -->
+    <div class="overflow-x-auto rounded-xl border border-gray-100 bg-white">
+        <table class="min-w-full divide-y divide-gray-100">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">No</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">NIS</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Siswa</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Kelas</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Jurusan</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @php
+                    $daftarSiswa = App\Models\Daftarsiswa::where('nip', Auth::user()->nip)->get();
+                    $no = 1;
+                @endphp
+                @forelse($daftarSiswa as $siswa)
+                    @foreach($siswa->daftar_siswa as $murid)
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{{ $murid['nis'] }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['name'] }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $siswa->nama_kelas }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $siswa->jurusan }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-1 sm:space-x-2">
+                            <a href="#" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">Cetak Rapor</a>
+                            <a href="#" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors">Detail</a>
+                        </td>
+                    </tr>
+                    @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-3 sm:px-6 py-3 sm:py-4 text-center text-sm text-gray-500">
+                            Tidak ada data siswa
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
     <!-- Pagination -->
     <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
         <div class="text-xs sm:text-sm text-gray-600">
-            Menampilkan <span class="font-medium">1 - 10</span> dari <span class="font-medium">36</span> siswa
+            Menampilkan <span class="font-medium">1 - {{ $daftarSiswa->count() }}</span> dari <span class="font-medium">{{ $daftarSiswa->count() }}</span> siswa
         </div>
         <div class="flex space-x-2">
             <button class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-1 sm:space-x-2">

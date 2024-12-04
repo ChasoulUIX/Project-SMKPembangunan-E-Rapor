@@ -4,22 +4,27 @@ namespace App\Http\Controllers\Wali;
 
 use App\Http\Controllers\Controller;
 use App\Models\Murid;
+use App\Models\Wali;
+use App\Models\Daftarsiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-class MuridController extends Controller
+class WaliMuridController extends Controller
 {
     public function index()
     {
         $murids = Murid::all();
-        return view('wali.siswa.index', compact('murids'));
+        dd($murids);
+        return view('wali.pages.siswa.index', compact('murids'));
     }
 
     public function create()
     {
-        return view('wali.siswa.create');
+        $murids = Murid::all(); // Mengambil semua data dari tabel murids
+        return view('wali.pages.siswa.create', compact('murids'));
     }
+    
 
     public function store(Request $request)
     {
@@ -58,14 +63,14 @@ class MuridController extends Controller
         return redirect()->route('wali.siswa.index')->with('success', 'Data siswa berhasil ditambahkan');
     }
 
-    public function show(Murid $murid)
+    public function show(Murid $siswa)
     {
-        return view('wali.siswa.show', compact('murid'));
+        return view('wali.siswa.show', ['siswa' => $siswa]);
     }
 
     public function edit(Murid $murid)
     {
-        return view('wali.siswa.edit', compact('murid'));
+        return view('wali.pages.siswa.edit', compact('murid'));
     }
 
     public function update(Request $request, Murid $murid)
