@@ -56,7 +56,7 @@
             </thead>
             <tbody class="divide-y divide-gray-100">
             @php
-                $daftarNilai = \App\Models\Daftarnilai::where('id_wali', auth()->user()->nip)
+                $daftarNilai = \App\Models\Daftarnilai::where('id_wali', auth()->user()?->nip)
                     ->paginate(10);
             @endphp
             @forelse($daftarNilai as $nilai)

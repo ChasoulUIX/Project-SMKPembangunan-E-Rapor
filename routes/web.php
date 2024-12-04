@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\WaliController;
 use App\Http\Controllers\Wali\WaliMuridController;
 use App\Http\Controllers\Wali\DaftarSiswaController;
 use App\Http\Controllers\Wali\DaftarNilaiController;
+use App\Http\Controllers\Wali\WaliRaporController;
 
 // Auth
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -65,6 +66,13 @@ Route::prefix('wali')->group(function () {
 Route::get('/pages/rapor', function () {
     return view('wali.pages.rapor');
 });
+Route::prefix('wali')->group(function () {
+    Route::get('/rapor', [WaliRaporController::class, 'index'])->name('wali.rapor.index');
+    Route::get('/rapor/detail/{nis}', [WaliRaporController::class, 'detail'])->name('wali.rapor.detail');
+        Route::get('/rapor/download-pdf', [WaliRaporController::class, 'downloadPDF'])->name('wali.rapor.downloadPDF');
+        Route::get('/rapor/download-image', [WaliRaporController::class, 'downloadImage'])->name('wali.rapor.downloadImage');
+    });
+
 
 Route::get('/pages/matapelajaran', function () {
     return view('wali.pages.matapelajaran');
