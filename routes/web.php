@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\MatapelajaranController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\WaliController;
 
+
 // Auth
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, '__invoke'])->name('login.submit');
@@ -23,8 +24,24 @@ Route::get('wali/dashboard', function () {
     return view('wali.dashboard');
 });
 
+Route::prefix('admin')->group(function () {
+    Route::get('/wali', [WaliController::class, 'index'])->name('admin.pages.wali.index');
+    Route::get('/wali/create', [WaliController::class, 'create'])->name('admin.pages.wali.create');
+    Route::post('/wali', [WaliController::class, 'store'])->name('admin.pages.wali.store');
+    Route::get('/wali/{wali}', [WaliController::class, 'show'])->name('admin.pages.wali.show');
+    Route::get('/wali/{wali}/edit', [WaliController::class, 'edit'])->name('admin.pages.wali.edit');
+    Route::put('/wali/{wali}', [WaliController::class, 'update'])->name('admin.pages.wali.update');
+    Route::delete('/wali/{wali}', [WaliController::class, 'destroy'])->name('admin.pages.wali.destroy');
+    Route::post('/wali/murid', [WaliController::class, 'storeMurid'])->name('wali.murid.store');
+});
+
 Route::get('/pages/siswa', function () {
     return view('wali.pages.siswa');
+});
+
+Route::prefix('wali')->group(function () {
+    Route::get('/siswa', [WaliController::class, 'siswaIndex'])->name('wali.siswa.index');
+    Route::get('/siswa/{siswa}', [WaliController::class, 'siswaShow'])->name('wali.siswa.show');
 });
 
 Route::get('/pages/nilai', function () {
@@ -33,6 +50,10 @@ Route::get('/pages/nilai', function () {
 
 Route::get('/pages/rapor', function () {
     return view('wali.pages.rapor');
+});
+
+Route::get('/pages/matapelajaran', function () {
+    return view('wali.pages.matapelajaran');
 });
 
 // Guru
@@ -90,6 +111,11 @@ Route::prefix('admin')->group(function () {
 });
 
 
+Route::get('/admin/matapelajaran', function () {
+    return view('admin.pages.matapelajaran');
+});
+
+
 Route::prefix('admin')->group(function () {
     Route::get('/matapelajaran', [MatapelajaranController::class, 'index'])->name('admin.pages.matapelajaran');
     Route::post('/matapelajaran', [MatapelajaranController::class, 'store'])->name('admin.pages.matapelajaran.store');
@@ -100,18 +126,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/pages/matapelajaran', [MatapelajaranController::class, 'index'])->name('admin.pages.matapelajaran');
 });
 
-Route::get('/admin/matapelajaran', function () {
-    return view('admin.pages.matapelajaran');
-});
-
-
-// Wali Kelas
-Route::get('/admin/wali', function () {
-    return view('admin.pages.wali');
-});
-Route::get('/admin/wali', [WaliController::class, 'index'])->name('admin.pages.wali.index');
-Route::post('/admin/wali', [WaliController::class, 'store'])->name('admin.pages.wali.store');
-Route::delete('/admin/wali/{wali}', [WaliController::class, 'destroy'])->name('admin.pages.wali.destroy');
 
 // Public
 Route::get('/images/{filename}', function ($filename) {

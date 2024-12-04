@@ -53,22 +53,35 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-                <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">1</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">2024001</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">0098765432</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">Ahmad Fauzi</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">Laki-laki</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span class="px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm text-green-700 bg-green-100 rounded-full">Aktif</span>
-                    </td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-1 sm:space-x-2">
-                        <button class="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">Edit</button>
-                        <button class="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">Hapus</button>
-                        <button class="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors">Detail</button>
-                    </td>
-                </tr>
-                <!-- Tambahkan baris lain sesuai kebutuhan -->
+                @if(isset($murids) && count($murids) > 0)
+                    @foreach($murids as $index => $murid)
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $index + 1 }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{{ $murid->nis }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->nisn }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->name }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                            <span class="px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm text-green-700 bg-green-100 rounded-full">Aktif</span>
+                        </td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-1 sm:space-x-2">
+                            <a href="{{ route('wali.murid.edit', $murid->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">Edit</a>
+                            <form action="{{ route('wali.murid.destroy', $murid->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">Hapus</button>
+                            </form>
+                            <a href="{{ route('wali.murid.show', $murid->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors">Detail</a>
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="7" class="px-3 sm:px-6 py-4 text-center text-sm text-gray-500">
+                            Tidak ada data siswa yang tersedia
+                        </td>
+                    </tr>
+                @endif
             </tbody>
         </table>
     </div>
@@ -125,25 +138,26 @@
                     <h3 class="text-xl font-semibold text-gray-900">Tambah Siswa Baru</h3>
                 </div>
 
-                <form class="space-y-5">
+                <form action="{{ route('wali.murid.store') }}" method="POST" class="space-y-5">
+                    @csrf
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">NIS</label>
-                        <input type="text" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan NIS">
+                        <input type="text" name="nis" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan NIS">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">NISN</label>
-                        <input type="text" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan NISN">
+                        <input type="text" name="nisn" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan NISN">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                        <input type="text" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan nama lengkap">
+                        <input type="text" name="name" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm placeholder-gray-400" placeholder="Masukkan nama lengkap">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
-                        <select class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                        <select name="gender" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                             <option value="" disabled selected>Pilih Jenis Kelamin</option>
                             <option value="L">Laki-laki</option>
                             <option value="P">Perempuan</option>

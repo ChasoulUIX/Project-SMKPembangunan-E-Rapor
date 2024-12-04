@@ -34,6 +34,7 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+    @auth
     <!-- Mobile Menu Button -->
     <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-blue-600 text-white">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,15 +63,15 @@
                     <div class="relative group">
                         <button class="flex items-center space-x-3 px-4 py-2 rounded-xl hover:bg-white/10 transition-all duration-200">
                             <div class="flex flex-col items-end">
-                                <span class="text-sm font-medium text-white">Admin User</span>
-                                <span class="text-xs text-white/80 hidden sm:inline">Administrator</span>
+                                <span class="text-sm font-medium text-white">{{ Auth::user()->name }}</span>
+                                <span class="text-xs text-white/80 hidden sm:inline">{{ Auth::user()->role }}</span>
                             </div>
                             <img class="h-10 w-10 rounded-lg ring-2 ring-white/20 shadow-lg" 
-                                 src="https://ui-avatars.com/api/?name=Admin+User&background=EFF6FF&color=3B82F6" 
+                                 src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=EFF6FF&color=3B82F6" 
                                  alt="Profile">
                         </button>
                         <div class="hidden group-hover:block absolute right-0 w-48 mt-2 py-2 bg-white rounded-lg shadow-xl border border-gray-100">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                            <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                                 <div class="flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -88,14 +89,17 @@
                                 </div>
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
-                            <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                                    </svg>
-                                    Logout
-                                </div>
-                            </a>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                        </svg>
+                                        Logout
+                                    </div>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -116,8 +120,9 @@
                     <span class="bg-white/20 px-2 py-0.5 rounded-lg text-xs">New</span>
                 </a>
 
+                @if(Auth::user()->role == 'wali')
                 <!-- Wali Kelas Dropdown -->
-                <div class="relative" x-data="{ open: false }">
+                <div class="relative" x-data="{ open: true }">
                     <button @click="open = !open" class="w-full group flex items-center px-4 py-3 text-base font-medium rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200">
                         <svg class="mr-3 h-6 w-6 text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
@@ -134,6 +139,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                                 </svg>
                                 Data Siswa
+                            </div>
+                        </a>
+                        <a href="/pages/matapelajaran" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                                Mata Pelajaran
                             </div>
                         </a>
                         <a href="/pages/nilai" class="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
@@ -156,7 +169,7 @@
                 </div>
 
                 <!-- Guru Dropdown -->
-                <div class="relative" x-data="{ open: false }">
+                <div class="relative" x-data="{ open: true }">
                     <button @click="open = !open" class="w-full group flex items-center px-4 py-3 text-base font-medium rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200">
                         <svg class="mr-3 h-6 w-6 text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -193,6 +206,7 @@
                         </a>
                     </div>
                 </div>
+                @endif
 
                 <div class="px-4 py-2">
                     <h3 class="text-xs font-semibold text-white/60 uppercase tracking-wider">Akun</h3>
@@ -233,6 +247,14 @@
             </div>
         </div>
     </div>
+    @else
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold mb-4">Please Login</h2>
+            <a href="{{ route('login') }}" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Login</a>
+        </div>
+    </div>
+    @endauth
 
     <!-- Scripts -->
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>

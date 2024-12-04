@@ -17,7 +17,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl sm:text-3xl font-bold text-blue-600">X RPL 1</span>
+                    <span class="text-2xl sm:text-3xl font-bold text-blue-600">{{ Auth::user()->email ?? 'Belum ditentukan' }}</span>
                     <p class="text-xs sm:text-sm text-blue-500 mt-1">2023/2024</p>
                 </div>
             </div>
@@ -34,12 +34,21 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl sm:text-3xl font-bold text-green-600">36</span>
+                    @php
+                        use App\Models\Murid;
+                        $muridCount = Murid::count();
+                        $muridLakiLaki = Murid::where('gender', 'L')->count();
+                        $muridPerempuan = Murid::where('gender', 'P')->count();
+                    @endphp
+                    <span class="text-2xl sm:text-3xl font-bold text-green-600">{{ $muridCount }}</span>
                     <p class="text-xs sm:text-sm text-green-500 mt-1">Siswa</p>
                 </div>
             </div>
             <h3 class="text-base sm:text-lg font-semibold text-gray-800">Jumlah Siswa</h3>
-            <p class="text-sm text-gray-600 mt-1">Laki-laki: 20 | Perempuan: 16</p>
+            <p class="text-sm text-gray-600 mt-1">
+                Laki-laki: {{ $muridLakiLaki }} | 
+                Perempuan: {{ $muridPerempuan }}
+            </p>
         </div>
 
         <!-- Card Mata Pelajaran -->
@@ -51,12 +60,12 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl sm:text-3xl font-bold text-purple-600">12</span>
+                    <span class="text-2xl sm:text-3xl font-bold text-purple-600">{{ Auth::user()->wali?->kelas?->matapelajaran?->count() ?? '0' }}</span>
                     <p class="text-xs sm:text-sm text-purple-500 mt-1">Mata Pelajaran</p>
                 </div>
             </div>
             <h3 class="text-base sm:text-lg font-semibold text-gray-800">Mata Pelajaran</h3>
-            <p class="text-sm text-gray-600 mt-1">Semester ini</p>
+            <p class="text-sm text-gray-600 mt-1">{{ Auth::user()->wali?->kelas?->matapelajaran?->pluck('nama_mapel')->implode(', ') ?? '-' }}</p>
         </div>
     </div>
 
@@ -65,9 +74,9 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
             <h2 class="text-lg sm:text-xl font-semibold text-gray-800">Daftar Siswa</h2>
             <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                <button class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                <a href="{{ route('wali.siswa.index') }}" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm text-center">
                     Nilai Siswa
-                </button>
+                </a>
                 <button class="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
                     Cetak Rapor
                 </button>
@@ -86,23 +95,35 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
+                    @php
+                        $murids = App\Models\Murid::all();
+                    @endphp
+                    @forelse($murids as $index => $murid)
                     <tr>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">1</td>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">2024001</td>
-                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">Ahmad Fauzi</td>
+                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $index + 1 }}</td>
+                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->nis }}</td>
+                        <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid->name }}</td>
                         <td class="px-4 sm:px-6 py-3 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Sudah Dicetak
+                                Aktif
                             </span>
                         </td>
                         <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm font-medium">
-                            <a href="#" class="text-blue-600 hover:text-blue-900">Detail</a>
+                            <a href="{{ route('wali.siswa.show', $murid->id) }}" class="text-blue-600 hover:text-blue-900">Detail</a>
                         </td>
                     </tr>
-                    <!-- Tambahkan baris lain sesuai kebutuhan -->
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-4 sm:px-6 py-3 whitespace-nowrap text-sm text-center text-gray-500">
+                            Tidak ada data siswa
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
+    </div>
+    </div>
     </div>
 </div>
 @endsection
