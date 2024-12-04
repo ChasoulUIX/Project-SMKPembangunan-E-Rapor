@@ -20,31 +20,30 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Mapel</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guru Pengajar</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KKM</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @if(isset($matapelajarans))
-                    @foreach($matapelajarans as $mapel)
+                @php
+                    $matapelajarans = \App\Models\Matapelajaran::all();
+                @endphp
+                @if($matapelajarans->count() > 0)
+                    @foreach($matapelajarans as $matapelajaran)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->kode_mapel }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->nama_mapel }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->nama_guru }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $mapel->kkm }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $matapelajaran->kode_mapel }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $matapelajaran->nama_mapel }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $matapelajaran->nama_guru }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right">
-                            <button onclick="openEditModal('{{ $mapel->id }}')" class="text-blue-600 hover:text-blue-900">Edit</button>
-                            <form action="{{ route('admin.pages.matapelajaran.destroy', $mapel->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="ml-2 text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
-                            </form>
+                            <button onclick="openEditModal({{ $matapelajaran->id }})" class="text-blue-600 hover:text-blue-900 mr-2">Edit</button>
+                            <a href="{{ route('admin.pages.matapelajaran.show', $matapelajaran->id) }}" class="text-blue-600 hover:text-blue-900">Detail</a>
                         </td>
                     </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">Tidak ada data mata pelajaran</td>
+                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                            Tidak ada data mata pelajaran
+                        </td>
                     </tr>
                 @endif
             </tbody>
@@ -53,95 +52,35 @@
 </div>
 
 <!-- Create Modal -->
-<div id="createModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+<div id="createModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="flex justify-between items-center pb-3 border-b">
-            <h3 class="text-lg font-medium">Tambah Mata Pelajaran</h3>
-            <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-500">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <form action="{{ route('admin.pages.matapelajaran.store') }}" method="POST" class="mt-4">
-            @csrf
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Kode Mapel</label>
-                    <input type="text" name="kode_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        <div class="mt-3">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Tambah Mata Pelajaran</h3>
+            <form id="createForm" action="{{ route('admin.pages.matapelajaran.store') }}" method="POST" class="mt-4">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="kode_mapel">Kode Mapel</label>
+                    <input type="text" name="kode_mapel" id="kode_mapel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Mapel</label>
-                    <input type="text" name="nama_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_mapel">Nama Mapel</label>
+                    <input type="text" name="nama_mapel" id="nama_mapel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
-                    <select name="nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_guru">Guru Pengajar</label>
+                    <select name="nama_guru" id="nama_guru" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         <option value="">Pilih Guru</option>
-                        @forelse($gurus ?? [] as $guru)
-                            <option value="{{ $guru->nip }}">{{ $guru->name }}</option>
-                        @empty
-                            <option value="" disabled>Tidak ada data guru</option>
-                        @endforelse
+                        @foreach(\App\Models\Guru::orderBy('name')->get() as $guru)
+                            <option value="{{ $guru->name }}">{{ $guru->name }}</option>
+                        @endforeach
                     </select>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">KKM</label>
-                    <input type="number" name="kkm" required min="0" max="100" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <div class="flex justify-end">
+                    <button type="button" onclick="closeCreateModal()" class="mr-2 px-4 py-2 text-gray-500 hover:text-gray-700">Batal</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
                 </div>
-            </div>
-            <div class="mt-6 flex justify-end space-x-3">
-                <button type="button" onclick="closeCreateModal()" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Batal</button>
-                <button type="submit" class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Edit Modal -->
-<div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="flex justify-between items-center pb-3 border-b">
-            <h3 class="text-lg font-medium">Edit Mata Pelajaran</h3>
-            <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-500">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+            </form>
         </div>
-        <form id="editForm" method="POST" class="mt-4">
-            @csrf
-            @method('PUT')
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Kode Mapel</label>
-                    <input type="text" name="kode_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Mapel</label>
-                    <input type="text" name="nama_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
-                    <select name="nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Pilih Guru</option>
-                        @forelse($gurus ?? [] as $guru)
-                            <option value="{{ $guru->nip }}">{{ $guru->name }}</option>
-                        @empty
-                            <option value="" disabled>Tidak ada data guru</option>
-                        @endforelse
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">KKM</label>
-                    <input type="number" name="kkm" required min="0" max="100" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-            </div>
-            <div class="mt-6 flex justify-end space-x-3">
-                <button type="button" onclick="closeEditModal()" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Batal</button>
-                <button type="submit" class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan Perubahan</button>
-            </div>
-        </form>
     </div>
 </div>
 
@@ -154,31 +93,31 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal(id) {
-    fetch(`/admin/pages/matapelajaran/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.querySelector('#editForm').action = `/admin/pages/matapelajaran/${id}`;
-                document.querySelector('#editForm [name="kode_mapel"]').value = data.data.kode_mapel;
-                document.querySelector('#editForm [name="nama_mapel"]').value = data.data.nama_mapel;
-                document.querySelector('#editForm [name="kkm"]').value = data.data.kkm;
-                
-                // Set selected guru in dropdown
-                const guruSelect = document.querySelector('#editForm [name="nip"]');
-                Array.from(guruSelect.options).forEach(option => {
-                    if (option.text === data.data.nama_guru) {
-                        option.selected = true;
-                    }
-                });
-                
-                document.getElementById('editModal').classList.remove('hidden');
-            }
-        });
-}
-
-function closeEditModal() {
-    document.getElementById('editModal').classList.add('hidden');
-}
+// Handle Create Form Submit
+document.getElementById('createForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    fetch('{{ route("admin.pages.matapelajaran.store") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            closeCreateModal();
+            location.reload();
+        } else {
+            alert('Gagal menambahkan data mata pelajaran');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menambahkan data');
+    });
+});
 </script>
 @endsection

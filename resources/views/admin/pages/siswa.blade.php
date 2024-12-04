@@ -231,19 +231,19 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">NIS</label>
-                        <input type="text" name="nis" id="edit_nis" value="{{ old('nis', $siswa->nis ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="nis" id="edit_nis" value="{{ old('nis', $murid->nis ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">NISN</label>
-                        <input type="text" name="nisn" id="edit_nisn" value="{{ old('nisn', $siswa->nisn ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="nisn" id="edit_nisn" value="{{ old('nisn', $murid->nisn ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                        <input type="text" name="name" id="edit_name" value="{{ old('name', $siswa->name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="name" id="edit_name" value="{{ old('name', $murid->name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" name="email" id="edit_email" value="{{ old('email', $siswa->email ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="email" name="email" id="edit_email" value="{{ old('email', $murid->email ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Password (Kosongkan jika tidak ingin mengubah)</label>
@@ -252,15 +252,15 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
                         <select name="gender" id="edit_gender" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="L" {{ old('gender', $siswa->gender ?? '') == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                            <option value="P" {{ old('gender', $siswa->gender ?? '') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                            <option value="L" {{ old('gender', $murid->gender ?? '') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="P" {{ old('gender', $murid->gender ?? '') == 'P' ? 'selected' : '' }}>Perempuan</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Foto</label>
                         <input type="file" name="photo" class="mt-1 block w-full">
-                        @if(isset($siswa) && $siswa->photo)
-                            <img src="{{ asset($siswa->photo) }}" alt="Preview foto siswa" class="mt-2 h-20 w-20 object-cover rounded-full">
+                        @if(isset($murid) && $murid->photo)
+                            <img src="{{ asset($murid->photo) }}" alt="Preview foto siswa" class="mt-2 h-20 w-20 object-cover rounded-full">
                         @endif
                     </div>
                 </div>
@@ -269,27 +269,27 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
-                        <input type="text" name="birth_place" id="edit_birth_place" value="{{ old('birth_place', $siswa->birth_place ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="birth_place" id="edit_birth_place" value="{{ old('birth_place', $murid->birth_place ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                        <input type="date" name="birth_date" id="edit_birth_date" value="{{ old('birth_date', $siswa->birth_date ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="date" name="birth_date" id="edit_birth_date" value="{{ old('birth_date', $murid->birth_date ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Alamat</label>
-                        <textarea name="address" id="edit_address" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">{{ old('address', $siswa->address ?? '') }}</textarea>
+                        <textarea name="address" id="edit_address" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">{{ old('address', $murid->address ?? '') }}</textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">No. Telepon</label>
-                        <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number', $siswa->phone_number ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="phone_number" id="edit_phone_number" value="{{ old('phone_number', $murid->phone_number ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nama Ayah</label>
-                        <input type="text" name="father_name" id="edit_father_name" value="{{ old('father_name', $siswa->father_name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="father_name" id="edit_father_name" value="{{ old('father_name', $murid->father_name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nama Ibu</label>
-                        <input type="text" name="mother_name" id="edit_mother_name" value="{{ old('mother_name', $siswa->mother_name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="mother_name" id="edit_mother_name" value="{{ old('mother_name', $murid->mother_name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
 
@@ -297,34 +297,34 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">No. Telepon Orang Tua</label>
-                        <input type="text" name="parent_phone" id="edit_parent_phone" value="{{ old('parent_phone', $siswa->parent_phone ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="parent_phone" id="edit_parent_phone" value="{{ old('parent_phone', $murid->parent_phone ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Alamat Orang Tua</label>
-                        <textarea name="parent_address" id="edit_parent_address" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">{{ old('parent_address', $siswa->parent_address ?? '') }}</textarea>
+                        <textarea name="parent_address" id="edit_parent_address" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">{{ old('parent_address', $murid->parent_address ?? '') }}</textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                        <input type="text" name="class" id="edit_class" value="{{ old('class', $siswa->class ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="class" id="edit_class" value="{{ old('class', $murid->class ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Jurusan</label>
                         <select name="major" id="edit_major" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="multimedia" {{ old('major', $siswa->major ?? '') == 'multimedia' ? 'selected' : '' }}>Multimedia</option>
-                            <option value="akuntansi" {{ old('major', $siswa->major ?? '') == 'akuntansi' ? 'selected' : '' }}>Akuntansi</option>
-                            <option value="perkantoran" {{ old('major', $siswa->major ?? '') == 'perkantoran' ? 'selected' : '' }}>Perkantoran</option>
-                            <option value="pemasaran" {{ old('major', $siswa->major ?? '') == 'pemasaran' ? 'selected' : '' }}>Pemasaran</option>
+                            <option value="multimedia" {{ old('major', $murid->major ?? '') == 'multimedia' ? 'selected' : '' }}>Multimedia</option>
+                            <option value="akuntansi" {{ old('major', $murid->major ?? '') == 'akuntansi' ? 'selected' : '' }}>Akuntansi</option>
+                            <option value="perkantoran" {{ old('major', $murid->major ?? '') == 'perkantoran' ? 'selected' : '' }}>Perkantoran</option>
+                            <option value="pemasaran" {{ old('major', $murid->major ?? '') == 'pemasaran' ? 'selected' : '' }}>Pemasaran</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tahun Akademik</label>
-                        <input type="number" name="academic_year" id="edit_academic_year" value="{{ old('academic_year', $siswa->academic_year ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="number" name="academic_year" id="edit_academic_year" value="{{ old('academic_year', $murid->academic_year ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Semester</label>
                         <select name="semester" id="edit_semester" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="1" {{ old('semester', $siswa->semester ?? '') == '1' ? 'selected' : '' }}>1</option>
-                            <option value="2" {{ old('semester', $siswa->semester ?? '') == '2' ? 'selected' : '' }}>2</option>
+                            <option value="1" {{ old('semester', $murid->semester ?? '') == '1' ? 'selected' : '' }}>1</option>
+                            <option value="2" {{ old('semester', $murid->semester ?? '') == '2' ? 'selected' : '' }}>2</option>
                         </select>
                     </div>
                     <input type="hidden" name="role" value="murid">

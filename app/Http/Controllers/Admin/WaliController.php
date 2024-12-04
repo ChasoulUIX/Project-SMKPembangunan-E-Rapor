@@ -21,34 +21,64 @@ class WaliController extends Controller
     {
         $request->validate([
             'nip' => 'required|unique:walis',
-            'name' => 'required',
-            'email' => 'required|email|unique:walis|unique:users',
-            'password' => 'required|min:3',
-            'role' => 'required'
+            'name' => 'required'
         ]);
 
-        // Create user first
-        $user = User::create([
-            'name' => $request->name,
-            'nip' => $request->nip,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'wali',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+        // Find existing user with matching NIP
+        $existingUser = User::where('nip', $request->nip)->first();
+
+        // Update role in gurus table
+        \App\Models\Guru::where('nip', $request->nip)->update([
+            'role' => 'wali'
         ]);
 
-        // Then create wali with user_id reference
-        Wali::create([
-            'user_id' => $user->id,
-            'nip' => $request->nip,
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'wali',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+        if ($existingUser) {
+            // Update existing user's role to include wali
+            $existingUser->update([
+                'role' => 'wali',
+                'updated_at' => Carbon::now()
+            ]);
+
+            // Create wali record linked to existing user
+            Wali::create([
+                'user_id' => $existingUser->id,
+                'nip' => $request->nip,
+                'name' => $request->name,
+                'email' => $existingUser->email,
+                'password' => $existingUser->password,
+                'role' => 'wali',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+
+        } else {
+            // Generate email from NIP if no existing user
+            $email = $request->nip . '@smkpembangunanbogor.sch.id';
+            $defaultPassword = bcrypt('password123');
+
+            // Create new user
+            $user = User::create([
+                'name' => $request->name,
+                'nip' => $request->nip,
+                'email' => $email,
+                'password' => $defaultPassword,
+                'role' => 'wali',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+
+            // Create wali record
+            Wali::create([
+                'user_id' => $user->id,
+                'nip' => $request->nip,
+                'name' => $request->name,
+                'email' => $email,
+                'password' => $defaultPassword,
+                'role' => 'wali',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Wali kelas berhasil ditambahkan');
     }

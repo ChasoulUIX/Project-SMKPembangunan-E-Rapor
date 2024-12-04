@@ -89,11 +89,12 @@ Route::PUT('/admin/pages/kelas/create', [KelasController::class, 'create'])->nam
 
 
 Route::prefix('admin')->group(function () {
-    Route::get('/pages/matapelajaran', [MatapelajaranController::class, 'index'])->name('admin.pages.matapelajaran.index');
-    Route::post('/pages/matapelajaran', [MatapelajaranController::class, 'store'])->name('admin.pages.matapelajaran.store');
-    Route::get('/pages/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'show'])->name('admin.pages.matapelajaran.show');
-    Route::put('/pages/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'update'])->name('admin.pages.matapelajaran.update');
-    Route::delete('/pages/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'destroy'])->name('admin.pages.matapelajaran.destroy');
+    Route::get('/matapelajaran', [MatapelajaranController::class, 'index'])->name('admin.pages.matapelajaran');
+    Route::post('/matapelajaran', [MatapelajaranController::class, 'store'])->name('admin.pages.matapelajaran.store');
+    Route::get('/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'show'])->name('admin.pages.matapelajaran.show');
+    Route::get('/matapelajaran/{matapelajaran}/edit', [MatapelajaranController::class, 'edit'])->name('admin.pages.matapelajaran.edit');
+    Route::put('/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'update'])->name('admin.pages.matapelajaran.update');
+    Route::delete('/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'destroy'])->name('admin.pages.matapelajaran.destroy');
 });
 
 Route::get('/admin/matapelajaran', function () {

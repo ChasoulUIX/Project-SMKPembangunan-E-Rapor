@@ -78,19 +78,45 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">NIP</label>
-                        <input type="text" name="nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="nip" id="nip" required readonly class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-100">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nama</label>
-                        <input type="text" name="name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select name="name" id="name" required onchange="updateFields(this)" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Pilih Wali Kelas</option>
+                            @foreach(\App\Models\Guru::orderBy('name')->get() as $guru)
+                                <option value="{{ $guru->name }}" 
+                                    data-nip="{{ $guru->nip }}"
+                                    data-email="{{ $guru->email }}"
+                                    data-password="password123">{{ $guru->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
+                    <script>
+                        function updateFields(selectElement) {
+                            const selectedOption = selectElement.options[selectElement.selectedIndex];
+                            
+                            // Update NIP
+                            const nipInput = document.getElementById('nip');
+                            nipInput.value = selectedOption.dataset.nip || '';
+                            
+                            // Update Email 
+                            const emailInput = document.querySelector('input[name="email"]');
+                            emailInput.value = selectedOption.dataset.email || '';
+                            
+                            // Update Password
+                            const passwordInput = document.querySelector('input[name="password"]');
+                            passwordInput.value = selectedOption.dataset.password || '';
+                        }
+                    </script>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" name="email" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="email" name="email" required readonly class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-100">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" name="password" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="password" name="password" required readonly class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-100">
                     </div>
                     <input type="hidden" name="role" value="wali">
                 </div>
