@@ -30,6 +30,7 @@ class WaliController extends Controller
         // Create user first
         $user = User::create([
             'name' => $request->name,
+            'nip' => $request->nip,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'wali',

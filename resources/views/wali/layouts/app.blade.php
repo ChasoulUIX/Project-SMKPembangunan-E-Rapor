@@ -88,7 +88,7 @@
                                 </div>
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
-                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                            <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
                                 <div class="flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -198,7 +198,7 @@
                     <h3 class="text-xs font-semibold text-white/60 uppercase tracking-wider">Akun</h3>
                 </div>
 
-                <form method="POST" action="/login">
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full group flex items-center px-4 py-3 text-base font-medium rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200">
                         <svg class="mr-3 h-6 w-6 text-white/70 group-hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

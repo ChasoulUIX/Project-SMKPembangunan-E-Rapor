@@ -63,7 +63,7 @@
                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Tugas 3</th>
                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Tugas 4</th>
                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Tugas 5</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Rata-rata Tugas</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Rata"</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nilai UTS</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nilai UAS</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nilai Sikap</th>

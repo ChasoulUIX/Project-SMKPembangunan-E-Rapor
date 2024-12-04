@@ -9,6 +9,7 @@ use App\Models\Admin;
 use App\Models\Guru;
 use App\Models\Murid;
 use App\Models\User;
+use App\Models\Wali;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -34,6 +35,9 @@ class LoginController extends Controller
             $user = User::where('nip', $userData->nip)->first();
         } elseif ($guru) {
             $userData = $guru;
+            $user = User::where('nip', $userData->nip)->first();
+        } elseif ($wali = Wali::where('nip', $credentials['nip'])->first()) {
+            $userData = $wali;
             $user = User::where('nip', $userData->nip)->first();
         } elseif ($murid) {
             $userData = $murid;
