@@ -13,11 +13,12 @@ class Kelas extends Model
     protected $fillable = [
         'nama_kelas',
         'wali_kelas',
-        'jurusan'
+        'jurusan',
+        'wali_id'
     ];
 
     public function wali()
     {
-        return $this->belongsTo(Wali::class);
+        return $this->belongsTo(Wali::class, 'wali_id');
     }
 }

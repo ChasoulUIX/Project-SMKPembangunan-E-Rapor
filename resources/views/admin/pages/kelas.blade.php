@@ -78,7 +78,7 @@
                         <select name="wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Wali Kelas</option>
                             @foreach(App\Models\Wali::where('role', 'wali')->get() as $wali)
-                                <option value="{{ $wali->id }}">{{ $wali->name }}</option>
+                                <option value="{{ $wali->id }}">{{ $wali->nip }} - {{ $wali->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -110,25 +110,19 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nama Kelas</label>
-                        <input type="text" name="nama_kelas" id="edit_nama_kelas" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                    </div>
+                         </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Jurusan</label>
                         <select name="jurusan" id="edit_jurusan" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Jurusan</option>
-                            <option value="Multimedia">Multimedia</option>
-                            <option value="Akuntansi">Akuntansi</option>
-                            <option value="Perkantoran">Perkantoran</option>
-                            <option value="Pemasaran">Pemasaran</option>
-                        </select>
+                            </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
                         <select name="wali_id" id="edit_wali_id" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Wali Kelas</option>
                             @foreach(App\Models\Wali::where('role', 'wali')->get() as $wali)
-                                <option value="{{ $wali->id }}">{{ $wali->name }}</option>
-                            @endforeach
+                                 @endforeach
                         </select>
                     </div>
                 </div>
@@ -154,16 +148,8 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal(id, nama_kelas, jurusan, wali_id) {
-    const modal = document.getElementById('editModal');
-    const form = document.getElementById('editForm');
-    form.action = `/admin/pages/kelas/${id}`;
-    
-    document.getElementById('edit_nama_kelas').value = nama_kelas;
-    document.getElementById('edit_jurusan').value = jurusan;
-    document.getElementById('edit_wali_id').value = wali_id;
-    
-    modal.classList.remove('hidden');
+function openEditModal(id) {
+    document.getElementById('editModal').classList.remove('hidden');
 }
 
 function closeEditModal() {

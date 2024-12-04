@@ -37,6 +37,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIP</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
@@ -49,6 +50,20 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $wali->nip }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $wali->name }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $wali->email }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        @php
+                            $kelasWali = \App\Models\Kelas::where('wali_kelas', $wali->name)->get();
+                        @endphp
+                        @if($kelasWali->count() > 0)
+                            @foreach($kelasWali as $kelas)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                                    {{ $kelas->nama_kelas }}
+                                </span>
+                            @endforeach
+                        @else
+                            <span class="text-gray-500">-</span>
+                        @endif
+                    </td>
                     <td class="px-6 py-4 text-right text-sm font-medium">
                         <button onclick="openEditModal({{ $wali->id }})" class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
                         <form action="{{ route('admin.pages.wali.destroy', $wali->id) }}" method="POST" class="inline">
@@ -143,19 +158,33 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">NIP</label>
-                        <input type="text" name="nip" id="edit_nip" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="nip" id="edit_nip" value="{{ old('nip', $wali->nip ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama</label>
-                        <input type="text" name="name" id="edit_name" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" name="name" id="edit_name" value="{{ old('name', $wali->name ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" name="email" id="edit_email" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="email" name="email" id="edit_email" value="{{ old('email', $wali->email ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <label class="block text-sm font-medium text-gray-700">Password (Kosongkan jika tidak ingin mengubah)</label>
+                        <input type="password" name="password" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <select name="gender" id="edit_gender" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="L" {{ old('gender', $wali->gender ?? '') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="P" {{ old('gender', $wali->gender ?? '') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Foto</label>
+                        <input type="file" name="photo" class="mt-1 block w-full">
+                        @if(isset($wali) && $wali->photo)
+                            <img src="{{ asset($wali->photo) }}" alt="Preview foto wali" class="mt-2 h-20 w-20 object-cover rounded-full">
+                        @endif
                     </div>
                     <input type="hidden" name="role" value="wali">
                 </div>
@@ -179,25 +208,6 @@ function closeCreateModal() {
 
 function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
-    
-    fetch(`/admin/wali/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById('editForm').action = `/admin/wali/${id}`;
-                document.getElementById('edit_nip').value = data.data.nip;
-                document.getElementById('edit_name').value = data.data.name;
-                document.getElementById('edit_email').value = data.data.email;
-            } else {
-                alert('Error loading wali data');
-                closeEditModal();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error loading wali data');
-            closeEditModal();
-        });
 }
 
 function closeEditModal() {
