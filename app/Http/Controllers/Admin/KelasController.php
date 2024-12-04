@@ -33,8 +33,6 @@ class KelasController extends Controller
             'nama_kelas' => $validated['nama_kelas'],
             'jurusan' => $validated['jurusan'],
             'wali_kelas' => $wali->name,
-            'wali_id' => $validated['wali_id'],
-            'daftar_siswa' => json_encode([]),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ];
@@ -67,7 +65,6 @@ class KelasController extends Controller
             'nama_kelas' => $validated['nama_kelas'],
             'jurusan' => $validated['jurusan'],
             'wali_kelas' => $wali->name,
-            'wali_id' => $validated['wali_id'],
             'updated_at' => Carbon::now()
         ];
 

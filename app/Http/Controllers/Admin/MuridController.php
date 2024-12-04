@@ -89,7 +89,7 @@ class MuridController extends Controller
 
     public function edit(Murid $murid)
     {
-        return view('admin.pages.siswa', compact('murid'));
+        return view('admin.pages.siswa.edit', compact('murid'));
     }
 
     public function update(Request $request, Murid $murid)

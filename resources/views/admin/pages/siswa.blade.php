@@ -79,7 +79,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($murid->major) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button type="button" onclick="openEditModal({{ $murid->id }})" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
-                        <form action="{{ route('admin.pages.murid.destroy', $murid->id) }}" method="POST" class="inline">
+                        <form action="{{ route('admin.pages.siswa.destroy', $murid->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?')" class="text-red-600 hover:text-red-900">Hapus</button>
@@ -100,7 +100,7 @@
             <div class="px-6 py-4 border-b">
                 <h3 class="text-lg font-medium text-gray-900">Tambah Siswa Baru</h3>
             </div>
-            <form action="{{ route('admin.pages.murid.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('admin.pages.siswa.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 <div class="grid grid-cols-3 gap-4">
                     <!-- Column 1 -->
@@ -347,8 +347,40 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal() {
+function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editForm').action = `/admin/pages/siswa/${id}`;
+    
+    // Fetch siswa data and populate form
+    fetch(`/admin/pages/siswa/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('edit_nis').value = data.nis;
+            document.getElementById('edit_nisn').value = data.nisn;
+            document.getElementById('edit_name').value = data.name;
+            document.getElementById('edit_email').value = data.email;
+            document.getElementById('edit_gender').value = data.gender;
+            document.getElementById('edit_birth_place').value = data.birth_place;
+            document.getElementById('edit_birth_date').value = data.birth_date;
+            document.getElementById('edit_address').value = data.address;
+            document.getElementById('edit_phone_number').value = data.phone_number;
+            document.getElementById('edit_father_name').value = data.father_name;
+            document.getElementById('edit_mother_name').value = data.mother_name;
+            document.getElementById('edit_parent_phone').value = data.parent_phone;
+            document.getElementById('edit_parent_address').value = data.parent_address;
+            document.getElementById('edit_class').value = data.class;
+            document.getElementById('edit_major').value = data.major;
+            document.getElementById('edit_academic_year').value = data.academic_year;
+            document.getElementById('edit_semester').value = data.semester;
+            
+            // Show current photo if exists
+            const currentPhotoDiv = document.getElementById('current_photo');
+            if (data.photo) {
+                currentPhotoDiv.innerHTML = `<img src="${data.photo}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">`;
+            } else {
+                currentPhotoDiv.innerHTML = '';
+            }
+        });
 }
 
 function closeEditModal() {

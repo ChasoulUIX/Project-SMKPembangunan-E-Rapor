@@ -57,25 +57,27 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 });
 Route::prefix('admin')->group(function () {
+    
     Route::get('/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
     Route::get('/pages/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
-    Route::get('/pages/siswa/create', [MuridController::class, 'create'])->name('admin.pages.murid.create');
-    Route::post('/pages/siswa', [MuridController::class, 'store'])->name('admin.pages.murid.store');
-    Route::get('/pages/siswa/{murid}', [MuridController::class, 'show'])->name('admin.pages.murid.show');
-    Route::get('/pages/siswa/{murid}/edit', [MuridController::class, 'edit'])->name('admin.pages.murid.edit');
-    Route::put('/pages/siswa/{murid}', [MuridController::class, 'update'])->name('admin.pages.murid.update');
-    Route::delete('/pages/siswa/{murid}', [MuridController::class, 'destroy'])->name('admin.pages.murid.destroy');
+    Route::get('/pages/siswa/create', [MuridController::class, 'create'])->name('admin.pages.siswa.create');
+    Route::post('/pages/siswa', [MuridController::class, 'store'])->name('admin.pages.siswa.store');
+    Route::get('/pages/siswa/{murid}', [MuridController::class, 'show'])->name('admin.pages.siswa.show');
+    Route::get('/pages/siswa/{murid}/edit', [MuridController::class, 'edit'])->name('admin.pages.siswa.edit');
+    Route::put('/pages/siswa/{murid}', [MuridController::class, 'update'])->name('admin.pages.siswa.update');
+    Route::delete('/pages/siswa/{murid}', [MuridController::class, 'destroy'])->name('admin.pages.siswa.destroy');
 });
 
-Route::get('/admin/guru', function () {
-    return view('admin.pages.guru');
+Route::prefix('admin')->group(function () {
+    Route::get('/guru', [GuruController::class, 'index'])->name('admin.pages.guru');
+    Route::get('/pages/guru', [GuruController::class, 'index'])->name('admin.pages.guru');
+    Route::get('/pages/guru/create', [GuruController::class, 'create'])->name('admin.pages.guru.create');
+    Route::post('/pages/guru', [GuruController::class, 'store'])->name('admin.pages.guru.store');
+    Route::get('/pages/guru/{guru}', [GuruController::class, 'show'])->name('admin.pages.guru.show');
+    Route::get('/pages/guru/{guru}/edit', [GuruController::class, 'edit'])->name('admin.pages.guru.edit');
+    Route::put('/pages/guru/{guru}', [GuruController::class, 'update'])->name('admin.pages.guru.update');
+    Route::delete('/pages/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.pages.guru.destroy');
 });
-Route::get('/admin/guru', [GuruController::class, 'index'])->name('admin.pages.guru.index');
-Route::post('/admin/guru', [GuruController::class, 'store'])->name('admin.pages.guru.store');
-Route::get('/admin/guru/{guru}', [GuruController::class, 'show'])->name('admin.pages.guru.show');
-Route::put('/admin/guru/{guru}', [GuruController::class, 'update'])->name('admin.pages.guru.update');
-Route::delete('/admin/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.pages.guru.destroy');
-
 
 Route::get('/admin/kelas', function () {
     return view('admin.pages.kelas');

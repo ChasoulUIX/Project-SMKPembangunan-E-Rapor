@@ -250,7 +250,32 @@ function closeCreateModal() {
 
 function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editForm').action = `/admin/pages/guru/${id}`;
+    
+    // Fetch guru data and populate form
+    fetch(`/admin/pages/guru/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('edit_nip').value = data.nip;
+            document.getElementById('edit_name').value = data.name;
+            document.getElementById('edit_email').value = data.email;
+            document.getElementById('edit_gender').value = data.gender;
+            document.getElementById('edit_birth_place').value = data.birth_place;
+            document.getElementById('edit_birth_date').value = data.birth_date;
+            document.getElementById('edit_address').value = data.address;
+            document.getElementById('edit_phone_number').value = data.phone_number;
+            document.getElementById('edit_role').value = data.role;
+            
+            // Show current photo if exists
+            const currentPhotoDiv = document.getElementById('current_photo');
+            if (data.photo) {
+                currentPhotoDiv.innerHTML = `<img src="${data.photo}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">`;
+            } else {
+                currentPhotoDiv.innerHTML = '';
+            }
+        });
 }
+
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
