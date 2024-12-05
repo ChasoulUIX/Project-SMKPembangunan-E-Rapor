@@ -13,6 +13,9 @@ use App\Http\Controllers\Wali\DaftarSiswaController;
 use App\Http\Controllers\Wali\DaftarNilaiController;
 use App\Http\Controllers\Wali\WaliRaporController;
 use App\Http\Controllers\Wali\WaliMatapelajaranController;
+use App\Http\Controllers\Guru\NilaiController;
+use App\Http\Controllers\Wali\WaliNilaiSiswaController;
+
 
 // Auth
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -60,8 +63,8 @@ Route::get('/pages/nilai', function () {
 });
 
 Route::prefix('wali')->group(function () {
-    Route::get('/nilai', [WaliNilaiController::class, 'index'])->name('wali.nilai.index');
-    Route::get('/nilai/{id}', [WaliNilaiController::class, 'show'])->name('wali.nilai.show');
+    Route::get('/nilai', [WaliNilaiSiswaController::class, 'index'])->name('wali.nilai.index');
+    Route::get('/nilai/{id}', [WaliNilaiSiswaController::class, 'show'])->name('wali.nilai.show');
 });
 
 Route::get('/pages/rapor', function () {
@@ -70,8 +73,8 @@ Route::get('/pages/rapor', function () {
 Route::prefix('wali')->group(function () {
     Route::get('/rapor', [WaliRaporController::class, 'index'])->name('wali.rapor.index');
     Route::get('/rapor/detail/{nis}', [WaliRaporController::class, 'detail'])->name('wali.rapor.detail');
-    Route::get('/rapor/download-pdf', [WaliRaporController::class, 'downloadPDF'])->name('wali.rapor.downloadPDF');
-    Route::get('/rapor/download-image', [WaliRaporController::class, 'downloadImage'])->name('wali.rapor.downloadImage');
+    Route::post('/rapor/download-pdf', [WaliRaporController::class, 'downloadPDF'])->name('wali.rapor.downloadPDF');
+    Route::post('/rapor/download-image', [WaliRaporController::class, 'downloadImage'])->name('wali.rapor.downloadImage');
 });
 
 
@@ -89,6 +92,10 @@ Route::prefix('wali')->group(function () {
     Route::delete('/matapelajaran/{matapelajaran}', [WaliMatapelajaranController::class, 'destroy'])->name('wali.matapelajaran.destroy');
 });
 
+
+
+
+
 // Guru
 Route::get('/guru/dashboard', function () {
     return view('guru.dashboard');
@@ -102,9 +109,22 @@ Route::get('/guru/nilai', function () {
     return view('guru.pages.nilai');
 });
 
+Route::prefix('guru')->group(function () {
+    Route::get('/nilai', [NilaiController::class, 'index'])->name('guru.nilai.index');
+    Route::get('/nilai/create', [NilaiController::class, 'create'])->name('guru.nilai.create');
+    Route::post('/nilai', [NilaiController::class, 'store'])->name('guru.nilai.store');
+    Route::get('/nilai/{id}', [NilaiController::class, 'show'])->name('guru.nilai.show');
+    Route::get('/nilai/{id}/edit', [NilaiController::class, 'edit'])->name('guru.nilai.edit');
+    Route::put('/nilai/{id}', [NilaiController::class, 'update'])->name('guru.nilai.update');
+    Route::delete('/nilai/{id}', [NilaiController::class, 'destroy'])->name('guru.nilai.destroy');
+});
+
+
 Route::get('/guru/absensi', function () {
     return view('guru.pages.absensi');
 });
+
+
 
 // Admin
 Route::get('/admin/dashboard', function () {

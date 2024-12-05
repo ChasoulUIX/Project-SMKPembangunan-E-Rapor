@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Wali;
 use App\Http\Controllers\Controller;
 use App\Models\Daftarsiswa;
 use App\Models\Murid;
-use App\Models\Daftarnilai;
+use App\Models\Nilaisiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -41,7 +41,9 @@ class WaliRaporController extends Controller
             'alpha' => $studentData['kehadiran']['alpha'] ?? 0
         ];
 
-        return view('wali.pages.rapor.detailrapor', compact('murid'));
+        $nilaiSiswa = Nilaisiswa::where('nis', $nis)->get();
+
+        return view('wali.pages.rapor.detailrapor', compact('murid', 'nilaiSiswa'));
     }
 
     public function downloadPDF(Request $request)
