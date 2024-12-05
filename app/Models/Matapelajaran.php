@@ -13,4 +13,8 @@ class Matapelajaran extends Model
         'nip',
         'daftar_siswa'
     ];
+
+    protected $casts = [
+        'daftar_siswa' => 'array'
+    ];
 }

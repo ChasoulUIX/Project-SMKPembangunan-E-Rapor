@@ -148,7 +148,6 @@
 
                             kelasSelect.addEventListener('change', function() {
                                 const selectedKelas = this.value;
-                                // Fetch kelas data to get ID
                                 fetch(`/api/kelas/${selectedKelas}`)
                                     .then(response => response.json())
                                     .then(data => {
@@ -162,48 +161,27 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kelas</label>
                         <select name="nama_kelas" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                             <option value="">Pilih Kelas</option>
-                            @foreach(\App\Models\Kelas::orderBy('nama_kelas')->get() as $kelas)
+                            @foreach(\App\Models\Kelas::where('wali_kelas', Auth::user()->name)->orderBy('nama_kelas')->get() as $kelas)
                                 <option value="{{ $kelas->nama_kelas }}">{{ $kelas->nama_kelas }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div>
-                        <input type="hidden" name="nip" id="nipInput">
+                        <input type="hidden" name="nip" value="{{ Auth::user()->nip }}">
                     </div>
 
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const waliSelect = document.getElementById('waliKelasSelect');
-                            const nipInput = document.getElementById('nipInput');
-
-                            waliSelect.addEventListener('change', function() {
-                                const selectedWali = this.value;
-                                // Fetch wali data to get NIP
-                                fetch(`/api/wali/${selectedWali}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        nipInput.value = data.nip;
-                                    })
-                                    .catch(error => console.error('Error:', error));
-                            });
-                        });
-                    </script>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Wali Kelas</label>
-                        <select name="wali_kelas" id="waliKelasSelect" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
-                            <option value="">Pilih Wali Kelas</option>
-                            @foreach(\App\Models\Wali::orderBy('name')->get() as $wali)
-                                <option value="{{ $wali->name }}">{{ $wali->name }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" value="{{ Auth::user()->name }}" class="block w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-100" readonly>
+                        <input type="hidden" name="wali_kelas" value="{{ Auth::user()->name }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Jurusan</label>
                         <select name="jurusan" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                             <option value="">Pilih Jurusan</option>
-                            @foreach(\App\Models\Kelas::select('jurusan')->distinct()->orderBy('jurusan')->get() as $kelas)
+                            @foreach(\App\Models\Kelas::where('wali_kelas', Auth::user()->name)->select('jurusan')->distinct()->orderBy('jurusan')->get() as $kelas)
                                 <option value="{{ $kelas->jurusan }}">{{ $kelas->jurusan }}</option>
                             @endforeach
                         </select>

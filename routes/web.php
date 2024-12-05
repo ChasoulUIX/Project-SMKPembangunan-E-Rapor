@@ -12,6 +12,7 @@ use App\Http\Controllers\Wali\WaliMuridController;
 use App\Http\Controllers\Wali\DaftarSiswaController;
 use App\Http\Controllers\Wali\DaftarNilaiController;
 use App\Http\Controllers\Wali\WaliRaporController;
+use App\Http\Controllers\Wali\WaliMatapelajaranController;
 
 // Auth
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -69,13 +70,23 @@ Route::get('/pages/rapor', function () {
 Route::prefix('wali')->group(function () {
     Route::get('/rapor', [WaliRaporController::class, 'index'])->name('wali.rapor.index');
     Route::get('/rapor/detail/{nis}', [WaliRaporController::class, 'detail'])->name('wali.rapor.detail');
-        Route::get('/rapor/download-pdf', [WaliRaporController::class, 'downloadPDF'])->name('wali.rapor.downloadPDF');
-        Route::get('/rapor/download-image', [WaliRaporController::class, 'downloadImage'])->name('wali.rapor.downloadImage');
-    });
+    Route::get('/rapor/download-pdf', [WaliRaporController::class, 'downloadPDF'])->name('wali.rapor.downloadPDF');
+    Route::get('/rapor/download-image', [WaliRaporController::class, 'downloadImage'])->name('wali.rapor.downloadImage');
+});
 
 
 Route::get('/pages/matapelajaran', function () {
     return view('wali.pages.matapelajaran');
+});
+
+Route::prefix('wali')->group(function () {
+    Route::get('/matapelajaran', [WaliMatapelajaranController::class, 'index'])->name('wali.matapelajaran.index');
+    Route::get('/matapelajaran/create', [WaliMatapelajaranController::class, 'create'])->name('wali.matapelajaran.create');
+    Route::post('/matapelajaran', [WaliMatapelajaranController::class, 'store'])->name('wali.matapelajaran.store');
+    Route::get('/matapelajaran/{matapelajaran}', [WaliMatapelajaranController::class, 'show'])->name('wali.matapelajaran.show');
+    Route::get('/matapelajaran/{matapelajaran}/edit', [WaliMatapelajaranController::class, 'edit'])->name('wali.matapelajaran.edit');
+    Route::put('/matapelajaran/{matapelajaran}', [WaliMatapelajaranController::class, 'update'])->name('wali.matapelajaran.update');
+    Route::delete('/matapelajaran/{matapelajaran}', [WaliMatapelajaranController::class, 'destroy'])->name('wali.matapelajaran.destroy');
 });
 
 // Guru
