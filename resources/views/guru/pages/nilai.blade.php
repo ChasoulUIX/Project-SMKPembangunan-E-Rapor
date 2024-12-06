@@ -7,6 +7,21 @@
         <p class="text-sm sm:text-base text-gray-600">Silahkan pilih kelas dan mata pelajaran untuk menginput nilai</p>
     </div>
 
+    <!-- Filter Section -->
+    <div class="mb-6">
+        <label for="filter_kelas" class="block text-sm font-medium text-gray-700 mb-2">Filter Kelas:</label>
+        <select id="filter_kelas" onchange="filterByKelas(this.value)" class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">Semua Kelas</option>
+            @foreach(\App\Models\Nilaisiswa::where('nama_guru', Auth::user()->name)
+                    ->select('nama_kelas')
+                    ->distinct()
+                    ->orderBy('nama_kelas')
+                    ->get() as $kelas)
+                <option value="{{ $kelas->nama_kelas }}">{{ $kelas->nama_kelas }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <!-- Create Button -->
     <div class="mb-4">
         <button onclick="openCreateModal()" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:border-blue-800 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
@@ -20,9 +35,8 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">No</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">NIS</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Kelas</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Siswa</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Guru</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Mata Pelajaran</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">UTS</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">UAS</th>
@@ -35,11 +49,10 @@
                 $no = 1;
             @endphp
             @forelse($nilaiSiswa as $nilai)
-                <tr class="hover:bg-gray-50 transition-colors">
+                <tr class="hover:bg-gray-50 transition-colors nilai-row" data-kelas="{{ $nilai->nama_kelas }}">
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nis }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_kelas }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_siswa }}</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_guru }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_mapel }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uts }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uas }}</td>
@@ -69,83 +82,219 @@
 
 <!-- Create Modal -->
 <div id="createModal" class="fixed inset-0 bg-black bg-opacity-50 hidden overflow-y-auto h-full w-full backdrop-blur-sm transition-all duration-300">
-    <div class="relative top-20 mx-auto p-8 border w-[500px] shadow-2xl rounded-xl bg-white transform transition-all duration-300">
+    <div class="relative top-10 mx-auto p-8 border w-[90%] max-w-[1000px] shadow-2xl rounded-xl bg-white transform transition-all duration-300">
         <div class="mt-2">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6">Tambah Nilai Baru</h3>
-            <form action="{{ route('guru.nilai.store') }}" method="POST">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Tambah Nilai Baru</h3>
+                <button onclick="closeCreateModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form action="{{ route('guru.nilai.store') }}" method="POST" class="space-y-6">
                 @csrf
-                <div class="space-y-6">
-                    <div class="relative">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">NIS</label>
-                        <input type="number" name="nis" id="nis"
-                            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                            placeholder="NIS akan terisi otomatis"
-                            readonly
-                            required>
-                    </div>
 
-                    <div class="relative">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Siswa</label>
-                        <select name="nama_siswa" id="nama_siswa"
-                            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                            onchange="updateNIS(this)"
-                            required>
-                            <option value="">Pilih Siswa</option>
-                            @foreach(\App\Models\Murid::orderBy('name')->get() as $siswa)
-                                <option value="{{ $siswa->name }}" data-nis="{{ $siswa->nis }}">{{ $siswa->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <script>
-                        function updateNIS(select) {
-                            const selectedOption = select.options[select.selectedIndex];
-                            const nis = selectedOption.getAttribute('data-nis');
-                            document.getElementById('nis').value = nis || '';
-                        }
-                    </script>
-
-                    <div class="relative">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Wali Kelas</label>
-                        <select name="nama_wali" id="nama_wali"
-                            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                            required>
-                            <option value="">Pilih Wali Kelas</option>
-                            @foreach(\App\Models\Kelas::select('wali_kelas')->distinct()->orderBy('wali_kelas')->get() as $wali)
-                                <option value="{{ $wali->wali_kelas }}">{{ $wali->wali_kelas }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="relative">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Mata Pelajaran</label>
-                        <input type="text" name="nama_mapel" id="nama_mapel"
-                            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                            placeholder="Mata Pelajaran akan terisi otomatis"
-                            value="{{ \App\Models\Matapelajaran::where('nama_guru', Auth::user()->name)->first()->nama_mapel ?? '' }}"
-                            readonly
-                            required>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div class="space-y-6">
                         <div class="relative">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">UTS</label>
-                            <input type="number" name="uts" min="0" max="100"
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Kelas</label>
+                            <select name="nama_kelas" id="nama_kelas"
                                 class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                placeholder="0-100"
+                                onchange="updateIdKelas(this)"
+                                required>
+                                <option value="">Pilih Kelas</option>
+                                @foreach(\App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)
+                                    ->select('nama_kelas', 'id_kelas')
+                                    ->distinct()
+                                    ->orderBy('nama_kelas')
+                                    ->get() as $kelas)
+                                    <option value="{{ $kelas->nama_kelas }}" data-id="{{ $kelas->id_kelas }}">{{ $kelas->nama_kelas }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <input type="hidden" name="id_kelas" id="id_kelas" required>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">NIS</label>
+                            <input type="number" name="nis" id="nis"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm bg-gray-50"
+                                placeholder="NIS akan terisi otomatis"
+                                readonly
                                 required>
                         </div>
 
                         <div class="relative">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">UAS</label>
-                            <input type="number" name="uas" min="0" max="100"
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Siswa</label>
+                            <select name="nama_siswa" id="nama_siswa"
                                 class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                placeholder="0-100"
+                                onchange="updateNIS(this)"
                                 required>
+                                <option value="">Pilih Siswa</option>
+                                @foreach(\App\Models\Murid::orderBy('name')->get() as $siswa)
+                                    <option value="{{ $siswa->name }}" data-nis="{{ $siswa->nis }}">{{ $siswa->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Wali Kelas</label>
+                            <select name="nama_wali" id="nama_wali"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                required>
+                                <option value="">Pilih Wali Kelas</option>
+                                @foreach(\App\Models\Kelas::select('wali_kelas')->distinct()->orderBy('wali_kelas')->get() as $wali)
+                                    <option value="{{ $wali->wali_kelas }}">{{ $wali->wali_kelas }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Mata Pelajaran</label>
+                            <input type="text" name="nama_mapel" id="nama_mapel"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm bg-gray-50"
+                                placeholder="Mata Pelajaran akan terisi otomatis"
+                                value="{{ \App\Models\Matapelajaran::where('nama_guru', Auth::user()->name)->first()->nama_mapel ?? '' }}"
+                                readonly
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 1</label>
+                                <input type="text" name="nama_materi_1"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Masukkan nama materi 1">
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 1</label>
+                                <input type="number" name="materi_1" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 2</label>
+                                <input type="text" name="nama_materi_2"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Masukkan nama materi 2">
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 2</label>
+                                <input type="number" name="materi_2" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 3</label>
+                                <input type="text" name="nama_materi_3"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Masukkan nama materi 3">
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 3</label>
+                                <input type="number" name="materi_3" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 4</label>
+                                <input type="text" name="nama_materi_4"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Masukkan nama materi 4">
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 4</label>
+                                <input type="number" name="materi_4" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 5</label>
+                                <input type="text" name="nama_materi_5"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Masukkan nama materi 5">
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 5</label>
+                                <input type="number" name="materi_5" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                            <div class="relative hidden">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Akhir Materi</label>
+                                <input type="number" name="na_materi" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">UTS</label>
+                                <input type="number" name="uts" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">UAS</label>
+                                <input type="number" name="uas" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Kehadiran</label>
+                                <input type="number" name="kehadiran" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Sikap</label>
+                                <input type="number" name="sikap" min="0" max="100"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="0-100">
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Rapor</label>
+                            <input type="number" name="nilai_rapor" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100">
                         </div>
                     </div>
                 </div>
 
-                <div class="flex justify-end space-x-4 mt-8">
+                <div class="flex justify-end space-x-4 mt-8 pt-4 border-t">
                     <button type="button" onclick="closeCreateModal()" 
                         class="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200 ease-in-out font-medium text-sm">
                         Batal
@@ -160,6 +309,20 @@
     </div>
 </div>
 
+<script>
+    function updateIdKelas(select) {
+        const selectedOption = select.options[select.selectedIndex];
+        const idKelas = selectedOption.getAttribute('data-id');
+        document.getElementById('id_kelas').value = idKelas || '';
+    }
+
+    function updateNIS(select) {
+        const selectedOption = select.options[select.selectedIndex];
+        const nis = selectedOption.getAttribute('data-nis');
+        document.getElementById('nis').value = nis || '';
+    }
+</script>
+
 <!-- Edit Modal -->
 <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -168,15 +331,135 @@
             <form id="editForm" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">UTS</label>
-                    <input type="number" name="uts" id="edit_uts" min="0" max="100" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200" required>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 1</label>
+                            <input type="text" name="nama_materi_1" id="edit_nama_materi_1"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="Masukkan nama materi 1" value="{{ old('nama_materi_1', $nilai['nama_materi_1'] ?? '') }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 1</label>
+                            <input type="number" name="materi_1" id="edit_materi_1" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('materi_1', $nilai['materi_1'] ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 2</label>
+                            <input type="text" name="nama_materi_2" id="edit_nama_materi_2"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="Masukkan nama materi 2" value="{{ old('nama_materi_2', $nilai['nama_materi_2'] ?? '') }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 2</label>
+                            <input type="number" name="materi_2" id="edit_materi_2" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('materi_2', $nilai['materi_2'] ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 3</label>
+                            <input type="text" name="nama_materi_3" id="edit_nama_materi_3"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="Masukkan nama materi 3" value="{{ old('nama_materi_3', $nilai['nama_materi_3'] ?? '') }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 3</label>
+                            <input type="number" name="materi_3" id="edit_materi_3" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('materi_3', $nilai['materi_3'] ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 4</label>
+                            <input type="text" name="nama_materi_4" id="edit_nama_materi_4"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="Masukkan nama materi 4" value="{{ old('nama_materi_4', $nilai['nama_materi_4'] ?? '') }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 4</label>
+                            <input type="number" name="materi_4" id="edit_materi_4" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('materi_4', $nilai['materi_4'] ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 5</label>
+                            <input type="text" name="nama_materi_5" id="edit_nama_materi_5"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="Masukkan nama materi 5" value="{{ old('nama_materi_5', $nilai['nama_materi_5'] ?? '') }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Materi 5</label>
+                            <input type="number" name="materi_5" id="edit_materi_5" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('materi_5', $nilai['materi_5'] ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="relative hidden">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Akhir Materi</label>
+                        <input type="number" name="na_materi" id="edit_na_materi" min="0" max="100"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                            placeholder="0-100" value="{{ old('na_materi', $nilai['na_materi'] ?? '') }}">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">UTS</label>
+                            <input type="number" name="uts" id="edit_uts" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('uts', $nilai['uts'] ?? '') }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">UAS</label>
+                            <input type="number" name="uas" id="edit_uas" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('uas', $nilai['uas'] ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Kehadiran</label>
+                            <input type="number" name="kehadiran" id="edit_kehadiran" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('kehadiran', $nilai['kehadiran'] ?? '') }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Sikap</label>
+                            <input type="number" name="sikap" id="edit_sikap" min="0" max="100"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="0-100" value="{{ old('sikap', $nilai['sikap'] ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Rapor</label>
+                        <input type="number" name="nilai_rapor" id="edit_nilai_rapor" min="0" max="100"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                            placeholder="0-100" value="{{ old('nilai_rapor', $nilai['nilai_rapor'] ?? '') }}">
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">UAS</label>
-                    <input type="number" name="uas" id="edit_uas" min="0" max="100" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200" required>
-                </div>
-                <div class="flex justify-end space-x-3">
+
+                <div class="flex justify-end space-x-3 mt-6">
                     <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Batal</button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Update</button>
                 </div>
@@ -207,6 +490,17 @@ function openEditModal(id) {
 
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
+}
+
+function filterByKelas(kelas) {
+    const rows = document.querySelectorAll('.nilai-row');
+    rows.forEach(row => {
+        if (kelas === '' || row.getAttribute('data-kelas') === kelas) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
 }
 </script>
 

@@ -97,24 +97,67 @@
 
     <!-- Nilai Akademik -->
     <div class="page relative" id="nilai-akademik-page">
-        <!-- Background Logo -->
-        <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-            <img src="{{ asset('images/logopembut.png') }}" alt="Logo Sekolah" class="w-96" crossorigin="anonymous">
-        </div>
+     
 
         <div class="text-center mb-8 relative">
             <h1 class="text-2xl font-bold">NILAI AKADEMIK</h1>
             <h2 class="text-xl">Tahun Ajaran {{ now()->year }}/{{ now()->year + 1 }}</h2>
         </div>
 
+        <div class="mb-8">
+            <div class="grid grid-cols-2 gap-8">
+                <div>
+                    <table class="w-full">
+                        <tr>
+                            <td class="py-2">Nama Peserta Didik</td>
+                            <td class="py-2">: {{ $murid->name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">NIS/NISN</td>
+                            <td class="py-2">: {{ $murid->nis }}/{{ $murid->nisn }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Sekolah</td>
+                            <td class="py-2">: SMK Pengembangan Bogor</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Alamat</td>
+                            <td class="py-2">: {{ $murid->address }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <table class="w-full">
+                        <tr>
+                            <td class="py-2">Kelas</td>
+                            <td class="py-2">: {{ $murid->class }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Fase</td>
+                            <td class="py-2">: E</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Semester</td>
+                            <td class="py-2">: {{ $murid->semester }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Tahun Pelajaran</td>
+                            <td class="py-2">: {{ now()->year }}/{{ now()->year + 1 }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        
         <div class="overflow-x-auto rounded-xl border border-gray-100 bg-white">
             <table class="min-w-full divide-y divide-gray-100">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">No</th>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Mata Pelajaran</th>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">UTS</th>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">UAS</th>
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">No</th>
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">Mata Pelajaran</th>
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">Nilai Akhir</th>
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">Capaian Kompetensi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -124,14 +167,54 @@
                 @endphp
                 @forelse($nilaiSiswa as $nilai)
                     <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_mapel }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uts }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uas }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 border border-gray-300">{{ $no++ }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 border border-gray-300">{{ $nilai->nama_mapel }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 border border-gray-300">{{ $nilai->nilai_rapor }}</td>
+                        <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 border border-gray-300">
+                            @php
+                                $materiValues = [
+                                    ['name' => $nilai->nama_materi_1, 'value' => $nilai->materi_1],
+                                    ['name' => $nilai->nama_materi_2, 'value' => $nilai->materi_2], 
+                                    ['name' => $nilai->nama_materi_3, 'value' => $nilai->materi_3],
+                                    ['name' => $nilai->nama_materi_4, 'value' => $nilai->materi_4],
+                                    ['name' => $nilai->nama_materi_5, 'value' => $nilai->materi_5]
+                                ];
+
+                                $lowestScore = PHP_FLOAT_MAX;
+                                $highestScore = 0;
+                                $lowestMateri = '';
+                                $highestMateri = '';
+
+                                foreach($materiValues as $materi) {
+                                    if($materi['value'] < $lowestScore && $materi['value'] > 0) {
+                                        $lowestScore = $materi['value'];
+                                        $lowestMateri = $materi['name'];
+                                    }
+                                    if($materi['value'] > $highestScore) {
+                                        $highestScore = $materi['value'];
+                                        $highestMateri = $materi['name'];
+                                    }
+                                }
+                            @endphp
+
+                            @if($nilai->nilai_rapor >= 90)
+                                Sangat Baik dalam memahami dan menerapkan konsep {{ $nilai->nama_mapel }}. 
+                                Pencapaian tertinggi pada materi {{ $highestMateri }} dan terendah pada materi {{ $lowestMateri }}
+                            @elseif($nilai->nilai_rapor >= 80)
+                                Baik dalam memahami dan menerapkan konsep {{ $nilai->nama_mapel }}.
+                                Pencapaian tertinggi pada materi {{ $highestMateri }} dan terendah pada materi {{ $lowestMateri }}
+                            @elseif($nilai->nilai_rapor >= 70)
+                                Cukup dalam memahami konsep {{ $nilai->nama_mapel }}.
+                                Pencapaian tertinggi pada materi {{ $highestMateri }} dan terendah pada materi {{ $lowestMateri }}
+                            @else
+                                Perlu bimbingan dalam memahami konsep {{ $nilai->nama_mapel }}.
+                                Pencapaian tertinggi pada materi {{ $highestMateri }} dan terendah pada materi {{ $lowestMateri }}
+                            @endif
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-3 sm:px-6 py-3 sm:py-4 text-center text-sm text-gray-500">
+                        <td colspan="4" class="px-3 sm:px-6 py-3 sm:py-4 text-center text-sm text-gray-500 border border-gray-300">
                             Tidak ada data nilai
                         </td>
                     </tr>

@@ -77,7 +77,8 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Kode Mapel</label>
-                        <input type="text" name="kode_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="kode_mapel" value="{{ 'A' . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT) }}" readonly class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 bg-gray-100 cursor-not-allowed">
+                        <small class="text-gray-500">Kode mapel otomatis dibuat dengan format: A diikuti 4 angka</small>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Nama Mapel</label>
@@ -85,18 +86,26 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">NIP</label>
-                        <input type="text" name="nip" id="nip" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="nip" id="nip" readonly class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 bg-gray-100 cursor-not-allowed">
                     </div>
                    
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
-                        <select name="nama_guru" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select name="nama_guru" required onchange="updateNIP(this)" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Guru</option>
                             @foreach(\App\Models\Guru::orderBy('name')->get() as $guru)
-                                <option value="{{ $guru->name }}">{{ $guru->name }}</option>
+                                <option value="{{ $guru->name }}" data-nip="{{ $guru->nip }}">{{ $guru->name }}</option>
                             @endforeach
                         </select>
                     </div>
+
+                    <script>
+                        function updateNIP(select) {
+                            const selectedOption = select.options[select.selectedIndex];
+                            const nip = selectedOption.getAttribute('data-nip');
+                            document.getElementById('nip').value = nip || '';
+                        }
+                    </script>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
                     <button type="button" onclick="closeCreateModal()" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Batal</button>

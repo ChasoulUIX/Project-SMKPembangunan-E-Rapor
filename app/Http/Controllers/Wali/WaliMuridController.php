@@ -25,7 +25,6 @@ class WaliMuridController extends Controller
         return view('wali.pages.siswa.create', compact('murids'));
     }
     
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -68,13 +67,16 @@ class WaliMuridController extends Controller
         return view('wali.siswa.show', ['siswa' => $siswa]);
     }
 
-    public function edit(Murid $murid)
+    public function edit($nis)
     {
+        $murid = Murid::where('nis', $nis)->firstOrFail();
         return view('wali.pages.siswa.edit', compact('murid'));
     }
 
-    public function update(Request $request, Murid $murid)
+    public function update(Request $request, $nis)
     {
+        $murid = Murid::where('nis', $nis)->firstOrFail();
+        
         $validated = $request->validate([
             'nis' => 'required|unique:murids,nis,'.$murid->id,
             'nisn' => 'required|unique:murids,nisn,'.$murid->id,
