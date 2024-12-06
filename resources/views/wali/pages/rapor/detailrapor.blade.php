@@ -3,8 +3,8 @@
 @section('content')
 <style>
 .page {
-    width: 210mm;
-    height: 297mm;
+    width: 215mm;
+    height: 330mm;
     padding: 20mm;
     margin: 10mm auto;
     background: white;
@@ -44,11 +44,6 @@
         <!-- Background Logo -->
         <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
             <img src="{{ asset('images/logopembut.png') }}" alt="Logo Sekolah" class="w-96" crossorigin="anonymous">
-        </div>
-
-        <div class="text-center mb-8 relative">
-            <h1 class="text-2xl font-bold">DATA SISWA</h1>
-            <h2 class="text-xl">Tahun Ajaran {{ now()->year }}/{{ now()->year + 1 }}</h2>
         </div>
 
         <div class="mb-8 relative">
@@ -97,52 +92,46 @@
 
     <!-- Nilai Akademik -->
     <div class="page relative" id="nilai-akademik-page">
-     
-
-        <div class="text-center mb-8 relative">
-            <h1 class="text-2xl font-bold">NILAI AKADEMIK</h1>
-            <h2 class="text-xl">Tahun Ajaran {{ now()->year }}/{{ now()->year + 1 }}</h2>
-        </div>
 
         <div class="mb-8">
             <div class="grid grid-cols-2 gap-8">
                 <div>
-                    <table class="w-full">
+                    <table class="w-full text-sm">
                         <tr>
-                            <td class="py-2">Nama Peserta Didik</td>
-                            <td class="py-2">: {{ $murid->name }}</td>
+                            <td class="py-1 w-48 font-bold whitespace-nowrap">Nama Peserta Didik</td>
+                            <td class="py-1 whitespace-nowrap">: {{ $murid->name }}</td>
                         </tr>
                         <tr>
-                            <td class="py-2">NIS/NISN</td>
-                            <td class="py-2">: {{ $murid->nis }}/{{ $murid->nisn }}</td>
+                            <td class="py-1 font-bold whitespace-nowrap">NIS/NISN</td>
+                            <td class="py-1 whitespace-nowrap">: {{ $murid->nis }}/{{ $murid->nisn }}</td>
                         </tr>
                         <tr>
-                            <td class="py-2">Sekolah</td>
-                            <td class="py-2">: SMK Pengembangan Bogor</td>
+                            <td class="py-1 font-bold whitespace-nowrap">Sekolah</td>
+                            <td class="py-1 whitespace-nowrap">: SMK Pengembangan Bogor</td>
                         </tr>
                         <tr>
-                            <td class="py-2">Alamat</td>
-                            <td class="py-2">: {{ $murid->address }}</td>
+                            <td class="py-1 font-bold whitespace-nowrap">Alamat</td>
+                            <td class="py-1 whitespace-nowrap">: {{ $murid->address }}</td>
                         </tr>
                     </table>
                 </div>
-                <div>
-                    <table class="w-full">
+                <div class="pl-12">
+                    <table class="w-full text-sm">
                         <tr>
-                            <td class="py-2">Kelas</td>
-                            <td class="py-2">: {{ $murid->class }}</td>
+                            <td class="py-1 w-48 font-bold">Kelas</td>
+                            <td class="py-1 whitespace-nowrap">: {{ $murid->class }}</td>
                         </tr>
                         <tr>
-                            <td class="py-2">Fase</td>
-                            <td class="py-2">: E</td>
+                            <td class="py-1 font-bold">Fase</td>
+                            <td class="py-1 whitespace-nowrap">: E</td>
                         </tr>
                         <tr>
-                            <td class="py-2">Semester</td>
-                            <td class="py-2">: {{ $murid->semester }}</td>
+                            <td class="py-1 font-bold">Semester</td>
+                            <td class="py-1 whitespace-nowrap">: {{ now()->month >= 6 && now()->month <= 12 ? 'Ganjil' : 'Genap' }}</td>
                         </tr>
                         <tr>
-                            <td class="py-2">Tahun Pelajaran</td>
-                            <td class="py-2">: {{ now()->year }}/{{ now()->year + 1 }}</td>
+                            <td class="py-1 font-bold">Tahun Pelajaran</td>
+                            <td class="py-1 whitespace-nowrap">: {{ now()->year }}/{{ now()->year + 1 }}</td>
                         </tr>
                     </table>
                 </div>
@@ -154,7 +143,7 @@
             <table class="min-w-full divide-y divide-gray-100">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">No</th>
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">No.</th>
                         <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">Mata Pelajaran</th>
                         <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">Nilai Akhir</th>
                         <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-950 uppercase tracking-wider whitespace-nowrap border border-gray-300">Capaian Kompetensi</th>
@@ -313,7 +302,11 @@ function downloadPageAsPDF(pageId) {
         allowTaint: true
     }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: [215, 330]  // Custom size untuk F4/Folio
+        });
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
