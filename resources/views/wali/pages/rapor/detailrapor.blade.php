@@ -138,6 +138,16 @@
             </div>
         </div>
 
+        <div class="absolute bottom-10 left-20">
+            <p class="text-[15px] font-normal">{{ $murid->name }}</p>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+            <p class="text-[15px] font-normal">-1-</p>
+        </div>
+        <div class="absolute bottom-10 right-20">
+            <p class="text-[15px] font-normal">{{ $murid->class }} {{ $murid->major }}</p>
+        </div>
+
         
         <div class="overflow-x-auto rounded-xl border border-gray-100 bg-white">
             <table class="min-w-full divide-y divide-gray-100">

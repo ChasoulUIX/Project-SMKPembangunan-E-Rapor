@@ -11,6 +11,7 @@ class Matapelajaran extends Model
         'nama_mapel',
         'nama_guru',
         'nip',
+        'kategori',
         'daftar_siswa'
     ];
 

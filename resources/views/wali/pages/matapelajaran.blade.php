@@ -147,23 +147,81 @@
                         </div>
 
                         <!-- Nama Mapel -->
-                        <div>
+                        <div class="relative">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Mapel</label>
-                            <select name="nama_mapel" id="nama_mapel" onchange="updateGuruName()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" required>
-                                <option value="">Pilih Mata Pelajaran</option>
-                                @foreach(\App\Models\Matapelajaran::select('nama_mapel', 'nama_guru')->distinct()->orderBy('nama_mapel')->get() as $mapel)
-                                    <option value="{{ $mapel->nama_mapel }}" data-guru="{{ $mapel->nama_guru }}">{{ $mapel->nama_mapel }}</option>
-                                @endforeach
-                            </select>
+                            <div class="flex space-x-2">
+                                <!-- Combobox dropdown -->
+                                <select name="nama_mapel_select" id="nama_mapel_select"
+                                    class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Mata Pelajaran</option>
+                                    @foreach(\App\Models\Matapelajaran::select('nama_mapel', 'nama_guru')->distinct()->orderBy('nama_mapel')->get() as $mapel)
+                                        <option value="{{ $mapel->nama_mapel }}" data-guru="{{ $mapel->nama_guru }}">{{ $mapel->nama_mapel }}</option>
+                                    @endforeach
+                                </select>
+
+                                <!-- Search input -->
+                                <input type="text" name="nama_mapel" id="nama_mapel"
+                                    class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Atau ketik untuk mencari..."
+                                    autocomplete="off"
+                                    required>
+                            </div>
+                            <div id="mapelDropdown" class="absolute z-10 w-1/2 right-0 bg-white border border-gray-200 rounded-lg mt-1 max-h-60 overflow-y-auto hidden">
+                            </div>
                         </div>
 
                         <script>
-                            function updateGuruName() {
-                                const mapelSelect = document.getElementById('nama_mapel');
-                                const guruInput = document.getElementById('nama_guru');
-                                const selectedOption = mapelSelect.options[mapelSelect.selectedIndex];
-                                guruInput.value = selectedOption.dataset.guru || '';
+                            const namaMapelInput = document.getElementById('nama_mapel');
+                            const namaMapelSelect = document.getElementById('nama_mapel_select');
+                            const mapelDropdown = document.getElementById('mapelDropdown');
+                            const mapelList = @json(\App\Models\Matapelajaran::select('nama_mapel', 'nama_guru')->distinct()->orderBy('nama_mapel')->get());
+                            const guruInput = document.getElementById('nama_guru');
+
+                            // Handle combobox selection
+                            namaMapelSelect.addEventListener('change', function() {
+                                const selectedOption = this.options[this.selectedIndex];
+                                if (selectedOption.value) {
+                                    namaMapelInput.value = selectedOption.value;
+                                    guruInput.value = selectedOption.dataset.guru;
+                                }
+                            });
+
+                            // Handle search input
+                            namaMapelInput.addEventListener('input', function() {
+                                const searchValue = this.value.toLowerCase();
+                                const filteredMapel = mapelList.filter(mapel => 
+                                    mapel.nama_mapel.toLowerCase().includes(searchValue)
+                                );
+
+                                if (searchValue === '') {
+                                    mapelDropdown.classList.add('hidden');
+                                    return;
+                                }
+
+                                mapelDropdown.innerHTML = filteredMapel
+                                    .map(mapel => `
+                                        <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" 
+                                             onclick="selectMapel('${mapel.nama_mapel}', '${mapel.nama_guru}')">
+                                            ${mapel.nama_mapel}
+                                        </div>
+                                    `).join('');
+
+                                mapelDropdown.classList.remove('hidden');
+                            });
+
+                            function selectMapel(nama_mapel, nama_guru) {
+                                namaMapelInput.value = nama_mapel;
+                                guruInput.value = nama_guru;
+                                namaMapelSelect.value = nama_mapel;
+                                mapelDropdown.classList.add('hidden');
                             }
+
+                            // Hide dropdown when clicking outside
+                            document.addEventListener('click', function(e) {
+                                if (!namaMapelInput.contains(e.target) && !mapelDropdown.contains(e.target)) {
+                                    mapelDropdown.classList.add('hidden');
+                                }
+                            });
                         </script>
 
                         <!-- Daftar Siswa -->

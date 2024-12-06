@@ -33,15 +33,17 @@ class MatapelajaranController extends Controller
             'nama_mapel' => 'required',
             'nama_guru' => 'required',
             'nip' => 'required',
+            'kategori' => 'required',
             'daftar_siswa' => 'nullable'
         ]);
 
-        // Include nip in the data to be created
+        // Remove unique validation for nip since a teacher can have multiple subjects
         Matapelajaran::create([
             'kode_mapel' => $validated['kode_mapel'],
             'nama_mapel' => $validated['nama_mapel'], 
             'nama_guru' => $validated['nama_guru'],
             'nip' => $validated['nip'],
+            'kategori' => $validated['kategori'],
             'daftar_siswa' => $validated['daftar_siswa'] ?? null
         ]);
 
@@ -59,7 +61,8 @@ class MatapelajaranController extends Controller
             'kode_mapel' => 'required|unique:matapelajarans,kode_mapel,' . $matapelajaran->id,
             'nama_mapel' => 'required',
             'nama_guru' => 'required',
-            'nip' => 'required',
+            'nip' => 'required', // Removed unique validation
+            'kategori' => 'required',
             'daftar_siswa' => 'nullable'
         ]);
 
@@ -68,6 +71,7 @@ class MatapelajaranController extends Controller
             'nama_mapel' => $validated['nama_mapel'],
             'nama_guru' => $validated['nama_guru'],
             'nip' => $validated['nip'],
+            'kategori' => $validated['kategori'],
             'daftar_siswa' => $validated['daftar_siswa'] ?? null
         ]);
 

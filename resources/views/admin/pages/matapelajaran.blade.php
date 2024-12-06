@@ -84,6 +84,16 @@
                         <label class="block text-sm font-medium text-gray-700">Nama Mapel</label>
                         <input type="text" name="nama_mapel" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Kategori</label>
+                        <select name="kategori" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Pilih Kategori</option>
+                            <option value="umum">Umum</option>
+                            <option value="kejuruan">Kejuruan</option>
+                            <option value="lokal">Lokal</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">NIP</label>
                         <input type="text" name="nip" id="nip" readonly class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 bg-gray-100 cursor-not-allowed">
@@ -140,10 +150,24 @@
                     <input type="text" name="nama_mapel" id="edit_nama_mapel" value="{{ old('nama_mapel', $matapelajaran->nama_mapel ?? '') }}" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
+                        <label class="block text-sm font-medium text-gray-700">Kategori</label>
+                        <select name="kategori" id="edit_kategori" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Pilih Kategori</option>
+                            <option value="umum" {{ old('kategori', $matapelajaran->kategori ?? '') == 'umum' ? 'selected' : '' }}>Umum</option>
+                            <option value="kejuruan" {{ old('kategori', $matapelajaran->kategori ?? '') == 'kejuruan' ? 'selected' : '' }}>Kejuruan</option>
+                            <option value="lokal" {{ old('kategori', $matapelajaran->kategori ?? '') == 'lokal' ? 'selected' : '' }}>Lokal</option>
+                        </select>
+                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">NIP</label>
+                    <input type="text" name="nip" id="edit_nip" value="{{ old('nip', $matapelajaran->nip ?? '') }}" readonly class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 bg-gray-100 cursor-not-allowed">
+                </div>
+                <div>
                     <label class="block text-sm font-medium text-gray-700">Guru Pengajar</label>
-                    <select name="nama_guru" id="edit_nama_guru" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <select name="nama_guru" id="edit_nama_guru" required onchange="updateEditNIP(this)" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Guru</option>
                         @foreach(\App\Models\Guru::orderBy('name')->get() as $guru)
-                            <option value="{{ $guru->name }}" {{ old('nama_guru', $matapelajaran->nama_guru ?? '') == $guru->name ? 'selected' : '' }}>{{ $guru->name }}</option>
+                            <option value="{{ $guru->name }}" data-nip="{{ $guru->nip }}" {{ old('nama_guru', $matapelajaran->nama_guru ?? '') == $guru->name ? 'selected' : '' }}>{{ $guru->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -165,6 +189,12 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
+function updateEditNIP(select) {
+    const selectedOption = select.options[select.selectedIndex];
+    const nip = selectedOption.getAttribute('data-nip');
+    document.getElementById('edit_nip').value = nip || '';
+}
+
 function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
     // Set form action URL
@@ -177,6 +207,8 @@ function openEditModal(id) {
             document.getElementById('edit_kode_mapel').value = data.kode_mapel;
             document.getElementById('edit_nama_mapel').value = data.nama_mapel;
             document.getElementById('edit_nama_guru').value = data.nama_guru;
+            document.getElementById('edit_kategori').value = data.kategori;
+            document.getElementById('edit_nip').value = data.nip;
         });
 }
 

@@ -187,17 +187,95 @@
                         </select>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Daftar Siswa</label>
-                        <select name="daftar_siswa" class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
-                            <option value="">Pilih Siswa</option>
-                            @foreach(\App\Models\Murid::orderBy('name')->get() as $murid)
-                                <option value="{{ json_encode(['id' => $murid->id, 'name' => $murid->name, 'nis' => $murid->nis, 'nisn' => $murid->nisn]) }}">
-                                    {{ $murid->name }} ({{ $murid->nis }})
-                                </option>
-                            @endforeach
-                        </select>
+                    <div class="relative">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Daftar Siswa</label>
+                        <div class="flex space-x-2">
+                            <!-- Combobox dropdown -->
+                            <select name="nama_siswa_select" id="nama_siswa_select"
+                                class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                <option value="">Pilih Siswa</option>
+                                @foreach(\App\Models\Murid::select('name', 'nis', 'id', 'nisn')->orderBy('name')->get() as $siswa)
+                                    <option value="{{ $siswa->name }}" data-nis="{{ $siswa->nis }}" data-id="{{ $siswa->id }}" data-nisn="{{ $siswa->nisn }}">{{ $siswa->name }}</option>
+                                @endforeach
+                            </select>
+
+                            <!-- Search input -->
+                            <input type="text" name="nama_siswa" id="nama_siswa"
+                                class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                placeholder="Atau ketik untuk mencari..."
+                                autocomplete="off"
+                                required>
+                        </div>
+                        <div id="siswaDropdown" class="absolute z-10 w-1/2 right-0 bg-white border border-gray-200 rounded-lg mt-1 max-h-60 overflow-y-auto hidden">
+                        </div>
                     </div>
+
+                    <script>
+                        const namaSiswaInput = document.getElementById('nama_siswa');
+                        const namaSiswaSelect = document.getElementById('nama_siswa_select');
+                        const siswaDropdown = document.getElementById('siswaDropdown');
+                        const siswaList = {!! json_encode(\App\Models\Murid::select('name', 'nis', 'id', 'nisn')->orderBy('name')->get()) !!};
+
+                        // Handle combobox selection
+                        namaSiswaSelect.addEventListener('change', function() {
+                            const selectedOption = this.options[this.selectedIndex];
+                            if (selectedOption.value) {
+                                namaSiswaInput.value = selectedOption.value;
+                                const siswaData = {
+                                    id: selectedOption.dataset.id,
+                                    name: selectedOption.value,
+                                    nis: selectedOption.dataset.nis,
+                                    nisn: selectedOption.dataset.nisn
+                                };
+                                document.getElementsByName('daftar_siswa')[0].value = JSON.stringify(siswaData);
+                            }
+                        });
+
+                        // Handle search input
+                        namaSiswaInput.addEventListener('input', function() {
+                            const searchValue = this.value.toLowerCase();
+                            const filteredSiswa = siswaList.filter(siswa => 
+                                siswa.name.toLowerCase().includes(searchValue)
+                            );
+
+                            if (searchValue === '') {
+                                siswaDropdown.classList.add('hidden');
+                                return;
+                            }
+
+                            siswaDropdown.innerHTML = filteredSiswa
+                                .map(siswa => `
+                                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" 
+                                         onclick="selectSiswa('${siswa.name}', '${siswa.nis}', '${siswa.id}', '${siswa.nisn}')">
+                                        ${siswa.name}
+                                    </div>
+                                `).join('');
+
+                            siswaDropdown.classList.remove('hidden');
+                        });
+
+                        function selectSiswa(name, nis, id, nisn) {
+                            namaSiswaInput.value = name;
+                            namaSiswaSelect.value = name;
+                            const siswaData = {
+                                id: id,
+                                name: name,
+                                nis: nis,
+                                nisn: nisn
+                            };
+                            document.getElementsByName('daftar_siswa')[0].value = JSON.stringify(siswaData);
+                            siswaDropdown.classList.add('hidden');
+                        }
+
+                        // Hide dropdown when clicking outside
+                        document.addEventListener('click', function(e) {
+                            if (!namaSiswaInput.contains(e.target) && !siswaDropdown.contains(e.target)) {
+                                siswaDropdown.classList.add('hidden');
+                            }
+                        });
+                    </script>
+
+                    <input type="hidden" name="daftar_siswa">
 
                     <div class="flex justify-end space-x-3 mt-8">
                         <button type="button" onclick="closeModal('tambahSiswaModal')" class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200">

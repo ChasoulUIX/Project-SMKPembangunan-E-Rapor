@@ -77,7 +77,20 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-600">Total Siswa</p>
-                    <p class="text-xl font-bold text-gray-800">108 Siswa</p>
+                    @php
+                        $totalSiswa = 0;
+                        $daftarMapel = \App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)->get();
+                        foreach($daftarMapel as $mapel) {
+                            $daftarSiswa = \App\Models\Daftarsiswa::where('id_kelas', $mapel->id_kelas)->first();
+                            if($daftarSiswa && $daftarSiswa->daftar_siswa) {
+                                $siswaArray = is_string($daftarSiswa->daftar_siswa) ? 
+                                    json_decode($daftarSiswa->daftar_siswa, true) : 
+                                    $daftarSiswa->daftar_siswa;
+                                $totalSiswa += count($siswaArray);
+                            }
+                        }
+                    @endphp
+                    <p class="text-xl font-bold text-gray-800">{{ $totalSiswa }} Siswa</p>
                 </div>
             </div>
         </div>

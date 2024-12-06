@@ -129,16 +129,80 @@
 
                         <div class="relative">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Siswa</label>
-                            <select name="nama_siswa" id="nama_siswa"
-                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                onchange="updateNIS(this)"
-                                required>
-                                <option value="">Pilih Siswa</option>
-                                @foreach(\App\Models\Murid::orderBy('name')->get() as $siswa)
-                                    <option value="{{ $siswa->name }}" data-nis="{{ $siswa->nis }}">{{ $siswa->name }}</option>
-                                @endforeach
-                            </select>
+                            <div class="flex space-x-2">
+                                <!-- Combobox dropdown -->
+                                <select name="nama_siswa_select" id="nama_siswa_select"
+                                    class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Siswa</option>
+                                    @foreach(\App\Models\Murid::select('name', 'nis')->orderBy('name')->get() as $siswa)
+                                        <option value="{{ $siswa->name }}" data-nis="{{ $siswa->nis }}">{{ $siswa->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                <!-- Search input -->
+                                <input type="text" name="nama_siswa" id="nama_siswa"
+                                    class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Atau ketik untuk mencari..."
+                                    autocomplete="off"
+                                    required>
+                            </div>
+                            <div id="siswaDropdown" class="absolute z-10 w-1/2 right-0 bg-white border border-gray-200 rounded-lg mt-1 max-h-60 overflow-y-auto hidden">
+                            </div>
                         </div>
+
+                        <script>
+                            const namaSiswaInput = document.getElementById('nama_siswa');
+                            const namaSiswaSelect = document.getElementById('nama_siswa_select');
+                            const siswaDropdown = document.getElementById('siswaDropdown');
+                            const siswaList = @json(\App\Models\Murid::select('name', 'nis')->orderBy('name')->get());
+                            const nisInput = document.getElementById('nis');
+
+                            // Handle combobox selection
+                            namaSiswaSelect.addEventListener('change', function() {
+                                const selectedOption = this.options[this.selectedIndex];
+                                if (selectedOption.value) {
+                                    namaSiswaInput.value = selectedOption.value;
+                                    nisInput.value = selectedOption.dataset.nis;
+                                }
+                            });
+
+                            // Handle search input
+                            namaSiswaInput.addEventListener('input', function() {
+                                const searchValue = this.value.toLowerCase();
+                                const filteredSiswa = siswaList.filter(siswa => 
+                                    siswa.name.toLowerCase().includes(searchValue)
+                                );
+
+                                if (searchValue === '') {
+                                    siswaDropdown.classList.add('hidden');
+                                    return;
+                                }
+
+                                siswaDropdown.innerHTML = filteredSiswa
+                                    .map(siswa => `
+                                        <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" 
+                                             onclick="selectSiswa('${siswa.name}', '${siswa.nis}')">
+                                            ${siswa.name}
+                                        </div>
+                                    `).join('');
+
+                                siswaDropdown.classList.remove('hidden');
+                            });
+
+                            function selectSiswa(name, nis) {
+                                namaSiswaInput.value = name;
+                                nisInput.value = nis;
+                                namaSiswaSelect.value = name;
+                                siswaDropdown.classList.add('hidden');
+                            }
+
+                            // Hide dropdown when clicking outside
+                            document.addEventListener('click', function(e) {
+                                if (!namaSiswaInput.contains(e.target) && !siswaDropdown.contains(e.target)) {
+                                    siswaDropdown.classList.add('hidden');
+                                }
+                            });
+                        </script>
 
                         <div class="relative">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Wali Kelas</label>
@@ -154,13 +218,77 @@
 
                         <div class="relative">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Mata Pelajaran</label>
-                            <input type="text" name="nama_mapel" id="nama_mapel"
-                                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm bg-gray-50"
-                                placeholder="Mata Pelajaran akan terisi otomatis"
-                                value="{{ \App\Models\Matapelajaran::where('nama_guru', Auth::user()->name)->first()->nama_mapel ?? '' }}"
-                                readonly
-                                required>
+                            <div class="flex space-x-2">
+                                <!-- Combobox dropdown -->
+                                <select name="nama_mapel_select" id="nama_mapel_select"
+                                    class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Mata Pelajaran</option>
+                                    @foreach(\App\Models\Matapelajaran::select('nama_mapel', 'nama_guru')->where('nama_guru', Auth::user()->name)->orderBy('nama_mapel')->get() as $mapel)
+                                        <option value="{{ $mapel->nama_mapel }}">{{ $mapel->nama_mapel }}</option>
+                                    @endforeach
+                                </select>
+
+                                <!-- Search input -->
+                                <input type="text" name="nama_mapel" id="nama_mapel"
+                                    class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
+                                    placeholder="Atau ketik untuk mencari..."
+                                    autocomplete="off"
+                                    required>
+                            </div>
+                            <div id="mapelDropdown" class="absolute z-10 w-1/2 right-0 bg-white border border-gray-200 rounded-lg mt-1 max-h-60 overflow-y-auto hidden">
+                            </div>
                         </div>
+
+                        <script>
+                            const namaMapelInput = document.getElementById('nama_mapel');
+                            const namaMapelSelect = document.getElementById('nama_mapel_select');
+                            const mapelDropdown = document.getElementById('mapelDropdown');
+                            const mapelList = @json(\App\Models\Matapelajaran::select('nama_mapel', 'nama_guru')->where('nama_guru', Auth::user()->name)->orderBy('nama_mapel')->get());
+
+                            // Handle combobox selection
+                            namaMapelSelect.addEventListener('change', function() {
+                                const selectedOption = this.options[this.selectedIndex];
+                                if (selectedOption.value) {
+                                    namaMapelInput.value = selectedOption.value;
+                                }
+                            });
+
+                            // Handle search input
+                            namaMapelInput.addEventListener('input', function() {
+                                const searchValue = this.value.toLowerCase();
+                                const filteredMapel = mapelList.filter(mapel => 
+                                    mapel.nama_mapel.toLowerCase().includes(searchValue)
+                                );
+
+                                if (searchValue === '') {
+                                    mapelDropdown.classList.add('hidden');
+                                    return;
+                                }
+
+                                mapelDropdown.innerHTML = filteredMapel
+                                    .map(mapel => `
+                                        <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" 
+                                             onclick="selectMapel('${mapel.nama_mapel}')">
+                                            ${mapel.nama_mapel}
+                                        </div>
+                                    `).join('');
+
+                                mapelDropdown.classList.remove('hidden');
+                            });
+
+                            function selectMapel(nama_mapel) {
+                                namaMapelInput.value = nama_mapel;
+                                namaMapelSelect.value = nama_mapel;
+                                mapelDropdown.classList.add('hidden');
+                            }
+
+                            // Hide dropdown when clicking outside
+                            document.addEventListener('click', function(e) {
+                                if (!namaMapelInput.contains(e.target) && !mapelDropdown.contains(e.target)) {
+                                    mapelDropdown.classList.add('hidden');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <!-- Right Column -->
