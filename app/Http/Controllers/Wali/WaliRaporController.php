@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\DB;
 
 class WaliRaporController extends Controller
 {
@@ -42,7 +43,7 @@ class WaliRaporController extends Controller
         ];
 
         $nilaiSiswa = Nilaisiswa::where('nis', $nis)->get();
-
+        
         return view('wali.pages.rapor.detailrapor', compact('murid', 'nilaiSiswa'));
     }
 
