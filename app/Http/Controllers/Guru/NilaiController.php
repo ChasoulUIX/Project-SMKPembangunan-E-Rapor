@@ -95,7 +95,7 @@ class NilaiController extends Controller
     public function edit($id)
     {
         $nilai = Nilaisiswa::findOrFail($id);
-        return view('guru.pages.nilai.edit', compact('nilai'));
+        return response()->json($nilai);
     }
 
     public function update(Request $request, $id)

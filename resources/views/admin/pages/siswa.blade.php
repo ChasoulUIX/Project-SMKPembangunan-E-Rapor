@@ -357,37 +357,57 @@ function closeCreateModal() {
 
 function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
-    document.getElementById('editForm').action = `/admin/pages/siswa/${id}`;
+    document.getElementById('editForm').action = `/wali/siswa/${id}`;
     
-    // Fetch siswa data and populate form
-    fetch(`/admin/pages/siswa/${id}`)
+    // Fetch siswa data
+    fetch(`/wali/siswa/${id}/edit`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('edit_nis').value = data.nis;
-            document.getElementById('edit_nisn').value = data.nisn;
-            document.getElementById('edit_name').value = data.name;
-            document.getElementById('edit_email').value = data.email;
-            document.getElementById('edit_gender').value = data.gender;
-            document.getElementById('edit_birth_place').value = data.birth_place;
-            document.getElementById('edit_birth_date').value = data.birth_date;
-            document.getElementById('edit_address').value = data.address;
-            document.getElementById('edit_phone_number').value = data.phone_number;
-            document.getElementById('edit_father_name').value = data.father_name;
-            document.getElementById('edit_mother_name').value = data.mother_name;
-            document.getElementById('edit_parent_phone').value = data.parent_phone;
-            document.getElementById('edit_parent_address').value = data.parent_address;
-            document.getElementById('edit_class').value = data.class;
-            document.getElementById('edit_major').value = data.major;
-            document.getElementById('edit_academic_year').value = data.academic_year;
-            document.getElementById('edit_semester').value = data.semester;
+            const murid = data.murid;
+            
+            // Populate form fields with existing data
+            document.getElementById('edit_nis').value = murid.nis;
+            document.getElementById('edit_nisn').value = murid.nisn;
+            document.getElementById('edit_name').value = murid.name;
+            document.getElementById('edit_email').value = murid.email;
+            document.getElementById('edit_gender').value = murid.gender;
+            document.getElementById('edit_birth_place').value = murid.birth_place;
+            document.getElementById('edit_birth_date').value = murid.birth_date;
+            document.getElementById('edit_address').value = murid.address;
+            document.getElementById('edit_phone_number').value = murid.phone_number;
+            document.getElementById('edit_father_name').value = murid.father_name;
+            document.getElementById('edit_mother_name').value = murid.mother_name;
+            document.getElementById('edit_parent_phone').value = murid.parent_phone;
+            document.getElementById('edit_parent_address').value = murid.parent_address;
+            document.getElementById('edit_class').value = murid.class;
+            document.getElementById('edit_major').value = murid.major;
+            document.getElementById('edit_academic_year').value = murid.academic_year;
+            document.getElementById('edit_semester').value = murid.semester;
             
             // Show current photo if exists
-            const currentPhotoDiv = document.getElementById('current_photo');
-            if (data.photo) {
-                currentPhotoDiv.innerHTML = `<img src="${data.photo}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">`;
-            } else {
-                currentPhotoDiv.innerHTML = '';
+            if (murid.photo) {
+                const photoUrl = murid.photo.startsWith('http') ? murid.photo : `/${murid.photo}`;
+                const currentPhotoDiv = document.getElementById('current_photo');
+                if (currentPhotoDiv) {
+                    currentPhotoDiv.innerHTML = `
+                        <img src="${photoUrl}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">
+                    `;
+                }
             }
+
+            // Update kelas dropdown if needed
+            const kelasSelect = document.getElementById('edit_class');
+            if (kelasSelect && data.kelas) {
+                kelasSelect.innerHTML = data.kelas.map(kls => 
+                    `<option value="${kls.nama_kelas}" ${murid.class === kls.nama_kelas ? 'selected' : ''}>
+                        ${kls.nama_kelas}
+                    </option>`
+                ).join('');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengambil data siswa');
         });
 }
 

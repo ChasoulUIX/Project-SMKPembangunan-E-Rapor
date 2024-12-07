@@ -195,14 +195,14 @@
                                 class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
                                 <option value="">Pilih Siswa</option>
                                 @foreach(\App\Models\Murid::select('name', 'nis', 'id', 'nisn')->orderBy('name')->get() as $siswa)
-                                    <option value="{{ $siswa->name }}" data-nis="{{ $siswa->nis }}" data-id="{{ $siswa->id }}" data-nisn="{{ $siswa->nisn }}">{{ $siswa->name }}</option>
+                                    <option value="{{ $siswa->name }}" data-nis="{{ $siswa->nis }}" data-id="{{ $siswa->id }}" data-nisn="{{ $siswa->nisn }}">{{ $siswa->name }} ({{ $siswa->nis }})</option>
                                 @endforeach
                             </select>
 
                             <!-- Search input -->
                             <input type="text" name="nama_siswa" id="nama_siswa"
                                 class="w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                placeholder="Atau ketik untuk mencari..."
+                                placeholder="Cari berdasarkan nama atau NIS..."
                                 autocomplete="off"
                                 required>
                         </div>

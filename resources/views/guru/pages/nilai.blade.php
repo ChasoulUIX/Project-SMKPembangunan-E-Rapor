@@ -36,10 +36,20 @@
                 <tr>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">No</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Kelas</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">NIS</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Siswa</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Mata Pelajaran</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Materi 1</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Materi 2</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Materi 3</th>    
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Materi 4</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Materi 5</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">NA Materi</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">UTS</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">UAS</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Kehadiran</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Sikap</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nilai Rapor</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Aksi</th>
                 </tr>
             </thead>
@@ -52,10 +62,20 @@
                 <tr class="hover:bg-gray-50 transition-colors nilai-row" data-kelas="{{ $nilai->nama_kelas }}">
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_kelas }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nis }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_siswa }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_mapel }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->materi_1 }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->materi_2 }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->materi_3 }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->materi_4 }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->materi_5 }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->na_materi }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uts }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->uas }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->kehadiran }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->sikap }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nilai_rapor }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                         <div class="flex space-x-3">
                             <a href="{{ route('guru.nilai.show', $nilai->id) }}" class="text-blue-600 hover:text-blue-900">Detail</a>
@@ -614,6 +634,30 @@ function closeCreateModal() {
 function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
     document.getElementById('editForm').action = `/guru/nilai/${id}`;
+    
+    // Fetch nilai data
+    fetch(`/guru/nilai/${id}/edit`)
+        .then(response => response.json())
+        .then(data => {
+            // Populate form fields with existing data
+            document.getElementById('edit_nama_materi_1').value = data.nama_materi_1;
+            document.getElementById('edit_materi_1').value = data.materi_1;
+            document.getElementById('edit_nama_materi_2').value = data.nama_materi_2;
+            document.getElementById('edit_materi_2').value = data.materi_2;
+            document.getElementById('edit_nama_materi_3').value = data.nama_materi_3;
+            document.getElementById('edit_materi_3').value = data.materi_3;
+            document.getElementById('edit_nama_materi_4').value = data.nama_materi_4;
+            document.getElementById('edit_materi_4').value = data.materi_4;
+            document.getElementById('edit_nama_materi_5').value = data.nama_materi_5;
+            document.getElementById('edit_materi_5').value = data.materi_5;
+            document.getElementById('edit_na_materi').value = data.na_materi;
+            document.getElementById('edit_uts').value = data.uts;
+            document.getElementById('edit_uas').value = data.uas;
+            document.getElementById('edit_kehadiran').value = data.kehadiran;
+            document.getElementById('edit_sikap').value = data.sikap;
+            document.getElementById('edit_nilai_rapor').value = data.nilai_rapor;
+        })
+        .catch(error => console.error('Error:', error));
 }
 
 function closeEditModal() {
