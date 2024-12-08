@@ -63,3 +63,4 @@ class Nilaisiswa extends Model
         'nilai_rapor' => 'integer'
     ];
 }
+

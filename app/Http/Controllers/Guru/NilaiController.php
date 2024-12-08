@@ -164,4 +164,13 @@ class NilaiController extends Controller
 
         return redirect()->route('guru.nilai.index')->with('success', 'Nilai berhasil dihapus');
     }
+
+    public function detailkelas($id_kelas)
+    {
+        $nilai = Nilaisiswa::where('id_kelas', $id_kelas)
+            ->where('nama_guru', Auth::user()->name)
+            ->get();
+        
+        return view('guru.pages.detailkelas', compact('nilai'));
+    }
 }

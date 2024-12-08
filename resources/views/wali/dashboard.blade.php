@@ -87,9 +87,6 @@
                 <a href="{{ route('wali.siswa.index') }}" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm text-center">
                     Nilai Siswa
                 </a>
-                <button class="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                    Cetak Rapor
-                </button>
             </div>
         </div>
         
@@ -99,9 +96,9 @@
                     <tr>
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
+                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NISN</th>
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
                         <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
-                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -114,6 +111,7 @@
                         <tr>
                             <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
                             <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['nis'] }}</td>
+                            <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['nisn'] }}</td>
                             <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['name'] }}</td>
                             <td class="px-4 sm:px-6 py-3 whitespace-nowrap">
                                 <div class="flex flex-col">
@@ -121,9 +119,7 @@
                                     <span class="text-xs text-gray-500">{{ $siswa->jurusan }}</span>
                                 </div>
                             </td>
-                            <td class="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm font-medium">
-                                <a href="{{ route('wali.siswa.show', $murid['id']) }}" class="text-blue-600 hover:text-blue-900">Detail</a>
-                            </td>
+                           
                         </tr>
                         @endforeach
                     @empty

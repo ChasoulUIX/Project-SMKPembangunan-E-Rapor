@@ -78,7 +78,7 @@
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nilai_rapor }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                         <div class="flex space-x-3">
-                            <a href="{{ route('guru.nilai.show', $nilai->id) }}" class="text-blue-600 hover:text-blue-900">Detail</a>
+                            
                             <button onclick="openEditModal({{ $nilai->id }})" class="text-green-600 hover:text-green-900">Edit</button>
                             <form action="{{ route('guru.nilai.destroy', $nilai->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                 @csrf

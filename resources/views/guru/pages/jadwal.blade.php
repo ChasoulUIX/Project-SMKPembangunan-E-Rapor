@@ -3,70 +3,50 @@
 @section('content')
 <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
     <div class="border-b pb-4 mb-4">
-        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Jadwal Mengajar</h1>
-        <p class="text-sm sm:text-base text-gray-600">Jadwal mengajar guru di SMK Pembangunan Bogor</p>
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Daftar Kelas Mengajar</h1>
+        <p class="text-sm sm:text-base text-gray-600">Kelas yang diampu oleh {{ Auth::user()->nama }}</p>
     </div>
 
     <!-- Filter Section -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        <div>
-            <label for="tahun_ajaran" class="block text-sm font-medium text-gray-700 mb-1">Tahun Ajaran</label>
-            <select id="tahun_ajaran" name="tahun_ajaran" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                <option value="2023/2024-1">2023/2024 - Semester Ganjil</option>
-                <option value="2023/2024-2">2023/2024 - Semester Genap</option>
-            </select>
-        </div>
-        <div>
-            <label for="hari" class="block text-sm font-medium text-gray-700 mb-1">Hari</label>
-            <select id="hari" name="hari" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                <option value="all">Semua Hari</option>
-                <option value="senin">Senin</option>
-                <option value="selasa">Selasa</option>
-                <option value="rabu">Rabu</option>
-                <option value="kamis">Kamis</option>
-                <option value="jumat">Jumat</option>
-            </select>
-        </div>
-    </div>
+    
 
-    <!-- Jadwal Table -->
-    <div class="bg-white rounded-lg border">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hari</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jam</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mata Pelajaran</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kelas</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ruangan</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Senin</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07:00 - 08:30</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pemrograman Dasar</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">X RPL 1</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Lab 1</td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Senin</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">08:30 - 10:00</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pemrograman Dasar</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">X RPL 2</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Lab 1</td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Selasa</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10:15 - 11:45</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Basis Data</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">XI RPL 1</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Lab 2</td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- Class Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @forelse(\App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)->get() as $mapel)
+        <div class="bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-semibold text-gray-900">{{ $mapel->nama_mapel }}</h3>
+                    <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                        {{ $mapel->kelas->nama_kelas }}
+                    </span>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        {{ is_array($mapel->daftar_siswa) ? count($mapel->daftar_siswa) : count(json_decode($mapel->daftar_siswa ?? '[]')) }} Siswa
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        {{ $mapel->kelas->jurusan }}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{{ route('guru.nilai.index', $mapel->id) }}" class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Lihat Detail
+                    </a>
+                </div>
+            </div>
         </div>
+        @empty
+        <div class="col-span-full text-center py-8">
+            <p class="text-gray-500">Tidak ada jadwal mengajar yang tersedia.</p>
+        </div>
+        @endforelse
     </div>
 </div>
 @endsection

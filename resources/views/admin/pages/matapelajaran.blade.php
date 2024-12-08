@@ -19,7 +19,7 @@
     <div class="flex flex-col md:flex-row gap-4 mb-6">
         <div class="flex-1">
             <div class="relative">
-                <input type="text" id="search" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Cari mata pelajaran...">
+                <input type="text" id="search" onkeyup="searchMapel()" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Cari mata pelajaran...">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -40,7 +40,7 @@
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-gray-200" id="mapelTableBody">
                 @php
                     $matapelajarans = \App\Models\Matapelajaran::all();
                 @endphp
@@ -214,6 +214,24 @@ function openEditModal(id) {
 
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
+}
+
+function searchMapel() {
+    const searchValue = document.getElementById('search').value.toLowerCase();
+    const tableBody = document.getElementById('mapelTableBody');
+    const rows = tableBody.getElementsByTagName('tr');
+
+    for (let row of rows) {
+        const namaMapelCell = row.getElementsByTagName('td')[1]; // Index 1 is nama_mapel column
+        if (namaMapelCell) {
+            const namaMapel = namaMapelCell.textContent.toLowerCase();
+            if (namaMapel.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
 }
 </script>
 @endsection

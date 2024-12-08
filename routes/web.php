@@ -124,6 +124,8 @@ Route::get('/guru/absensi', function () {
     return view('guru.pages.absensi');
 });
 
+Route::get('/guru/detailkelas/{id}', [NilaiController::class, 'detailkelas'])->name('guru.detailkelas');
+
 
 
 // Admin

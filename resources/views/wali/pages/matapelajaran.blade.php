@@ -10,7 +10,7 @@
     <!-- Search & Add Button -->
     <div class="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-3 sm:space-y-0">
         <div class="relative w-full sm:w-64">
-            <input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Cari mata pelajaran...">
+            <input type="text" id="searchInput" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Cari mata pelajaran...">
             <div class="absolute left-3 top-2.5">
                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -323,5 +323,21 @@ function openEditModal(id, kodeMapel, namaMapel) {
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
+
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    const searchValue = e.target.value.toLowerCase();
+    const tableRows = document.querySelectorAll('tbody tr');
+    
+    tableRows.forEach(row => {
+        if (row.cells.length > 1) { // Skip empty state row
+            const namaMapel = row.cells[2].textContent.toLowerCase(); // Index 2 is nama_mapel column
+            if (namaMapel.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+});
 </script>
 @endsection

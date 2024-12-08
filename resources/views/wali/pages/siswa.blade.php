@@ -4,30 +4,18 @@
 <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 max-w-full">
     <div class="border-b border-gray-100 pb-4 sm:pb-6 mb-4 sm:mb-6">
         <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Manajemen Data Siswa</h1>
-        <p class="text-xs sm:text-sm lg:text-base text-gray-500 mt-2">Kelola data siswa kelas X RPL 1</p>
-    </div>
+          </div>
 
     <!-- Filter dan Pencarian -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <div class="space-y-2">
             <label class="block text-xs sm:text-sm font-medium text-gray-700">Status Siswa</label>
-            <div class="relative">
-                <select class="w-full rounded-xl border-gray-200 bg-gray-50 py-2 sm:py-3 pl-3 sm:pl-4 pr-8 sm:pr-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-blue-500 appearance-none">
-                    <option value="">Semua Status</option>
-                    <option value="aktif">Aktif</option>
-                    <option value="nonaktif">Non-Aktif</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 sm:px-4">
-                    <svg class="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </div>
-            </div>
+           
         </div>
         <div class="space-y-2">
             <label class="block text-xs sm:text-sm font-medium text-gray-700">Cari Siswa</label>
             <div class="relative">
-                <input type="text" placeholder="Cari nama, NIS, atau NISN..." 
+                <input type="text" id="searchInput" placeholder="Cari nama, NIS, atau NISN..." 
                     class="w-full rounded-xl border-gray-200 bg-gray-50 py-2 sm:py-3 pl-8 sm:pl-10 pr-3 sm:pr-4 text-xs sm:text-sm focus:border-blue-500 focus:ring-blue-500">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4">
                     <svg class="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +36,6 @@
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Nama Siswa</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Kelas</th>
                     <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Jurusan</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Aksi</th>
                 </tr>
             </thead>
            <tbody class="divide-y divide-gray-100">
@@ -64,11 +51,6 @@
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $murid['name'] }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $siswa->nama_kelas }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $siswa->jurusan }}</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-1 sm:space-x-2">
-                        <a href="{{ route('wali.siswa.edit', $siswa->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">Edit</a>
-                        <a href="{{ route('wali.siswa.show', $siswa->id) }}" class="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors">Detail</a>
-                        <!-- Add delete form/button here -->
-                    </td>
                 </tr>
                 @endforeach
             @empty
@@ -302,6 +284,49 @@ function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+
+        tableRows.forEach(row => {
+            if (row.querySelector('td[colspan]')) {
+                // Skip the "Tidak ada data siswa" row
+                return;
+            }
+
+            const nis = row.children[1].textContent.toLowerCase();
+            const name = row.children[2].textContent.toLowerCase();
+            
+            const matchFound = nis.includes(searchTerm) || name.includes(searchTerm);
+            row.style.display = matchFound ? '' : 'none';
+        });
+
+        // Show "No results found" if all rows are hidden
+        const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
+        const noDataRow = document.querySelector('tr td[colspan]')?.parentElement;
+        
+        if (visibleRows.length === 0 && searchTerm !== '') {
+            if (noDataRow) {
+                noDataRow.style.display = '';
+                noDataRow.querySelector('td').textContent = 'Tidak ada hasil pencarian';
+            } else {
+                const tbody = document.querySelector('tbody');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td colspan="6" class="px-3 sm:px-6 py-3 sm:py-4 text-center text-sm text-gray-500">
+                        Tidak ada hasil pencarian
+                    </td>
+                `;
+                tbody.appendChild(newRow);
+            }
+        } else if (noDataRow) {
+            noDataRow.style.display = 'none';
+        }
+    });
+});
 </script>
 
 @endsection
