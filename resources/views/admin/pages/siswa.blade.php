@@ -78,8 +78,8 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $murid->class }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($murid->major) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button type="button" onclick="openEditModal({{ $murid->id }})" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
-                        <form action="{{ route('admin.pages.siswa.destroy', $murid->id) }}" method="POST" class="inline">
+                        <button type="button" onclick="openEditModal('{{ $murid->nis }}')" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
+                        <form action="{{ route('admin.pages.siswa.destroy', $murid->nis) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?')" class="text-red-600 hover:text-red-900">Hapus</button>
@@ -355,12 +355,12 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal(id) {
+function openEditModal(nis) {
     document.getElementById('editModal').classList.remove('hidden');
-    document.getElementById('editForm').action = `/wali/siswa/${id}`;
+    document.getElementById('editForm').action = `/admin/pages/siswa/${nis}`;
     
-    // Fetch siswa data
-    fetch(`/wali/siswa/${id}/edit`)
+    // Update fetch URL to use NIS
+    fetch(`/admin/pages/siswa/${nis}/edit`)
         .then(response => response.json())
         .then(data => {
             const murid = data.murid;

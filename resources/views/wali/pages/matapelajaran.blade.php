@@ -104,37 +104,43 @@
                 <form action="{{ route('wali.matapelajaran.store') }}" method="POST">
                     @csrf
                     <div class="space-y-6">
-                        <!-- ID Kelas -->
                         @php
                             $kelas = \App\Models\Kelas::where('wali_kelas', Auth::user()->name)->first();
                         @endphp
-                        <input type="hidden" name="id_kelas" id="id_kelas" 
-                            value="{{ $kelas->id }}"
-                            required>
 
-                        <!-- Nama Kelas -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Kelas</label>
-                            <input type="text" name="nama_kelas" id="nama_kelas" 
-                                value="{{ $kelas->nama_kelas }}"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-100"
-                                readonly required>
-                        </div>
+                        @if($kelas)
+                            <input type="hidden" name="id_kelas" id="id_kelas" 
+                                value="{{ $kelas->id }}"
+                                required>
+
+                            <!-- Nama Kelas -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Kelas</label>
+                                <input type="text" name="nama_kelas" id="nama_kelas" 
+                                    value="{{ $kelas->nama_kelas }}"
+                                    class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-100"
+                                    readonly required>
+                            </div>
+
+                            <!-- Jurusan -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Jurusan</label>
+                                <input type="text" name="jurusan" id="jurusan" 
+                                    value="{{ $kelas->jurusan }}"
+                                    class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-100"
+                                    readonly required>
+                            </div>
+                        @else
+                            <div class="text-red-500">
+                                Anda belum ditugaskan sebagai wali kelas. Silahkan hubungi admin.
+                            </div>
+                        @endif
 
                         <!-- Nama Wali -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Wali</label>
                             <input type="text" name="nama_wali" id="nama_wali" value="{{ Auth::user()->name }}"
                                 class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-100" 
-                                readonly required>
-                        </div>
-
-                        <!-- Jurusan -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Jurusan</label>
-                            <input type="text" name="jurusan" id="jurusan" 
-                                value="{{ $kelas->jurusan }}"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-100"
                                 readonly required>
                         </div>
 

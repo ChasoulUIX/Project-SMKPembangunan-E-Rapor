@@ -43,34 +43,38 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($gurus as $guru)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $guru->nip }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
-                            <div class="h-10 w-10 flex-shrink-0">
-                                @if($guru->photo)
-                                    <img class="h-10 w-10 rounded-full" src="{{ asset($guru->photo) }}" alt="{{ $guru->name }}">
-                                @else
-                                    <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($guru->name) }}" alt="{{ $guru->name }}">
-                                @endif
-                            </div>
-                            <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">{{ $guru->name }}</div>
-                                <div class="text-sm text-gray-500">{{ $guru->email }}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $guru->email }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $guru->phone_number }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button type="button" onclick="openEditModal({{ $guru->id }})" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
-                        <form action="{{ route('admin.pages.guru.destroy', $guru->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data guru ini?')" class="text-red-600 hover:text-red-900">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
+                    @if($guru->nip)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $guru->nip }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="h-10 w-10 flex-shrink-0">
+                                        @if($guru->photo)
+                                            <img class="h-10 w-10 rounded-full" src="{{ asset($guru->photo) }}" alt="{{ $guru->name }}">
+                                        @else
+                                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($guru->name) }}" alt="{{ $guru->name }}">
+                                        @endif
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">{{ $guru->name }}</div>
+                                        <div class="text-sm text-gray-500">{{ $guru->email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $guru->email }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $guru->phone_number }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button type="button" onclick="openEditModal('{{ $guru->nip }}')" class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
+                                <form action="{{ route('admin.pages.guru.destroy', $guru->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data guru ini?')" class="text-red-600 hover:text-red-900">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @else
+                        {{ Log::error('Guru without NIP found: ' . json_encode($guru)) }}
+                    @endif
                 @endforeach
             </tbody>
         </table>
@@ -248,31 +252,57 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal(id) {
+function openEditModal(nip) {
     document.getElementById('editModal').classList.remove('hidden');
-    document.getElementById('editForm').action = `/admin/pages/guru/${id}`;
+    document.getElementById('editForm').action = `/admin/pages/guru/${nip}`;
     
-    // Fetch guru data and populate form
-    fetch(`/admin/pages/guru/${id}`)
-        .then(response => response.json())
+    // Add loading state
+    const form = document.getElementById('editForm');
+    form.classList.add('opacity-50');
+    
+    console.log('Fetching guru data for NIP:', nip); // Debug log
+    
+    fetch(`/admin/pages/guru/${nip}`)
+        .then(async response => {
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || `HTTP error! status: ${response.status}`);
+            }
+            
+            return data;
+        })
         .then(data => {
-            document.getElementById('edit_nip').value = data.nip;
-            document.getElementById('edit_name').value = data.name;
-            document.getElementById('edit_email').value = data.email;
-            document.getElementById('edit_gender').value = data.gender;
-            document.getElementById('edit_birth_place').value = data.birth_place;
-            document.getElementById('edit_birth_date').value = data.birth_date;
-            document.getElementById('edit_address').value = data.address;
-            document.getElementById('edit_phone_number').value = data.phone_number;
-            document.getElementById('edit_role').value = data.role;
+            console.log('Received data:', data); // Debug log
+            
+            // Remove loading state
+            form.classList.remove('opacity-50');
+            
+            // Populate form fields
+            document.getElementById('edit_nip').value = data.nip || '';
+            document.getElementById('edit_name').value = data.name || '';
+            document.getElementById('edit_email').value = data.email || '';
+            document.getElementById('edit_gender').value = data.gender || '';
+            document.getElementById('edit_birth_place').value = data.birth_place || '';
+            document.getElementById('edit_birth_date').value = data.birth_date ? data.birth_date.split('T')[0] : '';
+            document.getElementById('edit_address').value = data.address || '';
+            document.getElementById('edit_phone_number').value = data.phone_number || '';
+            document.getElementById('edit_role').value = data.role || 'guru';
             
             // Show current photo if exists
-            const currentPhotoDiv = document.getElementById('current_photo');
             if (data.photo) {
-                currentPhotoDiv.innerHTML = `<img src="${data.photo}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">`;
-            } else {
-                currentPhotoDiv.innerHTML = '';
+                const photoUrl = data.photo.startsWith('http') ? data.photo : `/${data.photo}`;
+                const currentPhotoDiv = document.getElementById('current_photo');
+                if (currentPhotoDiv) {
+                    currentPhotoDiv.innerHTML = `<img src="${photoUrl}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">`;
+                }
             }
+        })
+        .catch(error => {
+            console.error('Error details:', error); // Debug log
+            form.classList.remove('opacity-50');
+            alert('Terjadi kesalahan saat mengambil data guru: ' + error.message);
+            closeEditModal();
         });
 }
 

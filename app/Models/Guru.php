@@ -12,16 +12,16 @@ class Guru extends Authenticatable
 
     protected $fillable = [
         'nip',
-        'name', 
+        'name',
         'email',
-        'password',
         'gender',
         'birth_place',
         'birth_date',
         'address',
         'phone_number',
         'photo',
-        'role'
+        'role',
+        'password'
     ];
 
     protected $hidden = [
@@ -45,5 +45,10 @@ class Guru extends Authenticatable
     public function matapelajarans()
     {
         return $this->hasMany(Matapelajaran::class, 'nip', 'nip');
+    }
+
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'wali_kelas', 'nip');
     }
 }

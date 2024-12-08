@@ -65,20 +65,35 @@ class GuruController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($nip)
     {
-        $guru = Guru::with(['kelas'])->findOrFail($id);
-        return response()->json($guru);
+        try {
+            \Log::info('Attempting to fetch guru with NIP: ' . $nip);
+            
+            $guru = Guru::where('nip', $nip)->first();
+            
+            if (!$guru) {
+                \Log::warning('Guru not found with NIP: ' . $nip);
+                return response()->json(['error' => 'Guru tidak ditemukan'], 404);
+            }
+            
+            \Log::info('Guru found:', $guru->toArray());
+            return response()->json($guru);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in GuruController@show: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
+        }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $nip)
     {
-        $guru = Guru::findOrFail($id);
+        $guru = Guru::where('nip', $nip)->firstOrFail();
 
         $rules = [
-            'nip' => 'required|string|unique:gurus,nip,' . $id,
+            'nip' => 'required|string|unique:gurus,nip,' . $guru->id,
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:gurus,email,' . $id,
+            'email' => 'required|string|email|max:255|unique:gurus,email,' . $guru->id,
             'gender' => 'required|in:L,P',
             'birth_place' => 'required|string',
             'birth_date' => 'required|date',

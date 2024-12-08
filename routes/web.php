@@ -136,10 +136,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/pages/siswa', [MuridController::class, 'index'])->name('admin.pages.siswa');
     Route::get('/pages/siswa/create', [MuridController::class, 'create'])->name('admin.pages.siswa.create');
     Route::post('/pages/siswa', [MuridController::class, 'store'])->name('admin.pages.siswa.store');
-    Route::get('/pages/siswa/{murid}', [MuridController::class, 'show'])->name('admin.pages.siswa.show');
-    Route::get('/pages/siswa/{murid}/edit', [MuridController::class, 'edit'])->name('admin.pages.siswa.edit');
-    Route::put('/pages/siswa/{murid}', [MuridController::class, 'update'])->name('admin.pages.siswa.update');
-    Route::delete('/pages/siswa/{murid}', [MuridController::class, 'destroy'])->name('admin.pages.siswa.destroy');
+    Route::get('/pages/siswa/{nis}', [MuridController::class, 'show'])->name('admin.pages.siswa.show');
+    Route::get('/pages/siswa/{nis}/edit', [MuridController::class, 'edit'])->name('admin.pages.siswa.edit');
+    Route::put('/pages/siswa/{nis}', [MuridController::class, 'update'])->name('admin.pages.siswa.update');
+    Route::delete('/pages/siswa/{nis}', [MuridController::class, 'destroy'])->name('admin.pages.siswa.destroy');
 });
 
 Route::prefix('admin')->group(function () {
@@ -147,10 +147,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/pages/guru', [GuruController::class, 'index'])->name('admin.pages.guru');
     Route::get('/pages/guru/create', [GuruController::class, 'create'])->name('admin.pages.guru.create');
     Route::post('/pages/guru', [GuruController::class, 'store'])->name('admin.pages.guru.store');
-    Route::get('/pages/guru/{guru}', [GuruController::class, 'show'])->name('admin.pages.guru.show');
-    Route::get('/pages/guru/{guru}/edit', [GuruController::class, 'edit'])->name('admin.pages.guru.edit');
-    Route::put('/pages/guru/{guru}', [GuruController::class, 'update'])->name('admin.pages.guru.update');
-    Route::delete('/pages/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.pages.guru.destroy');
+    Route::get('/pages/guru/{nip}', [GuruController::class, 'show'])->name('admin.pages.guru.show');
+    Route::get('/pages/guru/{nip}/edit', [GuruController::class, 'edit'])->name('admin.pages.guru.edit');
+    Route::put('/pages/guru/{nip}', [GuruController::class, 'update'])->name('admin.pages.guru.update');
+    Route::delete('/pages/guru/{nip}', [GuruController::class, 'destroy'])->name('admin.pages.guru.destroy');
 });
 
 Route::prefix('admin')->group(function () {

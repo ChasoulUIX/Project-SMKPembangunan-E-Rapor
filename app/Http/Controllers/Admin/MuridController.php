@@ -94,20 +94,23 @@ class MuridController extends Controller
         }
     }
 
-    public function show(Murid $murid)
+    public function show($nis)
     {
+        $murid = Murid::where('nis', $nis)->firstOrFail();
         $kelas = Kelas::all();
         return view('admin.pages.siswa', compact('murid', 'kelas'));
     }
 
-    public function edit(Murid $murid)
+    public function edit($nis)
     {
+        $murid = Murid::where('nis', $nis)->firstOrFail();
         $kelas = Kelas::all();
-        return view('admin.pages.siswa.edit', compact('murid', 'kelas'));
+        return response()->json(['murid' => $murid, 'kelas' => $kelas]);
     }
 
-    public function update(Request $request, Murid $murid)
+    public function update(Request $request, $nis)
     {
+        $murid = Murid::where('nis', $nis)->firstOrFail();
         $validated = $request->validate([
             'nis' => 'required|string|unique:murids,nis,' . $murid->id,
             'nisn' => 'required|string|unique:murids,nisn,' . $murid->id,
@@ -198,10 +201,12 @@ class MuridController extends Controller
         }
     }
 
-    public function destroy(Murid $murid)
+    public function destroy($nis)
     {
         DB::beginTransaction();
         try {
+            $murid = Murid::where('nis', $nis)->firstOrFail();
+            
             // Remove from class
             $kelas = Kelas::where('nama_kelas', $murid->class)->first();
             if ($kelas) {
@@ -220,16 +225,22 @@ class MuridController extends Controller
             }
             
             // Delete corresponding user
-            User::where('nis', $murid->nis)->delete();
+            User::where('nis', $nis)->delete();
             
             // Delete murid
             $murid->delete();
 
             DB::commit();
-            return redirect()->route('admin.pages.siswa')->with('success', 'Data siswa berhasil dihapus');
+            return response()->json([
+                'success' => true,
+                'message' => 'Data siswa berhasil dihapus'
+            ]);
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Error menghapus data siswa: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error menghapus data siswa: ' . $e->getMessage()
+            ], 500);
         }
     }
 
