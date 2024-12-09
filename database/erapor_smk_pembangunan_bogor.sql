@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 07, 2024 at 12:26 PM
+-- Generation Time: Dec 09, 2024 at 05:23 AM
 -- Server version: 8.0.40-0ubuntu0.24.04.1
 -- PHP Version: 8.3.6
 
@@ -43,7 +43,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `nip`, `name`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
-(6, '111', 'ChasoulUIX', 'chasouluix@gmail.com', '$2y$12$h3qv43gAng1LzfINNuMCdOpAXGanfyQpEyacm0EYz7mv9Z1lWByEq', 'admin', '2024-12-04 10:41:19', '2024-12-04 10:41:19');
+(7, '111', 'admin', '111@gmail.com', '$2y$12$8c/hG/biMQJaaZi4MM5fSOnfamaaHXxsjWB/Y4Zl6UMfv3XB0tjku', 'admin', '2024-12-07 20:37:30', '2024-12-07 20:37:30');
 
 -- --------------------------------------------------------
 
@@ -93,12 +93,7 @@ CREATE TABLE `daftar_mapel` (
 --
 
 INSERT INTO `daftar_mapel` (`id`, `id_kelas`, `nama_kelas`, `nama_wali`, `jurusan`, `nama_guru`, `nama_mapel`, `daftar_siswa`, `created_at`, `updated_at`) VALUES
-(26, 16, 'X-1', 'bu nurhayati', 'Multimedia', 'bu nurhayati', 'Bahasa indonesia', '[\"{\\\"id\\\":\\\"15\\\",\\\"nis\\\":\\\"300\\\",\\\"name\\\":\\\"ChasoulUIX\\\",\\\"nisn\\\":\\\"300\\\"}\"]', '2024-12-06 09:32:23', '2024-12-06 09:32:23'),
-(27, 16, 'X-1', 'bu nurhayati', 'Multimedia', 'bu nurhayati', 'Bahasa Sunda', '[\"{\\\"id\\\":\\\"15\\\",\\\"nis\\\":\\\"300\\\",\\\"name\\\":\\\"ChasoulUIX\\\",\\\"nisn\\\":\\\"300\\\"}\"]', '2024-12-06 09:32:27', '2024-12-06 09:32:27'),
-(28, 16, 'X-1', 'bu nurhayati', 'Multimedia', 'bu nurhayati', 'mobile programming', '[\"{\\\"id\\\":\\\"15\\\",\\\"nis\\\":\\\"300\\\",\\\"name\\\":\\\"ChasoulUIX\\\",\\\"nisn\\\":\\\"300\\\"}\"]', '2024-12-06 09:32:31', '2024-12-06 09:32:31'),
-(29, 16, 'X-1', 'bu nurhayati', 'Multimedia', 'bu nurhayati', 'javascript FUndamental', '[\"{\\\"id\\\":\\\"15\\\",\\\"nis\\\":\\\"300\\\",\\\"name\\\":\\\"ChasoulUIX\\\",\\\"nisn\\\":\\\"300\\\"}\"]', '2024-12-07 03:13:24', '2024-12-07 03:13:24'),
-(30, 16, 'X-1', 'bu nurhayati', 'Multimedia', 'bu nurhayati', 'UIUX DESIGN', '[\"{\\\"id\\\":\\\"15\\\",\\\"nis\\\":\\\"300\\\",\\\"name\\\":\\\"ChasoulUIX\\\",\\\"nisn\\\":\\\"300\\\"}\"]', '2024-12-07 03:13:31', '2024-12-07 03:13:31'),
-(31, 16, 'X-1', 'bu nurhayati', 'Multimedia', 'bu nurhayati', 'UIUX DESIGN', '[\"{\\\"id\\\":\\\"15\\\",\\\"nis\\\":\\\"300\\\",\\\"name\\\":\\\"ChasoulUIX\\\",\\\"nisn\\\":\\\"300\\\"}\"]', '2024-12-07 03:13:35', '2024-12-07 03:13:35');
+(38, 21, 'X-1', 'pak wira', 'Multimedia', 'pak wira', 'Bahasa indonesia', '[\"{\\\"id\\\":\\\"24\\\",\\\"nis\\\":\\\"300\\\",\\\"name\\\":\\\"300\\\",\\\"nisn\\\":\\\"300\\\"}\"]', '2024-12-08 05:40:00', '2024-12-08 05:40:00');
 
 -- --------------------------------------------------------
 
@@ -150,7 +145,7 @@ CREATE TABLE `daftar_siswa` (
 --
 
 INSERT INTO `daftar_siswa` (`id`, `id_kelas`, `nama_kelas`, `nip`, `wali_kelas`, `jurusan`, `daftar_siswa`, `created_at`, `updated_at`) VALUES
-(17, 16, 'X-1', '200', 'bu nurhayati', 'Multimedia', '[{\"id\": \"15\", \"nis\": \"300\", \"name\": \"ChasoulUIX\", \"nisn\": \"300\"}]', '2024-12-06 09:29:37', '2024-12-06 09:29:37');
+(24, 21, 'X-1', '200', 'pak wira', 'Multimedia', '[{\"id\": \"24\", \"nis\": \"300\", \"name\": \"300\", \"nisn\": \"300\"}]', '2024-12-08 05:39:54', '2024-12-08 05:39:54');
 
 -- --------------------------------------------------------
 
@@ -196,7 +191,8 @@ CREATE TABLE `gurus` (
 --
 
 INSERT INTO `gurus` (`id`, `nip`, `name`, `email`, `password`, `gender`, `birth_place`, `birth_date`, `address`, `phone_number`, `photo`, `role`, `created_at`, `updated_at`) VALUES
-(19, '200', 'bu nurhayati', '200@gmail.com', '$2y$12$BYKJH4sw.19iyA9Ce/mMJ.3.aZg5ueVweEU9mzu0zP3GHMsUFJBkq', 'P', '200', '2024-12-04', '200', '200', '/images/1733502454.png', 'wali', '2024-12-06 09:27:34', '2024-12-06 09:27:53');
+(27, '200', 'pak wira', '200@gmail.com', '$2y$12$DdrifBc6cIOQq4PiY/9z7uuKWnUxLvFU8qRrruABZeyzugFjSN/Gi', 'L', '200', '2024-12-06', '200', '200', '/images/1733661495.png', 'wali', '2024-12-08 05:38:15', '2024-12-08 05:38:38'),
+(28, '201', '201', '201@gmail.com', '$2y$12$iUHeUqQ4Bdae/PhsFcOO8elWm2yOXDA4iRj/AqJOYpVPwiRu.s.SK', 'L', '201', '2024-12-05', '201', '201', '', 'guru', '2024-12-08 05:38:30', '2024-12-08 05:38:30');
 
 -- --------------------------------------------------------
 
@@ -254,7 +250,7 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id`, `nama_kelas`, `wali_kelas`, `jurusan`, `daftar_siswa`, `created_at`, `updated_at`) VALUES
-(16, 'X-1', 'bu nurhayati', 'Multimedia', NULL, '2024-12-06 09:28:04', '2024-12-06 09:28:04');
+(21, 'X-1', 'pak wira', 'Multimedia', NULL, '2024-12-08 05:38:52', '2024-12-08 05:38:52');
 
 -- --------------------------------------------------------
 
@@ -279,12 +275,7 @@ CREATE TABLE `matapelajarans` (
 --
 
 INSERT INTO `matapelajarans` (`id`, `kode_mapel`, `nama_mapel`, `nip`, `nama_guru`, `kategori`, `daftar_siswa`, `created_at`, `updated_at`) VALUES
-(21, 'A4470', 'Bahasa indonesia', 200, 'bu nurhayati', 'umum', NULL, '2024-12-06 09:28:20', '2024-12-06 09:28:20'),
-(22, 'A7201', 'mobile programming', 200, 'bu nurhayati', 'kejuruan', NULL, '2024-12-06 09:28:30', '2024-12-06 09:28:30'),
-(23, 'A5568', 'Bahasa Sunda', 200, 'bu nurhayati', 'lokal', NULL, '2024-12-06 09:28:40', '2024-12-06 09:28:40'),
-(24, 'A4912', 'UIUX DESIGN', 200, 'bu nurhayati', 'kejuruan', NULL, '2024-12-07 03:12:34', '2024-12-07 03:12:34'),
-(25, 'A5454', 'javascript FUndamental', 200, 'bu nurhayati', 'kejuruan', NULL, '2024-12-07 03:12:53', '2024-12-07 03:12:53'),
-(26, 'A5250', 'Sejarah indonesia', 200, 'bu nurhayati', 'umum', NULL, '2024-12-07 03:13:08', '2024-12-07 03:13:08');
+(31, 'A4000', 'Bahasa indonesia', 200, 'pak wira', 'umum', NULL, '2024-12-08 05:39:04', '2024-12-08 05:39:04');
 
 -- --------------------------------------------------------
 
@@ -354,7 +345,7 @@ CREATE TABLE `murids` (
 --
 
 INSERT INTO `murids` (`id`, `nis`, `nisn`, `name`, `email`, `password`, `gender`, `birth_place`, `birth_date`, `address`, `phone_number`, `father_name`, `mother_name`, `parent_phone`, `parent_address`, `class`, `major`, `academic_year`, `semester`, `photo`, `role`, `created_at`, `updated_at`) VALUES
-(15, '300', '300', 'Mochamad arry ishaa', '300@gmail.com', '$2y$12$UvKJRO.Kkdz.l7wV0CGJdO4tq4gdJ0IWnqEnMUB4I.XTBC9PMccU6', 'L', '300', '2024-12-02', 'Jl. Bogor baru A7', '300', '300', '300', '300', '300', 'X-1', 'multimedia', 300, '1', '/images/1733502552.png', 'murid', '2024-12-06 09:29:12', '2024-12-06 09:29:12');
+(24, '300', '300', '300', '300@gmail.com', '$2y$12$mJWZM9wTp7TQruX3EnOpt.k6WJrfXoHJuEQy9s0bE0mo0lAL4ogn.', 'L', '300', '2024-12-05', '300', '300', '300', '300', '300', '300', 'X-1', 'multimedia', 300, '1', NULL, 'murid', '2024-12-08 05:39:36', '2024-12-08 05:39:36');
 
 -- --------------------------------------------------------
 
@@ -396,12 +387,7 @@ CREATE TABLE `nilai_siswa` (
 --
 
 INSERT INTO `nilai_siswa` (`id`, `nama_kelas`, `id_kelas`, `nis`, `nama_siswa`, `nama_wali`, `nama_guru`, `nama_mapel`, `nama_materi_1`, `materi_1`, `nama_materi_2`, `materi_2`, `nama_materi_3`, `materi_3`, `nama_materi_4`, `materi_4`, `nama_materi_5`, `materi_5`, `na_materi`, `uts`, `uas`, `kehadiran`, `sikap`, `nilai_rapor`, `updated_at`, `created_at`) VALUES
-(18, 'X-1', 16, 300, 'ChasoulUIX', 'bu nurhayati', 'bu nurhayati', 'Bahasa indonesia', 'uiux', '100', 'komsep', '100', 'MAtriks', '80', 'algoritma', '70', 'struktur', '50', 80, 100, 100, 100, 100, 92, '2024-12-06 09:35:08', '2024-12-06 09:35:08'),
-(19, 'X-1', 16, 300, 'ChasoulUIX', 'bu nurhayati', 'bu nurhayati', 'Bahasa Sunda', 'gini', '100', 'design', '100', 'Puisi', '80', 'Cerpen', '50', 'tuhhh', '50', 76, 80, 70, 100, 100, 80, '2024-12-06 09:35:52', '2024-12-06 09:35:52'),
-(20, 'X-1', 16, 300, 'ChasoulUIX', 'bu nurhayati', 'bu nurhayati', 'mobile programming', 'web', '100', '0', '100', '0', '100', '0', '0', '0', '0', 60, 0, 0, 0, 0, 24, '2024-12-06 09:45:03', '2024-12-06 09:36:22'),
-(21, 'X-1', 16, 300, 'Mochamad arry ishaa', 'bu nurhayati', 'bu nurhayati', 'UIUX DESIGN', 'fundamental', '100', '0', '0', '0', '0', '0', '0', '0', '0', 20, 0, 0, 0, 0, 8, '2024-12-07 03:14:04', '2024-12-07 03:14:04'),
-(22, 'X-1', 16, 300, 'Mochamad arry ishaa', 'bu nurhayati', 'bu nurhayati', 'javascript FUndamental', 'fundamental', '100', '0', '0', '0', '0', '0', '0', '0', '0', 20, 0, 0, 0, 0, 8, '2024-12-07 03:14:21', '2024-12-07 03:14:21'),
-(23, 'X-1', 16, 300, 'Mochamad arry ishaa', 'bu nurhayati', 'bu nurhayati', 'Sejarah indonesia', 'sejarah', '100', '0', '0', '0', '0', '0', '0', '0', '0', 20, 0, 0, 0, 0, 8, '2024-12-07 03:14:37', '2024-12-07 03:14:37');
+(33, 'X-1', 21, 300, '300', 'pak wira', 'pak wira', 'Bahasa indonesia', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 0, 0, 0, 0, 0, 0, '2024-12-08 05:40:16', '2024-12-08 05:40:16');
 
 -- --------------------------------------------------------
 
@@ -423,7 +409,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('2dscqzJ3B2AIdRIgHz4FAQtJP0qVEyz4Rnt6xc0H', 39, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiQzdxWDFIRnVDTWFZVTFNTVJvM29JUFFFd0FxN05jTmtlenJCOE1mZCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ndXJ1L2phZHdhbCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjM5O30=', 1733568488);
+('I7fA6LTKFV5e4lGfeONjFeN6QdVuxizgom18sC8d', 49, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiN2lsMjBMcUJCeDNidkk2UUZJd0I5MDQwM2N1VDNJbmZZaWdrVnFTbyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9kYXNoYm9hcmQiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo0OTt9', 1733667503);
 
 -- --------------------------------------------------------
 
@@ -454,9 +440,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `nip`, `nis`, `phone`, `address`, `avatar`, `remember_token`, `email_verified_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(20, 'ChasoulUIX', 'chasouluix@gmail.com', '$2y$12$3fWoFFK1Wsi5Q2jFxSnx7upih3bGwZ.ZUZiSKUQYVrHGrfzTjjaoG', 'admin', '111', NULL, NULL, NULL, NULL, NULL, NULL, '2024-12-04 10:41:18', '2024-12-04 10:41:18', NULL),
-(39, 'bu nurhayati', '200@gmail.com', '$2y$12$BYKJH4sw.19iyA9Ce/mMJ.3.aZg5ueVweEU9mzu0zP3GHMsUFJBkq', 'wali', '200', NULL, NULL, NULL, NULL, NULL, NULL, '2024-12-06 09:27:34', '2024-12-06 09:27:53', NULL),
-(40, 'ChasoulUIX', '300@gmail.com', '$2y$12$UvKJRO.Kkdz.l7wV0CGJdO4tq4gdJ0IWnqEnMUB4I.XTBC9PMccU6', 'murid', NULL, '300', NULL, NULL, NULL, NULL, NULL, '2024-12-06 09:29:12', '2024-12-06 09:29:12', NULL);
+(49, 'admin', '111@gmail.com', '$2y$12$f5m6QATw6yEOln.rhtGukuOcSN7Vb5ZjTmpi1daJftD7RdkI0jU82', 'admin', '111', NULL, NULL, NULL, NULL, NULL, NULL, '2024-12-07 20:37:30', '2024-12-07 20:37:30', NULL),
+(57, 'pak wira', '200@gmail.com', '$2y$12$DdrifBc6cIOQq4PiY/9z7uuKWnUxLvFU8qRrruABZeyzugFjSN/Gi', 'wali', '200', NULL, NULL, NULL, NULL, NULL, NULL, '2024-12-08 05:38:15', '2024-12-08 05:38:38', NULL),
+(58, '201', '201@gmail.com', '$2y$12$iUHeUqQ4Bdae/PhsFcOO8elWm2yOXDA4iRj/AqJOYpVPwiRu.s.SK', 'guru', '201', NULL, NULL, NULL, NULL, NULL, NULL, '2024-12-08 05:38:30', '2024-12-08 05:38:30', NULL),
+(59, '300', '300@gmail.com', '$2y$12$mJWZM9wTp7TQruX3EnOpt.k6WJrfXoHJuEQy9s0bE0mo0lAL4ogn.', 'murid', NULL, '300', NULL, NULL, NULL, NULL, NULL, '2024-12-08 05:39:36', '2024-12-08 05:39:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -480,7 +467,7 @@ CREATE TABLE `walis` (
 --
 
 INSERT INTO `walis` (`id`, `nip`, `name`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
-(16, '200', 'bu nurhayati', '200@gmail.com', '$2y$12$BYKJH4sw.19iyA9Ce/mMJ.3.aZg5ueVweEU9mzu0zP3GHMsUFJBkq', 'wali', '2024-12-06 09:27:53', '2024-12-06 09:27:53');
+(22, '200', 'pak wira', '200@gmail.com', '$2y$12$DdrifBc6cIOQq4PiY/9z7uuKWnUxLvFU8qRrruABZeyzugFjSN/Gi', 'wali', '2024-12-08 05:38:38', '2024-12-08 05:38:38');
 
 --
 -- Indexes for dumped tables
@@ -623,13 +610,13 @@ ALTER TABLE `walis`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `daftar_mapel`
 --
 ALTER TABLE `daftar_mapel`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `daftar_nilai`
@@ -641,7 +628,7 @@ ALTER TABLE `daftar_nilai`
 -- AUTO_INCREMENT for table `daftar_siswa`
 --
 ALTER TABLE `daftar_siswa`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -653,7 +640,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `gurus`
 --
 ALTER TABLE `gurus`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -665,13 +652,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `matapelajarans`
 --
 ALTER TABLE `matapelajarans`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -683,25 +670,25 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `murids`
 --
 ALTER TABLE `murids`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `nilai_siswa`
 --
 ALTER TABLE `nilai_siswa`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `walis`
 --
 ALTER TABLE `walis`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables
