@@ -15,6 +15,7 @@ use App\Http\Controllers\Wali\WaliRaporController;
 use App\Http\Controllers\Wali\WaliMatapelajaranController;
 use App\Http\Controllers\Guru\NilaiController;
 use App\Http\Controllers\Wali\WaliNilaiSiswaController;
+use App\Http\Controllers\Wali\TambahSiswaController;
 
 
 // Auth
@@ -40,6 +41,19 @@ Route::prefix('admin')->group(function () {
     Route::put('/wali/{wali}', [WaliController::class, 'update'])->name('admin.pages.wali.update');
     Route::delete('/wali/{wali}', [WaliController::class, 'destroy'])->name('admin.pages.wali.destroy');
     Route::post('/wali/murid', [WaliController::class, 'storeMurid'])->name('wali.murid.store');
+});
+
+Route::get('/pages/tambahsiswa', function () {
+    return view('wali.pages.tambahsiswa');
+});
+
+Route::prefix('wali')->group(function () {
+    Route::get('/tambahsiswa', [TambahSiswaController::class, 'index'])->name('wali.tambahsiswa.index');
+    Route::post('/tambahsiswa', [TambahSiswaController::class, 'store'])->name('wali.tambahsiswa.store');
+    Route::get('/tambahsiswa/create', [TambahSiswaController::class, 'create'])->name('wali.tambahsiswa.create');
+    Route::get('/tambahsiswa/edit/{nis}', [TambahSiswaController::class, 'edit'])->name('wali.tambahsiswa.edit');
+    Route::put('/tambahsiswa/update/{nis}', [TambahSiswaController::class, 'update'])->name('wali.tambahsiswa.update');
+    Route::delete('/tambahsiswa/delete/{nis}', [TambahSiswaController::class, 'destroy'])->name('wali.tambahsiswa.destroy');
 });
 
 Route::get('/pages/siswa', function () {
