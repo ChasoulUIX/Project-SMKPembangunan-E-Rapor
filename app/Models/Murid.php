@@ -50,4 +50,9 @@ class Murid extends Authenticatable
     {
         return self::all();
     }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
+    }
 }

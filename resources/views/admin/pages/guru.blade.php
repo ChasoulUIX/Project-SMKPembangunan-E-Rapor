@@ -19,7 +19,11 @@
     <div class="flex flex-col md:flex-row gap-4 mb-6">
         <div class="flex-1">
             <div class="relative">
-                <input type="text" id="search" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Cari guru...">
+                <input type="text" 
+                       id="search" 
+                       onkeyup="searchTable()"
+                       class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" 
+                       placeholder="Cari berdasarkan NIP atau nama...">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -308,6 +312,25 @@ function openEditModal(nip) {
 
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
+}
+
+function searchTable() {
+    const input = document.getElementById('search');
+    const filter = input.value.toLowerCase();
+    const table = document.querySelector('table');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header row
+        const row = rows[i];
+        const nip = row.cells[0]?.textContent || '';
+        const name = row.cells[1]?.querySelector('.text-sm.font-medium')?.textContent || '';
+        
+        if (nip.toLowerCase().includes(filter) || name.toLowerCase().includes(filter)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
 }
 </script>
 @endsection

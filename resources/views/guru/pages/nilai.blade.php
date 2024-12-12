@@ -8,18 +8,44 @@
     </div>
 
     <!-- Filter Section -->
-    <div class="mb-6">
-        <label for="filter_kelas" class="block text-sm font-medium text-gray-700 mb-2">Filter Kelas:</label>
-        <select id="filter_kelas" onchange="filterByKelas(this.value)" class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <option value="">Semua Kelas</option>
-            @foreach(\App\Models\Nilaisiswa::where('nama_guru', Auth::user()->name)
-                    ->select('nama_kelas')
-                    ->distinct()
-                    ->orderBy('nama_kelas')
-                    ->get() as $kelas)
-                <option value="{{ $kelas->nama_kelas }}">{{ $kelas->nama_kelas }}</option>
-            @endforeach
-        </select>
+    <div class="mb-6 flex flex-wrap gap-4">
+        <!-- Search Bar -->
+        <div class="w-full sm:w-auto flex-grow">
+            <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari Siswa:</label>
+            <input type="text" 
+                   id="search" 
+                   onkeyup="filterData()"
+                   class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                   placeholder="Cari berdasarkan NIS atau nama siswa...">
+        </div>
+
+        <div>
+            <label for="filter_kelas" class="block text-sm font-medium text-gray-700 mb-2">Filter Kelas:</label>
+            <select id="filter_kelas" onchange="filterData()" class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option value="">Semua Kelas</option>
+                @foreach(\App\Models\Nilaisiswa::where('nama_guru', Auth::user()->name)
+                        ->select('nama_kelas')
+                        ->distinct()
+                        ->orderBy('nama_kelas')
+                        ->get() as $kelas)
+                    <option value="{{ $kelas->nama_kelas }}">{{ $kelas->nama_kelas }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div>
+            <label for="filter_mapel" class="block text-sm font-medium text-gray-700 mb-2">Filter Mata Pelajaran:</label>
+            <select id="filter_mapel" onchange="filterData()" class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option value="">Semua Mata Pelajaran</option>
+                @foreach(\App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)
+                        ->select('nama_mapel')
+                        ->distinct()
+                        ->orderBy('nama_mapel')
+                        ->get() as $mapel)
+                    <option value="{{ $mapel->nama_mapel }}">{{ $mapel->nama_mapel }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     <!-- Create Button -->
@@ -59,7 +85,9 @@
                 $no = 1;
             @endphp
             @forelse($nilaiSiswa as $nilai)
-                <tr class="hover:bg-gray-50 transition-colors nilai-row" data-kelas="{{ $nilai->nama_kelas }}">
+                <tr class="hover:bg-gray-50 transition-colors nilai-row" 
+                    data-kelas="{{ $nilai->nama_kelas }}"
+                    data-mapel="{{ $nilai->nama_mapel }}">
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $no++ }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nama_kelas }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $nilai->nis }}</td>
@@ -316,9 +344,17 @@
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 1</label>
-                                <input type="text" name="nama_materi_1"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                    placeholder="Masukkan nama materi 1">
+                                <select name="nama_materi_1" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Materi</option>
+                                    @foreach(\App\Models\MateriPelajaran::where('nama_guru', Auth::user()->name)
+                                            ->select('materi_1')
+                                            ->whereNotNull('materi_1')
+                                            ->distinct()
+                                            ->orderBy('materi_1')
+                                            ->get() as $materi)
+                                        <option value="{{ $materi->materi_1 }}">{{ $materi->materi_1 }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="relative">
@@ -332,9 +368,17 @@
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 2</label>
-                                <input type="text" name="nama_materi_2"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                    placeholder="Masukkan nama materi 2">
+                                <select name="nama_materi_2" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Materi</option>
+                                    @foreach(\App\Models\MateriPelajaran::where('nama_guru', Auth::user()->name)
+                                            ->select('materi_2')
+                                            ->whereNotNull('materi_2')
+                                            ->distinct()
+                                            ->orderBy('materi_2')
+                                            ->get() as $materi)
+                                        <option value="{{ $materi->materi_2 }}">{{ $materi->materi_2 }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="relative">
@@ -348,9 +392,17 @@
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 3</label>
-                                <input type="text" name="nama_materi_3"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                    placeholder="Masukkan nama materi 3">
+                                <select name="nama_materi_3" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Materi</option>
+                                    @foreach(\App\Models\MateriPelajaran::where('nama_guru', Auth::user()->name)
+                                            ->select('materi_3')
+                                            ->whereNotNull('materi_3')
+                                            ->distinct()
+                                            ->orderBy('materi_3')
+                                            ->get() as $materi)
+                                        <option value="{{ $materi->materi_3 }}">{{ $materi->materi_3 }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="relative">
@@ -364,9 +416,17 @@
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 4</label>
-                                <input type="text" name="nama_materi_4"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                    placeholder="Masukkan nama materi 4">
+                                <select name="nama_materi_4" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Materi</option>
+                                    @foreach(\App\Models\MateriPelajaran::where('nama_guru', Auth::user()->name)
+                                            ->select('materi_4')
+                                            ->whereNotNull('materi_4')
+                                            ->distinct()
+                                            ->orderBy('materi_4')
+                                            ->get() as $materi)
+                                        <option value="{{ $materi->materi_4 }}">{{ $materi->materi_4 }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="relative">
@@ -380,9 +440,17 @@
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Materi 5</label>
-                                <input type="text" name="nama_materi_5"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm"
-                                    placeholder="Masukkan nama materi 5">
+                                <select name="nama_materi_5" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-sm">
+                                    <option value="">Pilih Materi</option>
+                                    @foreach(\App\Models\MateriPelajaran::where('nama_guru', Auth::user()->name)
+                                            ->select('materi_5')
+                                            ->whereNotNull('materi_5')
+                                            ->distinct()
+                                            ->orderBy('materi_5')
+                                            ->get() as $materi)
+                                        <option value="{{ $materi->materi_5 }}">{{ $materi->materi_5 }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="relative">
@@ -664,10 +732,22 @@ function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
 
-function filterByKelas(kelas) {
+function filterData() {
+    const searchValue = document.getElementById('search').value.toLowerCase();
+    const selectedKelas = document.getElementById('filter_kelas').value;
+    const selectedMapel = document.getElementById('filter_mapel').value;
     const rows = document.querySelectorAll('.nilai-row');
+
     rows.forEach(row => {
-        if (kelas === '' || row.getAttribute('data-kelas') === kelas) {
+        const nis = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        const nama = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+        const kelasMatch = selectedKelas === '' || row.getAttribute('data-kelas') === selectedKelas;
+        const mapelMatch = selectedMapel === '' || row.getAttribute('data-mapel') === selectedMapel;
+        const searchMatch = searchValue === '' || 
+                          nis.includes(searchValue) || 
+                          nama.includes(searchValue);
+
+        if (kelasMatch && mapelMatch && searchMatch) {
             row.style.display = '';
         } else {
             row.style.display = 'none';

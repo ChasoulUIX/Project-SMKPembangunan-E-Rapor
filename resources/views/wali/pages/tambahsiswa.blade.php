@@ -19,7 +19,10 @@
     <div class="flex flex-col md:flex-row gap-4 mb-6">
         <div class="flex-1">
             <div class="relative">
-                <input type="text" id="search" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Cari siswa...">
+                <input type="text" 
+                       id="searchInput" 
+                       class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" 
+                       placeholder="Cari berdasarkan NIS atau nama siswa...">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -398,5 +401,21 @@ function openEditModal(nis) {
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
+
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    const searchValue = this.value.toLowerCase();
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    tableRows.forEach(row => {
+        const nis = row.querySelector('td:first-child').textContent.toLowerCase();
+        const name = row.querySelector('td:nth-child(2) .text-sm.font-medium').textContent.toLowerCase();
+        
+        if (nis.includes(searchValue) || name.includes(searchValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
 </script>
 @endsection

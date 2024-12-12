@@ -12,7 +12,9 @@
         <div class="space-y-2">
             <label class="block text-xs sm:text-sm font-medium text-gray-700">Cari Siswa</label>
             <div class="relative">
-                <input type="text" placeholder="Cari nama siswa..." 
+                <input type="text" 
+                    id="searchInput" 
+                    placeholder="Cari berdasarkan NIS atau nama siswa..." 
                     class="w-full rounded-xl border-gray-200 bg-gray-50 py-2 sm:py-3 pl-8 sm:pl-10 pr-3 sm:pr-4 text-xs sm:text-sm focus:border-blue-500 focus:ring-blue-500">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4">
                     <svg class="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,4 +96,28 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+
+        tableRows.forEach(row => {
+            if (row.querySelector('td[colspan]')) return; // Skip empty state row
+
+            const nis = row.children[1].textContent.toLowerCase();
+            const name = row.children[2].textContent.toLowerCase();
+
+            if (nis.includes(searchTerm) || name.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 @endsection

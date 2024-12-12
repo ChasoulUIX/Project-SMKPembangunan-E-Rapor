@@ -120,6 +120,15 @@
                     </div>
                 </a>
 
+                <a href="/admin/importsiswa" class="block px-4 py-3 text-base font-medium rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 mr-3 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        Import Siswa
+                    </div>
+                </a>
+
                 <a href="/admin/guru" class="block px-4 py-3 text-base font-medium rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200">
                     <div class="flex items-center">
                         <svg class="w-6 h-6 mr-3 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">

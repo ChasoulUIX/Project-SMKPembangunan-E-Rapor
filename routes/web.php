@@ -16,6 +16,8 @@ use App\Http\Controllers\Wali\WaliMatapelajaranController;
 use App\Http\Controllers\Guru\NilaiController;
 use App\Http\Controllers\Wali\WaliNilaiSiswaController;
 use App\Http\Controllers\Wali\TambahSiswaController;
+use App\Http\Controllers\Admin\ImportSiswaController;
+use App\Http\Controllers\Guru\MateriPelajaranController;
 
 
 // Auth
@@ -133,6 +135,15 @@ Route::prefix('guru')->group(function () {
     Route::delete('/nilai/{id}', [NilaiController::class, 'destroy'])->name('guru.nilai.destroy');
 });
 
+Route::get('/guru/materi', function () {
+    return view('guru.pages.materi');
+});
+
+Route::prefix('guru')->group(function () {
+    Route::get('/materi', [MateriPelajaranController::class, 'index'])->name('guru.materi.index');
+    Route::get('/materi/create', [MateriPelajaranController::class, 'create'])->name('guru.materi.create');
+    Route::post('/materi', [MateriPelajaranController::class, 'store'])->name('guru.materi.store');
+});
 
 Route::get('/guru/absensi', function () {
     return view('guru.pages.absensi');
@@ -193,6 +204,20 @@ Route::prefix('admin')->group(function () {
     Route::put('/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'update'])->name('admin.pages.matapelajaran.update');
     Route::delete('/matapelajaran/{matapelajaran}', [MatapelajaranController::class, 'destroy'])->name('admin.pages.matapelajaran.destroy');
     Route::get('/pages/matapelajaran', [MatapelajaranController::class, 'index'])->name('admin.pages.matapelajaran');
+});
+
+Route::get('/admin/importsiswa', function () {
+    return view('admin.pages.importsiswa');
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('/importsiswa', [ImportSiswaController::class, 'index'])->name('admin.pages.importsiswa');
+    Route::post('/importsiswa', [ImportSiswaController::class, 'store'])->name('admin.pages.importsiswa.store');
+    Route::get('/importsiswa/create', [ImportSiswaController::class, 'create'])->name('admin.pages.importsiswa.create');
+    Route::get('/importsiswa/{id}', [ImportSiswaController::class, 'show'])->name('admin.pages.importsiswa.show');
+    Route::get('/importsiswa/{id}/edit', [ImportSiswaController::class, 'edit'])->name('admin.pages.importsiswa.edit');
+    Route::put('/importsiswa/{id}', [ImportSiswaController::class, 'update'])->name('admin.pages.importsiswa.update');
+    Route::delete('/importsiswa/{id}', [ImportSiswaController::class, 'destroy'])->name('admin.pages.importsiswa.destroy');
 });
 
 
