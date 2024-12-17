@@ -62,15 +62,15 @@
                     <div class="relative group">
                         <button class="flex items-center space-x-3 px-4 py-2 rounded-xl hover:bg-white/10 transition-all duration-200">
                         <div class="flex flex-col items-end">
-                                @if(Auth::check() && Auth::user())
-                                    <span class="text-sm font-medium text-white">{{ Auth::user()->name }}</span>
+                                @if(auth()->check() && auth()->user())
+                                    <span class="text-sm font-medium text-white">{{ auth()->user()->name }}</span>
                                     <span class="text-xs text-white/80 hidden sm:inline">User</span>
                                 @else
                                     <span class="text-sm font-medium text-white">Guru tidak ditemukan</span>
                                 @endif
                             </div>
                             <img class="h-10 w-10 rounded-lg ring-2 ring-white/20 shadow-lg" 
-                                 src="https://ui-avatars.com/api/?name={{ Auth::check() ? urlencode(Auth::user()->name) : 'Guest' }}&background=EFF6FF&color=3B82F6" 
+                                 src="https://ui-avatars.com/api/?name={{ auth()->check() ? urlencode(auth()->user()->name) : 'Guest' }}&background=EFF6FF&color=3B82F6" 
                                  alt="Profile">
                         </button>
                         <div class="hidden group-hover:block absolute right-0 w-48 mt-2 py-2 bg-white rounded-lg shadow-xl border border-gray-100">

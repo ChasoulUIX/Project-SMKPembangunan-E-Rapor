@@ -13,7 +13,7 @@
             <label for="kelas" class="block text-sm font-medium text-gray-700 mb-1">Pilih Kelas</label>
             <select id="kelas" name="kelas" onchange="filterData()" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
                 <option value="">Pilih Kelas</option>
-                @foreach(\App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)->select('nama_kelas')->distinct()->orderBy('nama_kelas')->get() as $kelas)
+                @foreach(\App\Models\Daftarmatapelajaran::where('nama_guru', auth()->user()->name)->select('nama_kelas')->distinct()->orderBy('nama_kelas')->get() as $kelas)
                     <option value="{{ $kelas->nama_kelas }}">{{ $kelas->nama_kelas }}</option>
                 @endforeach
             </select>
@@ -23,7 +23,7 @@
             <label for="mapel" class="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
             <select id="mapel" name="mapel" onchange="filterData()" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
                 <option value="">Pilih Mata Pelajaran</option>
-                @foreach(\App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)->select('nama_mapel')->distinct()->orderBy('nama_mapel')->get() as $mapel)
+                @foreach(\App\Models\Daftarmatapelajaran::where('nama_guru', auth()->user()->name)->select('nama_mapel')->distinct()->orderBy('nama_mapel')->get() as $mapel)
                     <option value="{{ $mapel->nama_mapel }}">{{ $mapel->nama_mapel }}</option>
                 @endforeach
             </select>
@@ -41,7 +41,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-600">Total Kelas</p>
-                    <p class="text-xl font-bold text-gray-800">{{ \App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)->select('nama_kelas')->distinct()->count() }} Kelas</p>
+                    <p class="text-xl font-bold text-gray-800">{{ \App\Models\Daftarmatapelajaran::where('nama_guru', auth()->user()->name)->select('nama_kelas')->distinct()->count() }} Kelas</p>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-600">Mata Pelajaran</p>
-                    <p class="text-xl font-bold text-gray-800">{{ \App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)->select('nama_mapel')->distinct()->count() }} Mapel</p>
+                    <p class="text-xl font-bold text-gray-800">{{ \App\Models\Daftarmatapelajaran::where('nama_guru', auth()->user()->name)->select('nama_mapel')->distinct()->count() }} Mapel</p>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
                     <p class="text-sm text-gray-600">Total Siswa</p>
                     @php
                         $totalSiswa = 0;
-                        $daftarMapel = \App\Models\Daftarmatapelajaran::where('nama_guru', Auth::user()->name)->get();
+                        $daftarMapel = \App\Models\Daftarmatapelajaran::where('nama_guru', auth()->user()->name)->get();
                         foreach($daftarMapel as $mapel) {
                             $daftarSiswa = \App\Models\Daftarsiswa::where('id_kelas', $mapel->id_kelas)->first();
                             if($daftarSiswa && $daftarSiswa->daftar_siswa) {
@@ -106,7 +106,7 @@
             </thead>
             <tbody class="divide-y divide-gray-100">
             @php
-                $nilaiSiswa = \App\Models\Nilaisiswa::where('nama_guru', Auth::user()->name)->get();
+                $nilaiSiswa = \App\Models\Nilaisiswa::where('nama_guru', auth()->user()->name)->get();
                 $no = 1;
             @endphp
             @forelse($nilaiSiswa as $nilai)

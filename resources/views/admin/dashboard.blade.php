@@ -279,7 +279,7 @@ use Illuminate\Support\Facades\DB;
                 <div class="relative group">
                     <div class="flex mb-2 items-center justify-between">
                         <div>
-                            <span class="text-sm font-semibold {{ $colors[$stat->major][2] }}">
+                            <span class="text-sm font-semibold {{ $colors[$stat->major][2] ?? 'text-gray-600' }}">
                                 {{ ucfirst($stat->major) }}
                             </span>
                         </div>
@@ -292,7 +292,7 @@ use Illuminate\Support\Facades\DB;
                     </div>
                     <div class="overflow-hidden h-3 rounded-full bg-gray-100">
                         <div style="width:{{ ($stat->total / $totalSiswa) * 100 }}%" 
-                             class="h-full rounded-full bg-gradient-to-r {{ $colors[$stat->major][0] }} {{ $colors[$stat->major][1] }} shadow-lg transition-all duration-500 group-hover:scale-105">
+                             class="h-full rounded-full bg-gradient-to-r {{ $colors[$stat->major][0] ?? 'from-gray-400' }} {{ $colors[$stat->major][1] ?? 'to-gray-500' }} shadow-lg transition-all duration-500 group-hover:scale-105">
                         </div>
                     </div>
                 </div>
