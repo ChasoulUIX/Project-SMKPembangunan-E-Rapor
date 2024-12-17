@@ -1,6 +1,9 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@php
+use Illuminate\Support\Facades\DB;
+@endphp
 <div class="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-xl p-6 sm:p-8">
     <!-- Header Section -->
     <div class="relative border-b border-gray-200 pb-8 mb-8">
