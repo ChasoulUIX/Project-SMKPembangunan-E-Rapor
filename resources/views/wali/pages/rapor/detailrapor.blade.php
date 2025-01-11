@@ -1,6 +1,10 @@
 @extends('wali.layouts.app')
 
 @section('content')
+    @php
+        use Illuminate\Support\Facades\DB;
+    @endphp
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
     <link href="https://fonts.googleapis.com/css2?family=Arial&display=swap" rel="stylesheet">

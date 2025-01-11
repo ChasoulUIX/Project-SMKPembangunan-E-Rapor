@@ -1,5 +1,7 @@
 @extends('guru.layouts.app')
 
+@php use Illuminate\Support\Facades\Auth; @endphp
+
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-lg p-6">

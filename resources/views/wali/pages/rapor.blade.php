@@ -1,5 +1,9 @@
 @extends('wali.layouts.app')
 
+@php
+    use Illuminate\Support\Facades\Auth;
+@endphp
+
 @section('content')
 <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 max-w-full">
     <div class="border-b border-gray-100 pb-4 sm:pb-6 mb-4 sm:mb-6">

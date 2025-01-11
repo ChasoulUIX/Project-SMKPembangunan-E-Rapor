@@ -40,6 +40,7 @@
             </thead>
            <tbody class="divide-y divide-gray-100">
             @php
+                use Illuminate\Support\Facades\Auth;
                 $daftarSiswa = App\Models\Daftarsiswa::where('nip', Auth::user()->nip)->get();
                 $no = 1;
             @endphp
