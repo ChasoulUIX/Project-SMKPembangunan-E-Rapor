@@ -21,9 +21,9 @@
             <div class="relative">
                 <input type="text" 
                        id="search" 
-                       onkeyup="searchTable()"
                        class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="Cari berdasarkan NIP atau nama...">
+                       placeholder="Cari berdasarkan NIP atau nama..."
+                       oninput="searchTeachers()">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -260,53 +260,40 @@ function openEditModal(nip) {
     document.getElementById('editModal').classList.remove('hidden');
     document.getElementById('editForm').action = `/admin/pages/guru/${nip}`;
     
-    // Add loading state
-    const form = document.getElementById('editForm');
-    form.classList.add('opacity-50');
-    
-    console.log('Fetching guru data for NIP:', nip); // Debug log
-    
-    fetch(`/admin/pages/guru/${nip}`)
-        .then(async response => {
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.error || `HTTP error! status: ${response.status}`);
-            }
-            
-            return data;
-        })
+    fetch(`/admin/pages/guru/${nip}/edit`)
+        .then(response => response.json())
         .then(data => {
-            console.log('Received data:', data); // Debug log
+            const guru = data.guru;
             
-            // Remove loading state
-            form.classList.remove('opacity-50');
+            // Populate form fields with existing data
+            document.getElementById('edit_nip').value = guru.nip;
+            document.getElementById('edit_name').value = guru.name;
+            document.getElementById('edit_email').value = guru.email;
+            document.getElementById('edit_gender').value = guru.gender;
+            document.getElementById('edit_birth_place').value = guru.birth_place;
             
-            // Populate form fields
-            document.getElementById('edit_nip').value = data.nip || '';
-            document.getElementById('edit_name').value = data.name || '';
-            document.getElementById('edit_email').value = data.email || '';
-            document.getElementById('edit_gender').value = data.gender || '';
-            document.getElementById('edit_birth_place').value = data.birth_place || '';
-            document.getElementById('edit_birth_date').value = data.birth_date ? data.birth_date.split('T')[0] : '';
-            document.getElementById('edit_address').value = data.address || '';
-            document.getElementById('edit_phone_number').value = data.phone_number || '';
-            document.getElementById('edit_role').value = data.role || 'guru';
+            // Format the birth_date to YYYY-MM-DD format for the date input
+            const birthDate = guru.birth_date ? new Date(guru.birth_date).toISOString().split('T')[0] : '';
+            document.getElementById('edit_birth_date').value = birthDate;
+            
+            document.getElementById('edit_address').value = guru.address;
+            document.getElementById('edit_phone_number').value = guru.phone_number;
+            document.getElementById('edit_role').value = guru.role;
             
             // Show current photo if exists
-            if (data.photo) {
-                const photoUrl = data.photo.startsWith('http') ? data.photo : `/${data.photo}`;
+            if (guru.photo) {
+                const photoUrl = guru.photo.startsWith('http') ? guru.photo : `/${guru.photo}`;
                 const currentPhotoDiv = document.getElementById('current_photo');
                 if (currentPhotoDiv) {
-                    currentPhotoDiv.innerHTML = `<img src="${photoUrl}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">`;
+                    currentPhotoDiv.innerHTML = `
+                        <img src="${photoUrl}" alt="Current photo" class="h-20 w-20 object-cover rounded-full">
+                    `;
                 }
             }
         })
         .catch(error => {
-            console.error('Error details:', error); // Debug log
-            form.classList.remove('opacity-50');
-            alert('Terjadi kesalahan saat mengambil data guru: ' + error.message);
-            closeEditModal();
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengambil data guru');
         });
 }
 
@@ -314,23 +301,20 @@ function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
 
-function searchTable() {
-    const input = document.getElementById('search');
-    const filter = input.value.toLowerCase();
-    const table = document.querySelector('table');
-    const rows = table.getElementsByTagName('tr');
+function searchTeachers() {
+    const searchInput = document.getElementById('search').value.toLowerCase();
+    const tableRows = document.querySelectorAll('tbody tr');
 
-    for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header row
-        const row = rows[i];
-        const nip = row.cells[0]?.textContent || '';
-        const name = row.cells[1]?.querySelector('.text-sm.font-medium')?.textContent || '';
+    tableRows.forEach(row => {
+        const nip = row.querySelector('td:first-child').textContent.toLowerCase();
+        const name = row.querySelector('.text-sm.font-medium').textContent.toLowerCase();
         
-        if (nip.toLowerCase().includes(filter) || name.toLowerCase().includes(filter)) {
+        if (nip.includes(searchInput) || name.includes(searchInput)) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
         }
-    }
+    });
 }
 </script>
 @endsection

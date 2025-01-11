@@ -178,4 +178,10 @@ class GuruController extends Controller
             return redirect()->back()->with('error', 'Error deleting guru: ' . $e->getMessage());
         }
     }
+
+    public function edit($nip)
+    {
+        $guru = Guru::where('nip', $nip)->firstOrFail();
+        return response()->json(['guru' => $guru]);
+    }
 }
