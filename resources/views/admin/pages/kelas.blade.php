@@ -62,13 +62,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Jurusan</label>
-                        <select name="jurusan" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Pilih Jurusan</option>
-                            <option value="Multimedia">Multimedia</option>
-                            <option value="Akuntansi">Akuntansi</option>
-                            <option value="Perkantoran">Perkantoran</option>
-                            <option value="Pemasaran">Pemasaran</option>
-                        </select>
+                        <input type="text" name="jurusan" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
@@ -114,13 +108,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Jurusan</label>
-                    <select name="jurusan" id="edit_jurusan" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Pilih Jurusan</option>
-                        <option value="Multimedia">Multimedia</option>
-                        <option value="Akuntansi">Akuntansi</option>
-                        <option value="Perkantoran">Perkantoran</option>
-                        <option value="Pemasaran">Pemasaran</option>
-                    </select>
+                    <input type="text" name="jurusan" id="edit_jurusan" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Wali Kelas</label>
