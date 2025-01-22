@@ -40,10 +40,11 @@
             </select>
             <select class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
                 <option value="">Semua Jurusan</option>
-                <option value="multimedia">Multimedia</option>
-                <option value="akuntansi">Akuntansi</option>
-                <option value="perkantoran">Perkantoran</option>
                 <option value="pemasaran">Pemasaran</option>
+                <option value="manajemen_perkantoran">Manajemen Perkantoran dan Layanan Bisnis</option>
+                <option value="akuntansi">Akuntansi dan Keuangan Lembaga</option>
+                <option value="kecantikan">Kecantikan dan Spa</option>
+                <option value="dkv">Desain Komunikasi Visual</option>
             </select>
         </div>
     </div>
@@ -191,10 +192,11 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Jurusan</label>
                             <select name="major" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                <option value="multimedia">Multimedia</option>
-                                <option value="akuntansi">Akuntansi</option>
-                                <option value="perkantoran">Perkantoran</option>
                                 <option value="pemasaran">Pemasaran</option>
+                                <option value="manajemen_perkantoran">Manajemen Perkantoran dan Layanan Bisnis</option>
+                                <option value="akuntansi">Akuntansi dan Keuangan Lembaga</option>
+                                <option value="kecantikan">Kecantikan dan Spa</option>
+                                <option value="dkv">Desain Komunikasi Visual</option>
                             </select>
                         </div>
                         <div>
@@ -322,11 +324,12 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Jurusan</label>
                         <select name="major" id="edit_major" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="multimedia" {{ old('major', $murid->major ?? '') == 'multimedia' ? 'selected' : '' }}>Multimedia</option>
-                            <option value="akuntansi" {{ old('major', $murid->major ?? '') == 'akuntansi' ? 'selected' : '' }}>Akuntansi</option>
-                            <option value="perkantoran" {{ old('major', $murid->major ?? '') == 'perkantoran' ? 'selected' : '' }}>Perkantoran</option>
                             <option value="pemasaran" {{ old('major', $murid->major ?? '') == 'pemasaran' ? 'selected' : '' }}>Pemasaran</option>
-                        </select>
+                            <option value="manajemen_perkantoran" {{ old('major', $murid->major ?? '') == 'manajemen_perkantoran' ? 'selected' : '' }}>Manajemen Perkantoran dan Layanan Bisnis</option>
+                            <option value="akuntansi" {{ old('major', $murid->major ?? '') == 'akuntansi' ? 'selected' : '' }}>Akuntansi dan Keuangan Lembaga</option>
+                            <option value="kecantikan" {{ old('major', $murid->major ?? '') == 'kecantikan' ? 'selected' : '' }}>Kecantikan dan Spa</option>
+                            <option value="dkv" {{ old('major', $murid->major ?? '') == 'dkv' ? 'selected' : '' }}>Desain Komunikasi Visual</option>
+                        </select>   
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tahun Akademik</label>
