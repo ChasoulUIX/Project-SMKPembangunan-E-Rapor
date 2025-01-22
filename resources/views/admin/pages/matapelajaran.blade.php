@@ -199,37 +199,32 @@ function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
     document.getElementById('editForm').action = `/admin/matapelajaran/${id}`;
     
-    // Tambahkan console.log untuk debugging
-    console.log(`Fetching data from: /admin/matapelajaran/${id}/edit`);
-    
     fetch(`/admin/matapelajaran/${id}/edit`)
-        .then(response => {
-            if (!response.ok) {
-                // Log status dan text untuk debugging
-                console.error('Response status:', response.status);
-                return response.text().then(text => {
-                    console.error('Response text:', text);
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                });
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log('Received data:', data); // Debug log
-            if (data.success) {
+            if (data.matapelajaran) {
                 const matapelajaran = data.matapelajaran;
                 document.getElementById('edit_kode_mapel').value = matapelajaran.kode_mapel;
                 document.getElementById('edit_nama_mapel').value = matapelajaran.nama_mapel;
                 document.getElementById('edit_kategori').value = matapelajaran.kategori;
                 document.getElementById('edit_nip').value = matapelajaran.nip;
-                document.getElementById('edit_nama_guru').value = matapelajaran.nama_guru;
-            } else {
-                throw new Error(data.message || 'Terjadi kesalahan');
+                
+                // Set guru pengajar dengan mencari berdasarkan nama_guru
+                const guruSelect = document.getElementById('edit_nama_guru');
+                Array.from(guruSelect.options).forEach(option => {
+                    if (option.value === matapelajaran.nama_guru) {
+                        option.selected = true;
+                    }
+                });
+                
+                // Trigger event change untuk memastikan NIP terupdate
+                const event = new Event('change');
+                guruSelect.dispatchEvent(event);
             }
         })
         .catch(error => {
-            console.error('Error details:', error);
-            alert('Terjadi kesalahan saat mengambil data mata pelajaran: ' + error.message);
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengambil data mata pelajaran');
             closeEditModal();
         });
 }
@@ -237,6 +232,39 @@ function openEditModal(id) {
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
+
+// Tambahkan event listener untuk form edit
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const formData = new FormData(form);
+    const url = form.getAttribute('action');
+
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Tutup modal
+            closeEditModal();
+            
+            // Refresh halaman
+            window.location.reload();
+        } else {
+            alert('Terjadi kesalahan saat menyimpan data');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menyimpan data');
+    });
+});
 
 function searchMapel() {
     const searchValue = document.getElementById('search').value.toLowerCase();
