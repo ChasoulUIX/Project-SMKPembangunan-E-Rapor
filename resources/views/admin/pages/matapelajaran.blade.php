@@ -197,18 +197,40 @@ function updateEditNIP(select) {
 
 function openEditModal(id) {
     document.getElementById('editModal').classList.remove('hidden');
-    // Set form action URL
     document.getElementById('editForm').action = `/admin/matapelajaran/${id}`;
     
-    // Fetch mata pelajaran data and populate form
-    fetch(`/admin/matapelajaran/${id}`)
-        .then(response => response.json())
+    // Tambahkan console.log untuk debugging
+    console.log(`Fetching data from: /admin/matapelajaran/${id}/edit`);
+    
+    fetch(`/admin/matapelajaran/${id}/edit`)
+        .then(response => {
+            if (!response.ok) {
+                // Log status dan text untuk debugging
+                console.error('Response status:', response.status);
+                return response.text().then(text => {
+                    console.error('Response text:', text);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                });
+            }
+            return response.json();
+        })
         .then(data => {
-            document.getElementById('edit_kode_mapel').value = data.kode_mapel;
-            document.getElementById('edit_nama_mapel').value = data.nama_mapel;
-            document.getElementById('edit_nama_guru').value = data.nama_guru;
-            document.getElementById('edit_kategori').value = data.kategori;
-            document.getElementById('edit_nip').value = data.nip;
+            console.log('Received data:', data); // Debug log
+            if (data.success) {
+                const matapelajaran = data.matapelajaran;
+                document.getElementById('edit_kode_mapel').value = matapelajaran.kode_mapel;
+                document.getElementById('edit_nama_mapel').value = matapelajaran.nama_mapel;
+                document.getElementById('edit_kategori').value = matapelajaran.kategori;
+                document.getElementById('edit_nip').value = matapelajaran.nip;
+                document.getElementById('edit_nama_guru').value = matapelajaran.nama_guru;
+            } else {
+                throw new Error(data.message || 'Terjadi kesalahan');
+            }
+        })
+        .catch(error => {
+            console.error('Error details:', error);
+            alert('Terjadi kesalahan saat mengambil data mata pelajaran: ' + error.message);
+            closeEditModal();
         });
 }
 
