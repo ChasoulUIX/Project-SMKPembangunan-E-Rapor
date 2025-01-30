@@ -195,8 +195,8 @@
                                 <option value="pemasaran">Pemasaran</option>
                                 <option value="manajemen_perkantoran">Manajemen Perkantoran dan Layanan Bisnis</option>
                                 <option value="akuntansi">Akuntansi dan Keuangan Lembaga</option>
-                                <option value="kecantikan">Kecantikan dan Spa</option>
-                                <option value="dkv">Desain Komunikasi Visual</option>
+                                <option value="tata_kecantikan">Kecantikan dan Spa</option>
+                                <option value="desain_komunikasi_visual">Desain Komunikasi Visual</option>
                             </select>
                         </div>
                         <div>
@@ -324,12 +324,12 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Jurusan</label>
                         <select name="major" id="edit_major" required class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="pemasaran" {{ old('major', $murid->major ?? '') == 'pemasaran' ? 'selected' : '' }}>Pemasaran</option>
-                            <option value="manajemen_perkantoran" {{ old('major', $murid->major ?? '') == 'manajemen_perkantoran' ? 'selected' : '' }}>Manajemen Perkantoran dan Layanan Bisnis</option>
-                            <option value="akuntansi" {{ old('major', $murid->major ?? '') == 'akuntansi' ? 'selected' : '' }}>Akuntansi dan Keuangan Lembaga</option>
-                            <option value="kecantikan" {{ old('major', $murid->major ?? '') == 'kecantikan' ? 'selected' : '' }}>Kecantikan dan Spa</option>
-                            <option value="dkv" {{ old('major', $murid->major ?? '') == 'dkv' ? 'selected' : '' }}>Desain Komunikasi Visual</option>
-                        </select>   
+                            <option value="pemasaran">Pemasaran</option>
+                            <option value="manajemen_perkantoran">Manajemen Perkantoran dan Layanan Bisnis</option>
+                            <option value="akuntansi">Akuntansi dan Keuangan Lembaga</option>
+                            <option value="tata_kecantikan">Kecantikan dan Spa</option>
+                            <option value="desain_komunikasi_visual">Desain Komunikasi Visual</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Tahun Akademik</label>
@@ -391,9 +391,9 @@ function openEditModal(nis) {
             document.getElementById('edit_parent_phone').value = murid.parent_phone;
             document.getElementById('edit_parent_address').value = murid.parent_address;
             document.getElementById('edit_class').value = murid.class;
+            
+            // Update major value directly
             document.getElementById('edit_major').value = murid.major;
-            document.getElementById('edit_academic_year').value = murid.academic_year;
-            document.getElementById('edit_semester').value = murid.semester;
             
             // Show current photo if exists
             if (murid.photo) {
