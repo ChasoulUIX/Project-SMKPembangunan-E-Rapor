@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
 class Murid extends Authenticatable
 {
@@ -54,5 +55,11 @@ class Murid extends Authenticatable
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);
+    }
+
+    public function daftarSiswa()
+    {
+        return $this->belongsToMany(Daftarsiswa::class, 'daftar_siswa', 'nis', 'id_kelas')
+                    ->withTimestamps();
     }
 }

@@ -213,26 +213,36 @@
                                 if (selectedOption.value) {
                                     namaSiswaInput.value = selectedOption.value;
                                     nisInput.value = selectedOption.dataset.nis;
+                                    siswaDropdown.classList.add('hidden');
                                 }
                             });
 
                             // Handle search input
                             namaSiswaInput.addEventListener('input', function() {
                                 const searchValue = this.value.toLowerCase();
-                                const filteredSiswa = siswaList.filter(siswa => 
-                                    siswa.name.toLowerCase().includes(searchValue)
-                                );
+                                const selectedKelas = document.getElementById('nama_kelas').value;
+                                
+                                if (!selectedKelas) {
+                                    alert('Silakan pilih kelas terlebih dahulu');
+                                    this.value = '';
+                                    return;
+                                }
 
                                 if (searchValue === '') {
                                     siswaDropdown.classList.add('hidden');
                                     return;
                                 }
 
-                                siswaDropdown.innerHTML = filteredSiswa
-                                    .map(siswa => `
+                                const options = Array.from(namaSiswaSelect.options).slice(1); // Skip first option (placeholder)
+                                const filteredOptions = options.filter(option => 
+                                    option.text.toLowerCase().includes(searchValue)
+                                );
+
+                                siswaDropdown.innerHTML = filteredOptions
+                                    .map(option => `
                                         <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" 
-                                             onclick="selectSiswa('${siswa.name}', '${siswa.nis}')">
-                                            ${siswa.name}
+                                             onclick="selectSiswa('${option.value}', '${option.dataset.nis}')">
+                                            ${option.text}
                                         </div>
                                     `).join('');
 
@@ -294,14 +304,52 @@
                             const namaMapelSelect = document.getElementById('nama_mapel_select');
                             const mapelDropdown = document.getElementById('mapelDropdown');
                             const mapelList = @json(\App\Models\Matapelajaran::select('nama_mapel', 'nama_guru')->where('nama_guru', Auth::user()->name)->orderBy('nama_mapel')->get());
+                            const materiList = @json(\App\Models\MateriPelajaran::where('nama_guru', Auth::user()->name)->get());
 
                             // Handle combobox selection
                             namaMapelSelect.addEventListener('change', function() {
                                 const selectedOption = this.options[this.selectedIndex];
                                 if (selectedOption.value) {
                                     namaMapelInput.value = selectedOption.value;
+                                    updateMateriOptions(selectedOption.value);
                                 }
                             });
+
+                            function updateMateriOptions(selectedMapel) {
+                                const materi = materiList.find(m => m.nama_mapel === selectedMapel);
+                                
+                                if (materi) {
+                                    // Update materi 1
+                                    const namaMateri1Select = document.querySelector('select[name="nama_materi_1"]');
+                                    if (materi.materi_1) {
+                                        namaMateri1Select.value = materi.materi_1;
+                                    }
+
+                                    // Update materi 2
+                                    const namaMateri2Select = document.querySelector('select[name="nama_materi_2"]');
+                                    if (materi.materi_2) {
+                                        namaMateri2Select.value = materi.materi_2;
+                                    }
+
+                                    // Update materi 3
+                                    const namaMateri3Select = document.querySelector('select[name="nama_materi_3"]');
+                                    if (materi.materi_3) {
+                                        namaMateri3Select.value = materi.materi_3;
+                                    }
+
+                                        // Update materi 4
+                                        const namaMateri4Select = document.querySelector('select[name="nama_materi_4"]');
+                                        if (materi.materi_4) {
+                                            namaMateri4Select.value = materi.materi_4;
+                                        }
+
+                                        // Update materi 5
+                                        const namaMateri5Select = document.querySelector('select[name="nama_materi_5"]');
+                                        if (materi.materi_5) {
+                                            namaMateri5Select.value = materi.materi_5;
+                                        }
+                                }
+                            }
 
                             // Handle search input
                             namaMapelInput.addEventListener('input', function() {
@@ -531,7 +579,39 @@
     function updateIdKelas(select) {
         const selectedOption = select.options[select.selectedIndex];
         const idKelas = selectedOption.getAttribute('data-id');
+        const namaKelas = selectedOption.value;
         document.getElementById('id_kelas').value = idKelas || '';
+        
+        // Fetch wali kelas data
+        fetch(`/get-wali-kelas/${namaKelas}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.wali_kelas) {
+                    const waliKelasSelect = document.getElementById('nama_wali');
+                    waliKelasSelect.value = data.wali_kelas;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        // Fetch siswa data
+        fetch(`/get-siswa-kelas/${namaKelas}`)
+            .then(response => response.json())
+            .then(data => {
+                const namaSiswaSelect = document.getElementById('nama_siswa_select');
+                // Clear existing options
+                namaSiswaSelect.innerHTML = '<option value="">Pilih Siswa</option>';
+                
+                if (data.siswa && data.siswa.length > 0) {
+                    data.siswa.forEach(siswa => {
+                        const option = document.createElement('option');
+                        option.value = siswa.name;
+                        option.dataset.nis = siswa.nis;
+                        option.textContent = siswa.name;
+                        namaSiswaSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     function updateNIS(select) {

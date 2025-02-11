@@ -230,3 +230,17 @@ Route::get('/images/{filename}', function ($filename) {
     }
     return response()->file($path);
 });
+
+Route::get('/get-wali-kelas/{nama_kelas}', function ($nama_kelas) {
+    $kelas = \App\Models\Daftarsiswa::where('nama_kelas', $nama_kelas)->first();
+    return response()->json([
+        'wali_kelas' => $kelas ? $kelas->wali_kelas : null
+    ]);
+})->name('get.wali.kelas');
+
+Route::get('/get-siswa-kelas/{nama_kelas}', function ($nama_kelas) {
+    $kelas = \App\Models\Daftarsiswa::where('nama_kelas', $nama_kelas)->first();
+    return response()->json([
+        'siswa' => $kelas ? $kelas->daftar_siswa : []
+    ]);
+})->name('get.siswa.kelas');

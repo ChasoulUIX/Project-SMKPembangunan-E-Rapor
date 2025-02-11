@@ -20,4 +20,11 @@ class Daftarsiswa extends Model
     protected $casts = [
         'daftar_siswa' => 'array',
     ];
+
+    // Tambahkan relasi ke model Murid
+    public function murid()
+    {
+        return $this->belongsToMany(Murid::class, 'daftar_siswa', 'id_kelas', 'nis')
+                    ->withTimestamps();
+    }
 }
